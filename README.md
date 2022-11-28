@@ -1,20 +1,68 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# NHS Innovation Hub
+NHS Innovation Hub is the entry point of all NHS services related to innovations.
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+It is built with **Wagtail**, an open source content management framework.
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+## Requirements
+- Python
+- Pip
+- Docker and Docker compose
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+The following installation instructions are for any linux ubuntu flavored environment:
+
+``` bash
+# Install python and Pip
+$ sudo apt-get install python3
+$ sudo apt-get install python3-pip
+
+# Install docker + docker compose 
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu RELEASE stable" # Check RELEASE in "cat /etc/os-release", UBUNTU_CODENAME
+$ sudo apt-get update
+$ sudo apt-get install docker-ce docker-ce-cli docker-compose
+
+$ sudo usermod -a -G docker $USER # Optional command, if errors about permissions happens when running commands
+
+# Install global packages.
+$ pip install pipenv # Install virtual environments
+$ pip install autopep8 # Install code formatter.
+```
+---
+
+## Configuration
+This project is prepared to run locally using a virtual environment for the runtime, and adittionaly layers (PostgreSQL DB) served through Docker and Docker compose. Run the following intructions inside the project folder.
+
+### 1. Configure environment variables
+Rename the file ".env.example" to ".env"
+
+### 2. Start local DB server through docker and docker compose.
+```bash
+$ docker-compose -f .docker/docker-compose.yml up
+```
+
+### 3. Configure your virtual environment
+``` bash
+$ pipenv shell # This will create your new virtual environment, where everything runs.
+$ pip install -r requirements.txt # Install dependencies
+$ python3 manage.py migrate # Run migrations.
+$ python manage.py createsuperuser # Create admin user to access yout local admin area.
+
+```
+Everything will be installed and ready to run from the virtual environment.
+
+## Running an app
+### 1. Start local DB server through docker and docker compose.
+```bash
+$ docker-compose -f .docker/docker-compose.yml up
+```
+### 2. Make sure that you are inside your virtual environment. If not, execute the command:
+```bash
+$ pipenv shell
+```
+To exit from the virtual environment, type `$ deactivate`
+### 3. Run the app
+```bash
+$ python3 manage.py runserver
+```
+

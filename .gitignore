@@ -1,0 +1,15 @@
+# Assets.
+/media
+/static
+
+# Cache.
+**/__pycache__/
+**/__pycache__/*.pyc
+*.pyc
+
+# Environemnt variables
+.env
+
+# Virtual Environments.
+.venv
+Pipfile

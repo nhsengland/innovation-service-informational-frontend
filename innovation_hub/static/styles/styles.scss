@@ -1,0 +1,64 @@
+
+:root {
+  --primary-color: #005eb8;
+  // --success-color: #007f3b;
+  // --warning-color: 	#ffeb3b;
+  // --error-color: #d5281b;
+
+  --nhsuk-text-color: #212b32;
+
+  --white: #ffffff;
+
+  // --color_nhsuk-grey-1:	#4c6272;
+  // --color_nhsuk-grey-2:	#768692;
+  // --color_nhsuk-grey-3:	#aeb7bd;
+  // --color_nhsuk-grey-4:	#d8dde0;
+  --color_nhsuk-grey-5:	#f0f4f5;
+
+  // --nhsuk-border-color:	#d8dde0;
+  // --nhsuk-button-color:	#007f3b;
+
+  // --spacing-3: 32px;
+  // --mobile:  20em; /* 320px */
+  // --tablet:  40.0625em; /* 641px */
+  // --desktop-breakpoint: 48.0625em; /* 769px */
+  // --large-desktop: 61.875em; /* 990px */
+}
+
+
+.d-block { display: block; }
+.d-flex { display: flex; }
+.d-none { display: none; }
+/* .d-inline-block { display: inline-block; } */
+.align-items-center { align-items: center; }
+/* .justify-content-space-between { justify-content: space-between; } */
+/* .flex-direction-column { flex-direction: column; } */
+
+
+.app-width-container,
+.app-breadcrumb .nhsuk-width-container {
+  max-width: 1100px
+}
+
+@media (min-width: 767px) and (max-width: 1164px) {
+
+  .app-width-container,
+  .app-breadcrumb .nhsuk-width-container {
+    margin: 0 32px
+  }
+}
+
+
+.app-header__navigation {
+  max-width: 1164px
+}
+
+@media (min-width: 61.875em) {
+  .app-header__navigation-item__item--current {
+    box-shadow: inset 0 -4px 0 #d8dde0
+  }
+}
+
+.app-header__navigation-item__item--current .nhsuk-header__navigation-link {
+  font-weight: 600
+}
