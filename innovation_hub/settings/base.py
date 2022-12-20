@@ -24,11 +24,15 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Application definition
 
 INSTALLED_APPS = [
+    "innovation_hub.apps.contact_us",
+    "innovation_hub.apps.core",
     "innovation_hub.apps.home",
+    "innovation_hub.apps.innovation_pathway",
     "innovation_hub.apps.search",
 
     'compressor',
     'wagtailnhsukfrontend',
+    'wagtailnhsukfrontend.forms',
 
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
@@ -79,11 +83,11 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
 
-                'innovation_hub.config.constants.header_navigation_menus',
-                'innovation_hub.config.constants.footer_links',
-            ],
-        },
-    },
+                'innovation_hub.config.templates_constants.header_navigation_menus',
+                'innovation_hub.config.templates_constants.footer_links'
+            ]
+        }
+    }
 ]
 
 WSGI_APPLICATION = "innovation_hub.wsgi.application"
@@ -181,6 +185,8 @@ WAGTAILADMIN_BASE_URL = "http://example.com"
 
 # Custom settings.
 
-COMPRESS_PRECOMPILERS = [
-    ('text/x-scss', 'django_libsass.SassCompiler')
-]
+COMPRESS_PRECOMPILERS = [('text/x-scss', 'django_libsass.SassCompiler')]
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
+FORM_RENDERER = 'wagtailnhsukfrontend.forms.renderers.NHSUKFrontendRenderer'

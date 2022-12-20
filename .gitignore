@@ -2,10 +2,11 @@
 /media
 /static
 
-# Cache.
+# Cache / Temporary.
 **/__pycache__/
 **/__pycache__/*.pyc
 *.pyc
+tmp
 
 # Environemnt variables
 .env

@@ -31,12 +31,12 @@ $ pip install autopep8 # Install code formatter.
 ---
 
 ## Configuration
-This project is prepared to run locally using a virtual environment for the runtime, and adittionaly layers (PostgreSQL DB) served through Docker and Docker compose. Run the following intructions inside the project folder.
+This project is prepared to run locally using a virtual environment for the runtime, and additionally layers (PostgreSQL DB) served through Docker and Docker compose. Run the following intructions inside the project folder.
 
 ### 1. Configure environment variables
-Rename the file ".env.example" to ".env"
+Make a copy of the file ".env.example", and call it ".env"
 
-### 2. Start local DB server through docker and docker compose.
+### 2. Start local DB server through docker and docker compose
 ```bash
 $ docker-compose -f .docker/docker-compose.yml up
 ```

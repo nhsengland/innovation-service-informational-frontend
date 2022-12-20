@@ -1,5 +1,6 @@
 {% load static wagtailcore_tags wagtailuserbar %}
 {% load compress %}
+{% load nhsukfrontend_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -29,8 +30,8 @@
   {% compress css %}
   <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/styles.scss' %}">
   <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/header_navigation.scss' %}">
+  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/left-menu-layout.scss' %}">
   {% endcompress %}
-
 
   {% block extra_css %}{% endblock %}
 
@@ -39,6 +40,8 @@
 <body class="{% block body_class %}{% endblock %}">
 
   {% include "theme/header.html" %}
+
+  {% breadcrumb %}
 
   <div class="nhsuk-width-container app-width-container">
     <main id="maincontent" role="main" class="nhsuk-main-wrapper">

@@ -1,0 +1,49 @@
+{% extends "theme/base.html" %}
+{% load static wagtailcore_tags %}
+
+{% block content %}
+
+<div class="nhsuk-grid-row">
+  <div class="nhsuk-grid-column-full app-component-reading-width">
+
+    <div class="app-pane">
+
+      <div class="app-pane__side-bar">
+        <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
+          <ul class="nhsuk-list app-side-nav__list">
+            {% for section in self.get_menu %}
+            <li class="app-side-nav__item">
+              <a href="{{ section.url }}" class="app-side-nav__link">{{ section.label }}</a>
+            </li>
+            {% endfor%}
+          </ul>
+        </nav>
+      </div>
+
+      <div class="app-pane__main-content">
+
+        <h1>{{ self.title }}</h1>
+
+        {{ self.content }}
+
+        {# Left menu options visible only on mobile #}
+        <div class="nhsuk-u-padding-top-4 nhsuk-u-padding-bottom-5 app-u-hide-desktop">
+          <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
+            <ul class="nhsuk-list app-side-nav__list">
+              {% for section in self.get_menu %}
+              <li class="app-side-nav__item">
+                <a href="{{ section.url }}" class="app-side-nav__link">{{ section.label }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </nav>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+
+{% endblock content %}

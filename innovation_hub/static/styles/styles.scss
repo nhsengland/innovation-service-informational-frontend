@@ -18,7 +18,6 @@
   // --nhsuk-border-color:	#d8dde0;
   // --nhsuk-button-color:	#007f3b;
 
-  // --spacing-3: 32px;
   // --mobile:  20em; /* 320px */
   // --tablet:  40.0625em; /* 641px */
   // --desktop-breakpoint: 48.0625em; /* 769px */
@@ -34,31 +33,77 @@
 /* .justify-content-space-between { justify-content: space-between; } */
 /* .flex-direction-column { flex-direction: column; } */
 
+.ml-auto { margin-left: auto; }
+.mr-auto { margin-right: auto; }
 
+
+/* App custom width */
+.app-header__navigation { max-width: 1164px; }
 .app-width-container,
-.app-breadcrumb .nhsuk-width-container {
-  max-width: 1100px
-}
-
-@media (min-width: 767px) and (max-width: 1164px) {
-
-  .app-width-container,
-  .app-breadcrumb .nhsuk-width-container {
+.nhsuk-breadcrumb .nhsuk-width-container {
+  max-width: 1100px;
+  @media (min-width: 769px) and (max-width: 1164px) {
     margin: 0 32px
   }
 }
 
-
-.app-header__navigation {
-  max-width: 1164px
+/* Content visibility. */
+@media (max-width: 48.0525em) {
+  .app-u-hide-mobile { display: none; }
 }
-
-@media (min-width: 61.875em) {
-  .app-header__navigation-item__item--current {
-    box-shadow: inset 0 -4px 0 #d8dde0
+@media (min-width: 48.0625em) {
+  .app-u-hide-desktop { display: none; }
+}
+@media print {
+  .app-u-hide-print { display: none; }
+  a:after { content: none; }
+  div.page-break {
+    break-before: always;
+    break-inside: avoid;
   }
 }
 
-.app-header__navigation-item__item--current .nhsuk-header__navigation-link {
-  font-weight: 600
+@media (min-width: 48.0625em) {
+  .app-component-reading-width h1 {
+    max-width: 14.5em
+  }
+
+  .app-component-reading-width h2 {
+    max-width: 22em
+  }
+
+  .app-component-reading-width h3,
+  .app-component-reading-width .nhsuk-lede-text,
+  .app-component-reading-width .nhsuk-body-l {
+    max-width: 29em
+  }
+
+  .app-component-reading-width h4 {
+    max-width: 32em
+  }
+
+  .app-component-reading-width p,
+  .app-component-reading-width ul,
+  .app-component-reading-width ol,
+  .app-component-reading-width .nhsuk-details {
+    max-width: 37em
+  }
+
+  .app-component-reading-width .nhsuk-body-s {
+    max-width: 47em
+  }
+
+  .app-component-reading-width .app-example,
+  .app-component-reading-width .nhsuk-table,
+  .app-component-reading-width .app-colour-list,
+  .app-component-reading-width .app-example--image,
+  .app-component-reading-width .app-pre,
+  .app-component-reading-width .nhsuk-image__img {
+    max-width: 44em
+  }
+
+  .app-component-reading-width .app-tabs,
+  .app-component-reading-width .nhsuk-pagination__list {
+    max-width: 100%
+  }
 }
