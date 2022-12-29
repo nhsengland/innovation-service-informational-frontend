@@ -1,0 +1,108 @@
+{% extends "theme/base.html" %}
+{% load static wagtailcore_tags %}
+{% load wagtailimages_tags %}
+
+{% block extra_css %}
+  <style>
+    li.navigation-list {
+        display: inline-block;
+    }
+
+    @media (min-width: 48.0625em) {
+        li.navigation-list {
+            display: block
+        }
+    }
+  </style>
+
+
+{% endblock extra_css %}
+
+{% block content %}
+
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full app-component-reading-width">
+      <h1>{{ self.title }}</h1>
+    </div>
+  </div>
+
+  <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
+
+    <div class="nhsuk-grid-column-one-quarter">
+      <h2 class="nhsuk-heading-m nhsuk-u-padding-bottom-2 nhsuk-u-margin-bottom-3 border-bottom-separator-dark">
+        Filter by type
+      </h2>
+      <nav>
+        <ol class="nhsuk-u-padding-0">
+          {% for item in news_types_filter_list %}
+            <li class="navigation-list">
+              <a href="?{{ item.qp }}"
+                 class="tag-link nhsuk-u-font-size-14{% if item.is_active %} selected{% endif %}">{{ item.name }}</a>
+            </li>
+          {% endfor %}
+        </ol>
+      </nav>
+    </div>
+
+    <div class="nhsuk-grid-column-three-quarters">
+
+      <ul class="nhsuk-grid-row nhsuk-card-group">
+
+        {% for item in news_list %}
+ 
+          <li class="nhsuk-grid-column-one-half nhsuk-card-group__item">
+            <div class="nhsuk-card nhsuk-card--clickable">
+              <div class="nhsuk-card__content">
+                <h2 class="nhsuk-card__heading nhsuk-heading-m">
+                  <a href="{{ item.url }}" class="nhsuk-card__link">{{ item.title }}</a>
+                </h2>
+                <p class="nhsuk-card__description">{{ item.summary }}</p>
+                <p class="nhsuk-body-s font-color-secondary">{{ item.first_published_at|date:'F j, Y' }}</p>
+                <ul class="nhsuk-u-padding-0">
+                  {% for news_type_item in item.news_type.all %}
+                    <li class="tag-text nhsuk-u-font-size-14">{{ news_type_item.name }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </li>
+
+        {% endfor %}
+
+      </ul>
+
+      {% if news_list.paginator.num_pages > 1 %}
+
+        {{ current_url_qp }}
+
+        <ol class="app-pagination">
+          {% if news_list.has_previous %}
+            <li>
+              <a href="?{{ current_url_query_params }}&page={{ news_list.previous_page_number }}"
+                 class="page-link">Previous</a>
+            </li>
+          {% endif %}
+
+          {% for page_number in news_list.paginator.page_range %}
+            <li>
+              <a href="?{{ current_url_query_params }}&page={{ page_number }}"
+                 class="{% if page_number == news_list.number %}selected{% endif %}">{{ page_number }}</a>
+            </li>
+          {% endfor %}
+
+          {% if news_list.has_next %}
+            <li>
+              <a href="?{{ current_url_query_params }}&page={{ news_list.next_page_number }}"
+                 class="page-link">Next</a>
+            </li>
+          {% endif %}
+
+        </ol>
+
+      {% endif %}
+
+    </div>
+
+  </div>
+
+{% endblock content %}

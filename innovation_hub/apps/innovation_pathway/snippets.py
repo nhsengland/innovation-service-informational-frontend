@@ -7,7 +7,7 @@ from wagtail.admin.panels import FieldPanel, MultiFieldPanel
 
 
 @register_snippet
-class Category(models.Model):
+class InnovationPathwayStageSnippet(models.Model):
 
     name = models.CharField(max_length=100)
     # sort_order = models.PositiveIntegerField()
@@ -16,8 +16,8 @@ class Category(models.Model):
     # search_fields = [index.SearchField('text', partial_match=True)]
 
     class Meta:
-        verbose_name = 'Category'
-        verbose_name_plural = 'Categories'
+        verbose_name = 'Innovation pathway stage'
+        verbose_name_plural = 'Innovation pathway stages'
         ordering = ['name']
 
     def __str__(self):

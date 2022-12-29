@@ -1,17 +1,23 @@
-{% extends 'theme/base.html' %}
+{% extends "theme/base.html" %}
 {% load wagtailcore_tags %}
 {% load nhsukfrontendforms_tags %}
 
 {% block content %}
 
-  <h1>{{ page.title }}</h1>
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
 
-  {{ self.content|richtext }}
+      <h1>{{ page.title }}</h1>
 
-  <form method="POST" action="{% pageurl page %}" novalidate>
-    {% csrf_token %}
-    {% nhsuk_form form %}
-    <input class="nhsuk-button" type="submit" value="Send question" />
-  </form>
+      {{ self.content|richtext }}
 
-{% endblock %}
+      <form method="post" action="{% pageurl page %}" novalidate>
+        {% csrf_token %}
+        {% nhsuk_form form %}
+        <input class="nhsuk-button" type="submit" value="Send question" />
+      </form>
+
+    </div>
+  </div>
+
+{% endblock content %}

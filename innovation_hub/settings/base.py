@@ -25,9 +25,9 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 INSTALLED_APPS = [
     "innovation_hub.apps.contact_us",
-    "innovation_hub.apps.core",
     "innovation_hub.apps.home",
     "innovation_hub.apps.innovation_pathway",
+    "innovation_hub.apps.news",
     "innovation_hub.apps.search",
 
     'compressor',
@@ -83,8 +83,8 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
 
-                'innovation_hub.config.templates_constants.header_navigation_menus',
-                'innovation_hub.config.templates_constants.footer_links'
+                'innovation_hub.config.constants.templates_constants.header_navigation_menus',
+                'innovation_hub.config.constants.templates_constants.footer_links'
             ]
         }
     }

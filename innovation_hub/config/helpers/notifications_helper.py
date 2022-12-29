@@ -2,7 +2,7 @@ import os
 
 from notifications_python_client.notifications import NotificationsAPIClient
 
-from innovation_hub.config.constants import NOTIFICATIONS
+from innovation_hub.config.constants.constants import NOTIFICATIONS
 
 
 def __generate_api_key():

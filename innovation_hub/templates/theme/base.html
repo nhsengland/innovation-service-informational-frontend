@@ -10,30 +10,31 @@
   <title>
     {% block title %}
     {% if page.seo_title %}{{ page.seo_title }}{% else %}{{ page.title }}{% endif %}
-    {% endblock %}
+    {% endblock title %}
     {% block title_suffix %}
     {% wagtail_site as current_site %}
     {% if current_site and current_site.site_name %}- {{ current_site.site_name }}{% endif %}
-    {% endblock %}
+    {% endblock title_suffix %}
   </title>
   <meta name="description" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  {% include 'wagtailnhsukfrontend/favicons.html' %}
+  {% include "wagtailnhsukfrontend/favicons.html" %}
 
   {# Force all links in the live preview panel to be opened in a new tab #}
   {% if request.in_preview_panel %}
-  <base target="_blank">
+  <base target="_blank" />
   {% endif %}
 
   {# Global stylesheets #}
-  <link rel="stylesheet" type="text/css" href="{% static 'wagtailnhsukfrontend/css/nhsuk.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static "wagtailnhsukfrontend/css/nhsuk.min.css" %}" />
   {% compress css %}
-  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/styles.scss' %}">
-  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/header_navigation.scss' %}">
-  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/left-menu-layout.scss' %}">
+  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/styles.scss' %}" />
+  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/header_navigation.scss' %}" />
+  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/left-menu-layout.scss' %}" />
+  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/stepper-block.scss' %}" />
   {% endcompress %}
 
-  {% block extra_css %}{% endblock %}
+  {% block extra_css %}{% endblock extra_css %}
 
 </head>
 
@@ -59,7 +60,7 @@
 
   {% block extra_js %}
   {# Override this in templates to add extra javascript #}
-  {% endblock %}
+  {% endblock extra_js %}
 </body>
 
 </html>

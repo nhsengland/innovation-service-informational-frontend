@@ -6,15 +6,15 @@ from wagtail.core.models import Page
 
 from wagtailnhsukfrontend.blocks import ActionLinkBlock, CardGroupBlock, InsetTextBlock, RichTextBlock
 
-from innovation_hub.helpers.templates_helper import add_heading_elements_id, heading_elements_ids_list
-
-from innovation_hub.apps.core.snippets import Category
+from innovation_hub.config.helpers.templates_helper import add_heading_elements_id, heading_elements_ids_list
+from innovation_hub.apps.innovation_pathway.snippets import InnovationPathwayStageSnippet
 
 
 class InnovationPathwayIndexPage(Page):
 
     template = 'index_page.html'
     max_count = 1
+    parent_page_types = ['home.HomePage']
     subpage_types = ['innovation_pathway.InnovationPathwayDetailsPage']
 
     content = StreamField([
@@ -29,7 +29,7 @@ class InnovationPathwayIndexPage(Page):
     ]
 
     def get_menu(self):
-        children = self.get_children().public().live().specific()
+        children = self.get_children().live().public().specific()
         return list(map(lambda item: {'label': item.title, 'url': item.url}, children))
 
     class Meta:
@@ -40,10 +40,11 @@ class InnovationPathwayIndexPage(Page):
 class InnovationPathwayDetailsPage(Page):
 
     template = 'details_page.html'
+    parent_page_types = ['innovation_pathway.InnovationPathwayIndexPage']
     subpage_types = []
 
     category = models.ForeignKey(
-        Category,
+        InnovationPathwayStageSnippet,
         null=True,
         blank=False,
         on_delete=models.SET_NULL,

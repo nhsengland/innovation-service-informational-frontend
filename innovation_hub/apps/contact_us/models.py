@@ -10,15 +10,13 @@ from wagtail.contrib.forms.models import AbstractForm, AbstractFormField, Wagtai
 
 from wagtailnhsukfrontend.blocks import ActionLinkBlock, InsetTextBlock, RichTextBlock
 
-from innovation_hub.helpers.notifications_helper import send_contact_email
+from innovation_hub.config.helpers.notifications_helper import send_contact_email
 
 
 form_constants = {
-    """
-    Needed constants relative to mandatory fields that must exist in order to send to different email recipients.
-    "support_type_field_name" refers to the clean name, not the label.
-    """
-    'support_type_field_name': 'what_support_do_you_need',
+    # Needed constants relative to mandatory fields that must exist in order to send to different email recipients.
+    # "support_type_field_name" refers to the clean name, not the label.
+    'support_type_field_name': 'reason_for_contact',
     'support_type_field_general_enquiry_choice': 'General enquiry',
     'support_type_field_technical_support_choice': 'Technical support',
     'support_type_field_event_media_enquiries_choice': 'Event and media enquiries'
@@ -44,12 +42,12 @@ class ContactUsAdminPage(WagtailAdminFormPageForm):
                 field_clean_name = field.instance.get_field_clean_name()
                 field_choices = field.instance.choices
 
-                if field_clean_name == form_constants['support_type_field_name'] and field_choices == f'{ form_constants["support_type_field_general_enquiry_choice"] }, { form_constants["support_type_field_technical_support_choice"] }':
+                if field_clean_name == form_constants['support_type_field_name'] and field_choices == f'{ form_constants["support_type_field_general_enquiry_choice"] }, { form_constants["support_type_field_technical_support_choice"] }, { form_constants["support_type_field_event_media_enquiries_choice"] }':
                     has_request_type_field = True
 
             if not has_request_type_field:
                 raise ValidationError('''
-                    You must have a mandatory radio-button field called "What support do you need?", with the field choices equal to: "General enquiry, Technical support, Event and media enquiries".
+                    You must have a mandatory radio-button field called "Reason for contact", with the field choices equal to: "General enquiry, Technical support, Event and media enquiries".
                     These are mandadory to determine the email notifications recipients.
                 ''')
 
@@ -60,6 +58,7 @@ class ContactUsPage(AbstractForm):
     landing_page_template = 'success_landing_page.html'
 
     max_count = 1
+    parent_page_types = ['home.HomePage']
     subpage_types = []
 
     base_form_class = ContactUsAdminPage
@@ -88,7 +87,7 @@ class ContactUsPage(AbstractForm):
         null=True,
         blank=False,
         max_length=255,
-        help_text='Message will be sent to this email when user chooses "Technical support" option.'
+        help_text='Message will be sent to this email when user chooses "Event and media enquiries" option.'
     )
 
     content_panels = AbstractForm.content_panels + [
@@ -98,7 +97,9 @@ class ContactUsPage(AbstractForm):
         MultiFieldPanel([
             FieldRowPanel([
                 FieldPanel('general_enquiry_email', classname='col6'),
-                FieldPanel('technical_support_email', classname='col6'),
+                FieldPanel('technical_support_email', classname='col6')
+            ]),
+            FieldRowPanel([
                 FieldPanel('event_media_enquiries_email', classname='col6')
             ])
         ], heading='Email recipients')
@@ -126,8 +127,7 @@ class ContactUsPage(AbstractForm):
                     else:
                         raise AssertionError('Error: Unknown email to send')
 
-                    super(ContactUsPage, self).process_form_submission(
-                        form)  # Save form to admin
+                    super(ContactUsPage, self).process_form_submission(form)  # Save form to admin.
 
                     return render(request, self.landing_page_template, {'page': self})
 
