@@ -9,8 +9,8 @@
 
   --white: #ffffff;
 
-  // --color_nhsuk-grey-1:	#4c6272;
-  // --color_nhsuk-grey-2:	#768692;
+  --color_nhsuk-grey-1:	#4c6272;
+  --color_nhsuk-grey-2:	#768692;
   --color_nhsuk-grey-3: #aeb7bd;
   --color_nhsuk-grey-4: #d8dde0;
   --color_nhsuk-grey-5: #f0f4f5;
@@ -30,7 +30,10 @@
 .d-flex { display: flex; }
 .d-none { display: none; }
 
+.flex-auto { flex: auto; }
+
 .align-items-center { align-items: center; }
+.text-align-center { text-align: center; }
 
 /* .justify-content-space-between { justify-content: space-between; } */
 /* .flex-direction-column { flex-direction: column; } */
@@ -83,6 +86,7 @@
 }
 
 .app-width-container,
+.nhsuk-hero .nhsuk-width-container,
 .nhsuk-breadcrumb .nhsuk-width-container {
   max-width: 1100px;
 
@@ -90,6 +94,7 @@
     margin: 0 32px;
   }
 }
+
 
 /* Content visibility. */
 @media (max-width: 48.0525em) {
@@ -162,17 +167,19 @@
 
 .tag-text {
   display: inline-block;
+  background: var(--primary-color);
+  color: var(--white);
   border-radius: 5px;
   padding: 5px 10px;
-  background: #dfe2e4;
   text-decoration: none;
 }
 
 .tag-link {
   display: inline-block;
+  border: 1px solid var(--primary-color);
   border-radius: 5px;
   padding: 5px 10px;
-  background: #dfe2e4;
+  // background: #dfe2e4;
   text-decoration: none;
 
   &.tag-link:link,
@@ -183,14 +190,40 @@
   &.tag-link.selected,
   &.tag-link:active,
   &.tag-link:hover {
-    color: #fff;
-    background: #425563;
+    color: var(--white);
+    background: var(--primary-color);
+    // background: #425563;
   }
 
   &.tag-link:focus {
     box-shadow: 0 0 0 4px #ffcd60;
   }
 }
+
+.round-button-link {
+  padding: 1em 1.8em;
+  background: var(--white);
+  border-radius: 1.22rem;
+  font-weight: 600;
+
+  &.round-button-link:link,
+  &.round-button-link:visited {
+    color: #005eb8;
+  }
+
+  &.round-button-link.selected,
+  &.round-button-link:active,
+  &.round-button-link:hover {
+    // box-shadow: 0 0 0 .167rem #fae100;
+    color: var(--white);
+    background: var(--color_nhsuk-grey-2);
+  }
+
+  &.round-button-link:focus {
+    box-shadow: 0 0 0 4px #ffcd60;
+  }
+}
+
 
 .app-pagination {
 

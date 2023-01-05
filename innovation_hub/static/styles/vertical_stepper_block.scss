@@ -1,6 +1,6 @@
-.app-stepper {
+.app-vertical-stepper {
 
-  .app-stepper__step {
+  .app-vertical-stepper__step {
 
     position: relative;
     padding-left: 45px;
@@ -25,12 +25,12 @@
 
   }
 
-  .app-stepper__header {
+  .app-vertical-stepper__header {
     padding: 10px 0 0;
     border-top: solid 1px #d8dde0;
   }
 
-  .app-stepper__title {
+  .app-vertical-stepper__title {
     color: #0b0c0c;
     font-size: 19px;
     font-weight: bold;
@@ -39,7 +39,7 @@
   }
 
 
-  .app-stepper__circle {
+  .app-vertical-stepper__circle {
     box-sizing: border-box;
     position: absolute;
     z-index: 5;
@@ -53,14 +53,14 @@
     text-align: center;
   }
 
-  .app-stepper__circle--number {
+  .app-vertical-stepper__circle--number {
     font-size: 16px;
     font-weight: bold;
     line-height: 23px;
     border: solid 2px var(--primary-color);
   }
 
-  .app-stepper__circle-inner {
+  .app-vertical-stepper__circle-inner {
     float: right;
     min-width: 100%;
   }
@@ -68,7 +68,7 @@
 
   @media (min-width: 40.0625em) {
 
-    .app-stepper__step {
+    .app-vertical-stepper__step {
 
       padding-left: 60px;
 
@@ -88,21 +88,21 @@
       }
     }
 
-    .app-stepper__header {
+    .app-vertical-stepper__header {
       padding: 30px 0 0;
     }
 
-    .app-stepper__title {
+    .app-vertical-stepper__title {
       font-size: 24px;
     }
 
-    .app-stepper__circle {
+    .app-vertical-stepper__circle {
       top: 30px;
       width: 35px;
       height: 35px;
     }
 
-    .app-stepper__circle--number {
+    .app-vertical-stepper__circle--number {
       font-size: 19px;
       line-height: 30px;
       border-width: 3px;

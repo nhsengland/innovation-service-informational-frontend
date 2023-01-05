@@ -1,0 +1,7 @@
+{% load static wagtailcore_tags %}
+
+<div class="nhsuk-grid-row">
+  {% for block in self.content %}
+    <div class="nhsuk-grid-column-{{ self.column }}">{% include_block block %}</div>
+  {% endfor %}
+</div>

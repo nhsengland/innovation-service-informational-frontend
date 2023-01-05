@@ -1,0 +1,30 @@
+{% if list.paginator.num_pages > 1 %}
+
+  <ul class="nhsuk-grid-row app-pagination">
+
+    {% if list.has_previous %}
+      <li>
+        <a href="?{{ url_query_params }}&page={{ list.previous_page_number }}">Previous</a>
+      </li>
+    {% endif %}
+
+    {% for page_number in pagination_range %}
+      <li>
+        {% if page_number == list.paginator.ELLIPSIS %}
+          {{ list.paginator.ELLIPSIS }}
+        {% else %}
+          <a href="?{{ url_query_params }}&page={{ page_number }}"
+             class="{% if page_number == list.number %}selected{% endif %}">{{ page_number }}</a>
+        {% endif %}
+      </li>
+    {% endfor %}
+
+    {% if list.has_next %}
+      <li>
+        <a href="?{{ url_query_params }}&page={{ list.next_page_number }}">Next</a>
+      </li>
+    {% endif %}
+
+  </ul>
+
+{% endif %}

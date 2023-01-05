@@ -3,79 +3,48 @@
 
 {% block content %}
 
-<div class="nhsuk-grid-row">
-  <div class="nhsuk-grid-column-full app-component-reading-width">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-full app-component-reading-width">
 
-    <div class="app-pane">
+      <div class="app-pane">
 
-      <div class="app-pane__side-bar">
-        <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
-          <ul class="nhsuk-list app-side-nav__list">
-            {% for section in self.get_menu %}
-            <li class="app-side-nav__item{% if section.children %} app-side-nav__item--current{% endif %}">
-              <a href="{{ section.url }}" class="app-side-nav__link">{{ section.label }}</a>
-              {% if section.children %}
-              <ul class="app-side-nav__list app-side-nav__list--nested">
-                {% for innerItem in section.children %}
-                  <li class="app-side-nav__item">
-                    <a class="app-side-nav__link govuk-link govuk-link--no-visited-state" href="#{{ innerItem.slug }}">{{ innerItem.label }}</a>
-                  </li>
-                {% endfor %}
-              </ul>
-              {% endif %}
-            </li>
-            {% endfor %}
-          </ul>
-        </nav>
-      </div>
+        <div class="app-pane__side-bar">
+          <nav class="app-side-nav" role="navigation" aria-label="Main Navigation">
+            <ul class="nhsuk-list app-side-nav__list">
+              {% for section in self.get_menu %}
+                <li class="app-side-nav__item{% if section.children %} app-side-nav__item--current{% endif %}">
+                  <a href="{{ section.url }}" class="app-side-nav__link">{{ section.label }}</a>
+                  {% if section.children %}
+                    <ul class="app-side-nav__list app-side-nav__list--nested">
+                      {% for innerItem in section.children %}
+                        <li class="app-side-nav__item">
+                          <a href="#{{ innerItem.slug }}" class="app-side-nav__link govuk-link govuk-link--no-visited-state">
+                            {{ innerItem.label }}
+                          </a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </li>
+              {% endfor %}
+            </ul>
+          </nav>
+        </div>
 
-      <div class="app-pane__main-content">
+        <div class="app-pane__main-content">
 
-        <h1>{{ self.title }}</h1>
+          <h1>{{ self.title }}</h1>
 
-        {% comment %} Category: {{ self.category.name }} {% endcomment %}
+          {% comment %} Category: {{ self.category.name }} {% endcomment %}
 
-        {{ self.get_parsed_html|richtext }}
+          {{ self.get_parsed_html|richtext }}
 
-        {# Navigation buttons #}
-        {% if self.previous_sibling or self.next_sibling %}
-        <nav class="nhsuk-pagination app-u-hide-print" role="navigation" aria-label="Navigation">
-          <ul class="nhsuk-list nhsuk-pagination__list">
+          {% include "partials/content_navigation.html" with previous_url=self.previous_sibling.url previous_label=self.previous_sibling.title next_url=self.next_sibling.url next_label=self.next_sibling.title %}
 
-          {% if self.previous_sibling %}
-            <li class="nhsuk-pagination-item--previous">
-              <a class="nhsuk-pagination__link nhsuk-pagination__link--prev" href="{{ self.previous_sibling.url }}">
-                <span class="nhsuk-pagination__title">Previous</span>
-                <span class="nhsuk-u-visually-hidden">:</span>
-                <span class="nhsuk-pagination__page">{{ self.previous_sibling.title }}</span>
-                <svg class="nhsuk-icon nhsuk-icon__arrow-left" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" aria-hidden="true">
-                  <path d="M4.1 12.3l2.7 3c.2.2.5.2.7 0 .1-.1.1-.2.1-.3v-2h11c.6 0 1-.4 1-1s-.4-1-1-1h-11V9c0-.2-.1-.4-.3-.5h-.2c-.1 0-.3.1-.4.2l-2.7 3c0 .2 0 .4.1.6z"></path>
-                </svg>
-              </a>
-            </li>
-          {% endif %}
-      
-          {% if self.next_sibling %}
-            <li class="nhsuk-pagination-item--next">
-              <a class="nhsuk-pagination__link nhsuk-pagination__link--next" href="{{ self.next_sibling.url }}">
-                <span class="nhsuk-pagination__title">Next</span>
-                <span class="nhsuk-u-visually-hidden">:</span>
-                <span class="nhsuk-pagination__page">{{ self.next_sibling.title }}</span>
-                <svg class="nhsuk-icon nhsuk-icon__arrow-right" xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" aria-hidden="true">
-                  <path d="M19.6 11.66l-2.73-3A.51.51 0 0 0 16 9v2H5a1 1 0 0 0 0 2h11v2a.5.5 0 0 0 .32.46.39.39 0 0 0 .18 0 .52.52 0 0 0 .37-.16l2.73-3a.5.5 0 0 0 0-.64z"></path>
-                </svg>
-              </a>
-            </li>
-          {% endif %}
-
-          </ul>
-        </nav>
-        {% endif %}
+        </div>
 
       </div>
-
     </div>
   </div>
-</div>
 
 {% endblock content %}

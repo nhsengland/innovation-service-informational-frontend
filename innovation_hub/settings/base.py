@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     'wagtail.contrib.settings',
+    'wagtail.contrib.styleguide',
     "wagtail.embeds",
     "wagtail.sites",
     "wagtail.users",
@@ -85,7 +86,10 @@ TEMPLATES = [
 
                 'innovation_hub.config.constants.templates_constants.header_navigation_menus',
                 'innovation_hub.config.constants.templates_constants.footer_links'
-            ]
+            ],
+            "libraries": {
+                'custom_tags': 'innovation_hub.config.template_tags.custom_tags'
+            }
         }
     }
 ]

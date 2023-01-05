@@ -5,35 +5,26 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
 from django.shortcuts import render
 
-from modelcluster.fields import ParentalKey, ParentalManyToManyField
-from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.fields import ParentalManyToManyField
 
+from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.panels import PageChooserPanel
+from wagtail.contrib.routable_page.models import RoutablePageMixin, route
+from wagtail.core import blocks
 from wagtail.core.fields import RichTextField, StreamField
-
-from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
-from wagtail.contrib.routable_page.models import RoutablePageMixin, route, path
-from wagtail.core.fields import StreamField
 from wagtail.core.models import Page
-from wagtail.images.blocks import ImageChooserBlock
+from wagtail.embeds.blocks import EmbedBlock
 
 from wagtailnhsukfrontend.blocks import ActionLinkBlock, CardGroupBlock, InsetTextBlock, RichTextBlock
-
-# from wagtail.images.edit_handlers import ImageChooserPanel
-
-# from wagtail.snippets.edit_handlers import SnippetChooserPanel
-# from wagtail.core.fields import StreamField
-# from wagtail.core.models import Page, Orderable
-# from wagtail.images.edit_handlers import ImageChooserPanel
-# from wagtail.images.api.fields import ImageRenditionField
-# from wagtail.snippets.models import register_snippet
-
-# from streams import blocks
-
 
 from innovation_hub.apps.news.snippets import NewsTypeSnippet
 
 
 class NewsListPage(RoutablePageMixin, Page):
+
+
+    # For related news approach.
+    # https://docs.wagtail.org/en/stable/reference/pages/panels.html
 
     template = 'list_page.html'
     max_count = 1
@@ -59,13 +50,15 @@ class NewsListPage(RoutablePageMixin, Page):
             news_list = news_list.filter(news_type__name__in=url_news_types_list)
 
         # Paginator
-        paginator = Paginator(news_list, 2)
+        paginator = Paginator(news_list, 1)
         page = request.GET.get('page')
         try:
             news_list = paginator.page(page)
         except PageNotAnInteger:
+            page = 1
             news_list = paginator.page(1)
         except EmptyPage:  # If ?page=x is out of range (too high most likely), return last page.
+            page = paginator.num_pages
             news_list = paginator.page(paginator.num_pages)
 
         # Build news type filter list.
@@ -85,6 +78,7 @@ class NewsListPage(RoutablePageMixin, Page):
         context['current_url_query_params'] = f"types={'&types='.join(url_news_types_list)}" if len(url_news_types_list) > 0 else ''
         context['news_types_filter_list'] = news_types_filter_list
         context['news_list'] = news_list
+        context['pagination_range'] = news_list.paginator.get_elided_page_range(number=page, on_each_side=1, on_ends=1)
         return context
 
     def get_child_pages(self):
@@ -123,9 +117,11 @@ class NewsDetailPage(Page):
     news_type = ParentalManyToManyField("news.NewsTypeSnippet", blank=False)
 
     content = StreamField([
-        ('rich_text', RichTextBlock()),
+        ('rich_text', blocks.RichTextBlock()),
         ('inset_text', InsetTextBlock()),
         ('card_group', CardGroupBlock()),
+        ('embed', EmbedBlock()),
+
         # ('image_chooser', ImageChooserBlock())
     ], null=True, use_json_field=True)
 
@@ -136,11 +132,15 @@ class NewsDetailPage(Page):
         FieldPanel('content')
     ]
 
-    # def previous_sibling(self):
-    #     return self.get_prev_sibling()
+    #   content_panels = Page.content_panels + [
+    #     PageChooserPanel('related_page', 'demo.PublisherPage'),
+    # ]
 
-    # def next_sibling(self):
-    #     return self.get_next_sibling()
+    def previous_sibling(self):
+        return self.get_prev_sibling()
+
+    def next_sibling(self):
+        return self.get_next_sibling()
 
     class Meta:
         verbose_name = 'News detail page'

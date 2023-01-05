@@ -1,6 +1,7 @@
 {% load static wagtailcore_tags wagtailuserbar %}
 {% load compress %}
 {% load nhsukfrontend_tags %}
+{% load custom_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,27 +31,36 @@
   {% compress css %}
   <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/styles.scss' %}" />
   <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/header_navigation.scss' %}" />
-  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/left-menu-layout.scss' %}" />
-  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/stepper-block.scss' %}" />
+  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/left_menu_layout.scss' %}" />
+  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/vertical_stepper_block.scss' %}" />
   {% endcompress %}
 
   {% block extra_css %}{% endblock extra_css %}
 
 </head>
 
-<body class="{% block body_class %}{% endblock %}">
+<body class="{% block body_class %}{% endblock body_class %}">
 
   {% include "theme/header.html" %}
 
   {% breadcrumb %}
 
-  <div class="nhsuk-width-container app-width-container">
-    <main id="maincontent" role="main" class="nhsuk-main-wrapper">
+  <main id="maincontent" role="main">
 
-      {% block content %}{% endblock %}
+    {% blocktovariable content_var %}{% block content %}{% endblock content %}{% endblocktovariable %}
+    {% blocktovariable content_fluid_var %}{% block content_fluid %}{% endblock content_fluid %}{% endblocktovariable %}
+
+    {% if content_fluid_var %}
+      {{ content_fluid_var }}
+    {% endif %}
+
+    {% if content_var %}
+      <div class="nhsuk-width-container app-width-container nhsuk-main-wrapper">
+        {{ content_var }}
+      </div>
+    {% endif %}
 
     </main>
-  </div>
 
   {% include "theme/footer.html" %}
 
@@ -58,9 +68,8 @@
   <script type="text/javascript" src="{% static 'wagtailnhsukfrontend/js/nhsuk.min.js' %}" defer></script>
   <script type="text/javascript" src="{% static 'js/innovation_hub.js' %}" defer></script>
 
-  {% block extra_js %}
-  {# Override this in templates to add extra javascript #}
-  {% endblock extra_js %}
+  {% block extra_js %}{% endblock extra_js %}
+
 </body>
 
 </html>

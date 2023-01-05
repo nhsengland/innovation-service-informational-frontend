@@ -4,7 +4,7 @@
 {% block content %}
 
   <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full app-component-reading-width">
+    <div class="nhsuk-grid-column-two-thirds app-component-reading-width">
 
       <h1>{{ self.title }}</h1>
 
@@ -18,6 +18,8 @@
         <br />
  
       {% endfor %}
+
+      {% include "partials/content_navigation.html" with previous_url=self.previous_sibling.url previous_label=self.previous_sibling.title next_url=self.next_sibling.url next_label=self.next_sibling.title %}
 
     </div>
   </div>
