@@ -48,3 +48,13 @@
   </div>
 
 {% endblock content %}
+
+{% block content_fluid %}
+ 
+  <div class="bg-color-white">
+    <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5">
+      {% include "partials/related_content.html" with content=related_content_list %}
+    </div>
+  </div>
+
+{% endblock content_fluid %}

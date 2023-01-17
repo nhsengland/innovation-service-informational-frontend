@@ -24,6 +24,8 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 # Application definition
 
 INSTALLED_APPS = [
+    "innovation_hub.apps.base",
+    "innovation_hub.apps.base_menus",
     "innovation_hub.apps.contact_us",
     "innovation_hub.apps.home",
     "innovation_hub.apps.innovation_pathway",
@@ -33,11 +35,14 @@ INSTALLED_APPS = [
     'compressor',
     'wagtailnhsukfrontend',
     'wagtailnhsukfrontend.forms',
+    'wagtailmetadata',
 
     "wagtail.contrib.forms",
+    'wagtail.contrib.modeladmin',
     "wagtail.contrib.redirects",
     'wagtail.contrib.settings',
     'wagtail.contrib.styleguide',
+    "wagtail.contrib.typed_table_block",
     "wagtail.embeds",
     "wagtail.sites",
     "wagtail.users",
@@ -82,14 +87,8 @@ TEMPLATES = [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
-                "django.contrib.messages.context_processors.messages",
-
-                'innovation_hub.config.constants.templates_constants.header_navigation_menus',
-                'innovation_hub.config.constants.templates_constants.footer_links'
-            ],
-            "libraries": {
-                'custom_tags': 'innovation_hub.config.template_tags.custom_tags'
-            }
+                "django.contrib.messages.context_processors.messages"
+            ]
         }
     }
 ]

@@ -10,18 +10,29 @@
 
       {{ self.content }}
 
-      <h2>Types</h2>
+      {% comment %} <h2>Types</h2>
 
       {% for item in self.news_type.all %}
  
         <a href="{{ self.get_parent.url }}?types={{ item.name }}">{{ item.name }}</a>
         <br />
  
-      {% endfor %}
+      {% endfor %} {% endcomment %}
 
       {% include "partials/content_navigation.html" with previous_url=self.previous_sibling.url previous_label=self.previous_sibling.title next_url=self.next_sibling.url next_label=self.next_sibling.title %}
 
     </div>
   </div>
-
+ 
 {% endblock content %}
+ 
+ 
+{% block content_fluid %}
+ 
+  <div class="bg-color-white">
+    <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5">
+      {% include "partials/related_content.html" with content=related_content_list %}
+    </div>
+  </div>
+
+{% endblock content_fluid %}

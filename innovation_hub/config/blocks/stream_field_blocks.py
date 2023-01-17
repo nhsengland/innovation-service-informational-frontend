@@ -1,6 +1,28 @@
 from wagtail.core import blocks
+from wagtail.images.blocks import ImageChooserBlock
 
 from wagtailnhsukfrontend.blocks import ActionLinkBlock, CardGroupBlock, InsetTextBlock
+
+
+class BannerBlock(blocks.StructBlock):
+
+    banner_image = ImageChooserBlock(required=True)
+    title = blocks.CharBlock(label='Title', required=True)
+    supporting_text = blocks.CharBlock(label='Supporting text', required=False)
+    layout = blocks.ChoiceBlock([
+        ('title-text', 'Title - Text'),
+        ('text-title', 'Text - Title')
+    ], default='title-text', required=True)
+    alignment = blocks.ChoiceBlock([
+        ('left', 'Left'),
+        ('center', 'Center')
+    ], default='left', required=True)
+
+    class Meta:
+        icon = 'snippet'
+        label = 'Banner'
+        label_format = 'Banner'
+        template = 'blocks/banner_block.html'
 
 
 class ButtonLinkBlock(blocks.StructBlock):
@@ -10,6 +32,8 @@ class ButtonLinkBlock(blocks.StructBlock):
 
     class Meta:
         icon = 'doc-full'
+        label = 'Button link'
+        label_format = 'Button link'
         template = 'blocks/button_link_block.html'
 
 
@@ -23,9 +47,10 @@ class VerticalStepperBlock(blocks.StructBlock):
     )
 
     class Meta:
+        icon = 'list-ol'
+        label = 'Vertical stepper'
+        label_format = 'Vertical stepper'
         template = "blocks/vertical_stepper_block.html"
-        icon = "list-ol"
-        label = "Vertical stepper"
 
 
 class ContentSeparatorBlock(blocks.StructBlock):
@@ -33,7 +58,8 @@ class ContentSeparatorBlock(blocks.StructBlock):
 
     class Meta:
         icon = 'code'
-        label = "Content separator"
+        label = 'Content separator'
+        label_format = 'Content separator'
 
 
 class LayoutContainerBlock(blocks.StructBlock):
@@ -54,6 +80,8 @@ class LayoutContainerBlock(blocks.StructBlock):
 
     class Meta:
         icon = 'placeholder'
+        label = 'Layout container'
+        label_format = 'Layout container'
         template = 'blocks/layout_container_block.html'
 
 
@@ -78,14 +106,15 @@ class SimpleTextCardGroupBlock(blocks.StructBlock):
 
     class Meta:
         icon = 'pilcrow'
+        label = 'Simple text card'
+        label_format = 'Simple text card'
         template = 'blocks/simple_text_card_group_block.html'
 
 
 BLOCKS_BASE_LIST = [
-    ('rich_text', blocks.RichTextBlock()),
     ('action_link', ActionLinkBlock()),
-    ('inset_text', InsetTextBlock()),
     ('card_group', CardGroupBlock()),
-    ('vertical_stepper', VerticalStepperBlock()),
-    ('layout_container', LayoutContainerBlock())
+    ('inset_text', InsetTextBlock()),
+    ('layout_container', LayoutContainerBlock()),
+    ('rich_text', blocks.RichTextBlock())
 ]

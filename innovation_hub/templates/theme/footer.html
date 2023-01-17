@@ -1,11 +1,15 @@
+{% load static menus_tags %}
+
+{% get_menu "footer" as footer_navigation %}
+
 <footer role="contentinfo">
   <div class="nhsuk-footer" id="nhsuk-footer">
     <div class="nhsuk-width-container app-width-container">
       <h2 class="nhsuk-u-visually-hidden">Support links</h2>
       <ul class="nhsuk-footer__list">
-        {% for item in footer_links %}
+        {% for item in footer_navigation.menu_items.all %}
         <li class="nhsuk-footer__list-item">
-          <a class="nhsuk-footer__list-item-link" href="{{ item.slug }}">{{ item.label }}</a>
+          <a class="nhsuk-footer__list-item-link" href="{{ item.link }}">{{ item.title }}</a>
         </li>
         {% endfor %}
       </ul>

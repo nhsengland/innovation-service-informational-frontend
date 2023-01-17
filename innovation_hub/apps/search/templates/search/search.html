@@ -1,38 +1,174 @@
-{% extends "base.html" %}
-{% load static wagtailcore_tags %}
+{% extends "theme/base.html" %}
+{% load static wagtailcore_tags base_filters %}
 
-{% block body_class %}template-searchresults{% endblock %}
+{% block extra_css %}
+  <style>
+    button.form-input-appended-button {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        box-shadow: none;
+        margin: 0;
+        padding: 4px 14px 0px 10px;
+        fill: var(--white);
+    }
 
-{% block title %}Search{% endblock %}
+    li.navigation-list {
+        display: inline-block;
+    }
+
+    @media (min-width: 48.0625em) {
+        li.navigation-list {
+            display: block;
+        }
+    }
+  </style>
+{% endblock extra_css %}
+
+{% block body_class %}
+  template-searchresults
+{% endblock body_class %}
+
+{% block title %}
+  Search
+{% endblock title %}
 
 {% block content %}
-<h1>Search</h1>
 
-<form action="{% url 'search' %}" method="get">
-    <input type="text" name="query"{% if search_query %} value="{{ search_query }}"{% endif %}>
-    <input type="submit" value="Search" class="button">
-</form>
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
 
-{% if search_results %}
-<ul>
-    {% for result in search_results %}
-    <li>
-        <h4><a href="{% pageurl result %}">{{ result }}</a></h4>
-        {% if result.search_description %}
-        {{ result.search_description }}
+      <h1>Search results{% if search_query %} for "{{ search_query }}"{% endif %}</h1>
+ 
+      <form id="search-page-form"
+            method="get"
+            action="{% url 'search' %}"
+            role="search">
+        <div class="nhsuk-form-group">
+          <label for="search-page-search-field" class="nhsuk-u-visually-hidden">Search the Innovation Hub website</label>
+          <div class="d-flex">
+            <input id="search-page-search-field"
+                   name="query"
+                   type="search"
+                   {% if search_query %} value="{{ search_query }}"{% endif %}
+                   placeholder="Search"
+                   autocomplete="off"
+                   class="nhsuk-input nhsuk-u-width-two-thirds"/>
+            <button type="submit" class="nhsuk-button form-input-appended-button">
+              <svg class=""
+                   xmlns="http://www.w3.org/2000/svg"
+                   viewBox="0 0 20 20"
+                   aria-hidden="true"
+                   focusable="false"
+                   height="24"
+                   width="24">
+                <path d="M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z">
+                </path>
+              </svg>
+            </button>
+          </div>
+
+          {% comment %} <button type="submit" class="nhsuk-search__submit">
+            <svg class="nhsuk-icon nhsuk-icon__search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false" width="27" height="27">
+              <path d="M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z" />
+            </svg>
+
+          </button> {% endcomment %}
+        </div>
+      </form>
+
+
+
+ 
+      {% comment %} <form action="{% url 'search' %}" method="get">
+        <input type="text" name="query" {% if search_query %} value="{{ search_query }}"{% endif %}>
+        <input type="submit" value="Search" class="button">
+      </form> {% endcomment %}
+ 
+    </div>
+  </div>
+
+
+  <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
+
+    <div class="nhsuk-grid-column-one-quarter">
+      <h2 class="nhsuk-heading-m nhsuk-u-padding-bottom-2 nhsuk-u-margin-bottom-3 border-bottom-separator-dark">
+        Filter by type
+      </h2>
+      <nav>
+        <ol class="nhsuk-u-padding-0">
+          {% for item in pages_types_list %}
+            <li class="navigation-list">
+              <a href="?{{ item.qp }}"
+                 class="tag-link nhsuk-u-font-size-14{% if item.is_active %} selected{% endif %}">{{ item.name }}</a>
+            </li>
+          {% endfor %}
+        </ol>
+      </nav>
+    </div>
+
+    <div class="nhsuk-grid-column-three-quarters">
+
+      {% if search_results %}
+
+        <ul class="nhsuk-list">
+
+          {% for item in search_results %}
+
+            {% comment %} {% ifchanged result|pagetypename %}
+              {% if not forloop.first %}
+              </ul>
+              <ul class="nhsuk-list">
+              {% endif %}
+              <h2>{{ result|pagetypename }}</h2>
+            {% endifchanged %} {% endcomment %}
+
+            <li class="nhsuk-grid-column-full">
+              <div class="nhsuk-card d-flex align-items-center nhsuk-u-padding-4">
+                <div>
+                  <h2 class="nhsuk-card__heading nhsuk-heading-m">
+                    <div class="tag-text tag-text__transparent nhsuk-u-font-size-14">{{ item|pagetypename }}</div>
+                    <div class="nhsuk-u-padding-top-2">
+                      <a href="{% pageurl item %}">{{ item.title }}</a>
+                    </div>
+                    {% comment %} <a href="{{ item.url }}" class="nhsuk-card__link">{{ item.title }}</a> {% endcomment %}
+                  </h2>
+                  <p class="nhsuk-card__description">
+                    {{ item.summary }}
+                    {% comment %} {% if item.search_description %}{{ item.search_description }}{% endif %} {% endcomment %}
+                  </p>
+                  <p class="nhsuk-body-s font-color-secondary">{{ item.first_published_at|date:'F j, Y' }}</p>
+                  <ul class="nhsuk-u-margin-0 nhsuk-u-padding-0">
+                    {% for news_type_item in item.news_type.all %}
+                      <li class="tag-text tag-text__primary nhsuk-u-font-size-14">{{ news_type_item.name }}</li>
+                    {% endfor %}
+                  </ul>
+                </div>
+              </div>
+              <hr class="nhsuk-section-break nhsuk-section-break--l nhsuk-section-break--visible" />
+            </li>
+
+          {% endfor %}
+        </ul>
+
+ 
+        {% comment %} {% if search_results.has_previous %}
+          <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}">Previous</a>
         {% endif %}
-    </li>
-    {% endfor %}
-</ul>
 
-{% if search_results.has_previous %}
-<a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.previous_page_number }}">Previous</a>
-{% endif %}
+        {% if search_results.has_next %}
+          <a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}">Next</a>
+        {% endif %} {% endcomment %}
 
-{% if search_results.has_next %}
-<a href="{% url 'search' %}?query={{ search_query|urlencode }}&amp;page={{ search_results.next_page_number }}">Next</a>
-{% endif %}
-{% elif search_query %}
-No results found
-{% endif %}
-{% endblock %}
+      {% elif search_query %}
+        No results found
+      {% else %}
+        Please, provide a search
+      {% endif %}
+ 
+      {% include "partials/pagination.html" with pages=search_results range=pagination_range query_params=current_url_query_params %}
+
+    </div>
+
+  </div>
+
+{% endblock content %}

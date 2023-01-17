@@ -41,6 +41,10 @@
 .ml-auto { margin-left: auto; }
 .mr-auto { margin-right: auto; }
 
+.text-align-left { text-align: start; }
+.text-align-center { text-align: center; }
+.text-align-right { text-align: end; }
+
 
 .app-width-container-fluid {
   margin: 0;
@@ -70,9 +74,6 @@
 .font-color-secondary {
   color: var(--nhsuk-secondary-text-color);
 }
-
-
-
 
 .border-bottom-separator-dark {
   border-bottom: 2px solid #212b32;
@@ -165,13 +166,44 @@
 
 
 
+.page-banner {
+  background-position: center right;
+  background-repeat: no-repeat;
+  background-size: cover;
+  
+  .page-banner__overlay {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    color: var(--white);
+
+    @media (max-width: 61.875em) {
+      background-color: rgba(0,0,0,.2);
+    }
+
+    .page-banner__content {
+      width: 100%;
+    }
+  }
+}
+
+
+
+
 .tag-text {
   display: inline-block;
-  background: var(--primary-color);
-  color: var(--white);
   border-radius: 5px;
   padding: 5px 10px;
   text-decoration: none;
+  
+  &.tag-text__primary {
+    background: var(--primary-color);
+    color: var(--white);
+  }
+  &.tag-text__transparent {
+    border: 1px solid var(--color_nhsuk-grey-3);
+    color: var(--nhsuk-secondary-text-color);
+  }
 }
 
 .tag-link {
