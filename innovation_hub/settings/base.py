@@ -27,6 +27,7 @@ INSTALLED_APPS = [
     "innovation_hub.apps.base",
     "innovation_hub.apps.base_menus",
     "innovation_hub.apps.contact_us",
+    "innovation_hub.apps.generic",
     "innovation_hub.apps.home",
     "innovation_hub.apps.innovation_pathway",
     "innovation_hub.apps.news",

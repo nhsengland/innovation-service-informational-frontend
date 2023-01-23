@@ -7,16 +7,14 @@ from modelcluster.contrib.taggit import ClusterTaggableManager
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.contrib.typed_table_block.blocks import TypedTableBlock
 from wagtail.core import blocks
-from wagtail.fields import StreamField
+from wagtail.fields import RichTextField, StreamField
 from wagtail.search import index
-
 from taggit.models import TaggedItemBase
 
 from innovation_hub.apps.base.models import BasePage
 from innovation_hub.apps.news.models import NewsDetailPage
 from innovation_hub.apps.innovation_pathway.snippets import InnovationPathwayStageSnippet
-from innovation_hub.config.blocks.stream_field_blocks import BLOCKS_BASE_LIST, ButtonLinkBlock, VerticalStepperBlock
-from innovation_hub.config.helpers.templates_helper import add_heading_elements_id, heading_elements_ids_list
+from innovation_hub.config.blocks.stream_field_blocks import BLOCKS_BASE_LIST, BannerBlock, ButtonLinkBlock, VerticalStepperBlock
 
 
 class InnovationPathwayStagePageTag(TaggedItemBase):
@@ -36,16 +34,16 @@ class InnovationPathwayIndexPage(BasePage):
     subpage_types = ['innovation_pathway.InnovationPathwayStagePage']
 
     # Database fields.
-    content = StreamField(BLOCKS_BASE_LIST, collapsed=True, null=True, use_json_field=True)
+    intro = RichTextField(verbose_name='Introduction', blank=True, help_text='Introduction text that appears before stages list')
+    content = StreamField(BLOCKS_BASE_LIST + [
+        ('banner', BannerBlock()),
+    ], collapsed=True, blank=True, null=True, use_json_field=True, help_text='This content appears after stages list')
 
     # Editor panels configuration.
     content_panels = BasePage.content_panels + [
+        FieldPanel('intro'),
         FieldPanel('content')
     ]
-
-    def get_menu(self):
-        children = self.get_children().live().public().specific()
-        return list(map(lambda item: {'label': item.title, 'url': item.url}, children))
 
     class Meta:
         verbose_name = 'Innovation pathway index page'
@@ -55,16 +53,13 @@ class InnovationPathwayIndexPage(BasePage):
 class InnovationPathwayStagePage(BasePage):
 
     # Page rules.
-    template = 'index_page.html'
-    max_count = 1
+    template = 'stage_page.html'
     parent_page_types = ['innovation_pathway.InnovationPathwayIndexPage']
     subpage_types = ['innovation_pathway.InnovationPathwayDetailPage']
 
     # Database fields.
     stage = models.ForeignKey(InnovationPathwayStageSnippet, null=True, blank=False, on_delete=models.SET_NULL, related_name='+')
-
     content = StreamField(BLOCKS_BASE_LIST, collapsed=True, null=True, use_json_field=True)
-
     tags = ClusterTaggableManager(through=InnovationPathwayStagePageTag, blank=True)
 
     # Editor panels configuration.
@@ -81,10 +76,6 @@ class InnovationPathwayStagePage(BasePage):
         index.RelatedFields('stage', [index.SearchField('name')]),
         index.RelatedFields('tags', [index.SearchField('name')])
     ]
-
-    def get_menu(self):
-        children = self.get_children().live().public().specific()
-        return list(map(lambda item: {'label': item.title, 'url': item.url}, children))
 
     class Meta:
         verbose_name = 'Innovation pathway stage page'
@@ -141,24 +132,6 @@ class InnovationPathwayDetailPage(BasePage):
 
         context['related_content_list'] = [related_content_news, related_content_ip]
         return context
-
-    def get_menu(self):
-
-        children = self.get_siblings().public().live().specific()
-        return list(map(lambda item: {
-            'label': item.title,
-            'url': item.url,
-            'children': heading_elements_ids_list(str(item.content), r'2') if self.get_url().endswith(f'{item.slug}/') else None
-        }, children))
-
-    def get_parsed_html(self):
-        return add_heading_elements_id(str(self.content))
-
-    def previous_sibling(self):
-        return self.get_prev_sibling()
-
-    def next_sibling(self):
-        return self.get_next_sibling()
 
     class Meta:
         verbose_name = 'Innovation pathway detail page'

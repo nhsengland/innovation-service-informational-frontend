@@ -5,7 +5,7 @@ from django.shortcuts import render
 from modelcluster.fields import ParentalKey
 
 from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
-from wagtail.core.fields import RichTextField, StreamField
+from wagtail.fields import RichTextField, StreamField
 from wagtail.contrib.forms.models import AbstractForm, AbstractFormField, WagtailAdminFormPageForm
 
 from wagtailnhsukfrontend.blocks import ActionLinkBlock, InsetTextBlock, RichTextBlock
@@ -63,7 +63,7 @@ class ContactUsPage(AbstractForm):
 
     base_form_class = ContactUsAdminPage
 
-    content = RichTextField(blank=True)
+    intro = RichTextField(verbose_name='Introduction', blank=True)
 
     success_landing_content = StreamField([
         ('rich_text', RichTextBlock()),
@@ -91,7 +91,7 @@ class ContactUsPage(AbstractForm):
     )
 
     content_panels = AbstractForm.content_panels + [
-        FieldPanel('content'),
+        FieldPanel('intro'),
         InlinePanel('form_fields', label='Form Fields'),
         FieldPanel('success_landing_content'),
         MultiFieldPanel([

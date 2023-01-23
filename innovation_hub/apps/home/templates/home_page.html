@@ -3,38 +3,37 @@
 
 {% block content_fluid %}
 
-  {% for custom_block in self.content %}
+  {% for custom_block in self.content.blocks_by_name.hero %}
 
-    {% if custom_block.block_type == 'hero' %}
-
-      <section class="nhsuk-hero">
-        <div class="nhsuk-width-container app-width-container nhsuk-hero--border">
-          <div class="nhsuk-grid-row d-flex align-items-center">
-            <div class="nhsuk-grid-column-two-thirds">
-              <div class="nhsuk-hero__wrapper app-hero__wrapper">
-                {% if custom_block.value.heading %}<h1 class="nhsuk-u-margin-bottom-4">{{ custom_block.value.heading }}</h1>{% endif %}
-                {% if custom_block.value.text %}<p class="nhsuk-body-l">{{ custom_block.value.text }}</p>{% endif %}
-                {% if custom_block.value.call_to_action_page %}
-                  <a href="{{ custom_block.value.call_to_action_page.url }}"
-                     class="round-button-link">{{ custom_block.value.call_to_action_label }}</a>
-                {% endif %}
-              </div>
+    <section class="nhsuk-hero">
+      <div class="nhsuk-width-container app-width-container nhsuk-hero--border">
+        <div class="nhsuk-grid-row d-flex align-items-center">
+          <div class="nhsuk-grid-column-two-thirds">
+            <div class="nhsuk-hero__wrapper app-hero__wrapper">
+              {% if custom_block.value.heading %}<h1 class="nhsuk-u-margin-bottom-4">{{ custom_block.value.heading }}</h1>{% endif %}
+              {% if custom_block.value.text %}<p class="nhsuk-body-l">{{ custom_block.value.text }}</p>{% endif %}
+              {% if custom_block.value.call_to_action_page %}
+                <a href="{{ custom_block.value.call_to_action_page.url }}"
+                   class="round-button-link">{{ custom_block.value.call_to_action_label }}</a>
+              {% endif %}
             </div>
-            {% if custom_block.value.image %}
-              <div class="nhsuk-grid-column-one-third text-align-center">
-                {% image custom_block.value.image max-250x250 as hero_image %}
-                <img src="{{ hero_image.url }}" alt="{{ hero_image.alt }}" />
-              </div>
-            {% endif %}
           </div>
+          {% if custom_block.value.image %}
+            <div class="nhsuk-grid-column-one-third text-align-center">
+              {% image custom_block.value.image max-250x250 as hero_image %}
+              <img src="{{ hero_image.url }}" alt="{{ hero_image.alt }}" />
+            </div>
+          {% endif %}
         </div>
-      </section>
+      </div>
+    </section>
 
-    {% elif custom_block.block_type == 'banner' %}
+  {% endfor %}
 
-      {% include_block custom_block %}
+ 
+  {% for custom_block in self.content.blocks_by_name.banner %}
 
-    {% endif %}
+    {% include_block custom_block %}
 
   {% endfor %}
 

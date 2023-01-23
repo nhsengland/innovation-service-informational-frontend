@@ -149,12 +149,6 @@ class NewsDetailPage(BasePage):
         context['related_content_list'] = [related_content_news]
         return context
 
-    def previous_sibling(self):
-        return self.get_prev_sibling()
-
-    def next_sibling(self):
-        return self.get_next_sibling()
-
     class Meta:
         verbose_name = 'News detail page'
         verbose_name_plural = 'News detail pages'

@@ -27,7 +27,7 @@ class HomePage(BasePage):
         ('button_link', ButtonLinkBlock()),
         ('content_separator', ContentSeparatorBlock()),
         ('simple_text_card_group', SimpleTextCardGroupBlock()),
-        ('vertical_stepper_cenas', VerticalStepperBlock())
+        ('vertical_stepper', VerticalStepperBlock())
     ], block_counts={'hero': {'max_num': 1}, 'banner': {'max_num': 1}}, collapsed=True, null=True, use_json_field=True)
 
     # Editor panels configuration.

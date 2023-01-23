@@ -7,6 +7,9 @@
   --nhsuk-text-color: #212b32;
   --nhsuk-secondary-text-color: #4c6272;
 
+  --nhsuk-link-color: #005eb8;
+  --nhsuk-link-focus-color: #ffeb3b;
+
   --white: #ffffff;
 
   --color_nhsuk-grey-1:	#4c6272;
@@ -22,6 +25,7 @@
   // --tablet:  40.0625em; /* 641px */
   // --desktop-breakpoint: 48.0625em; /* 769px */
   // --large-desktop: 61.875em; /* 990px */
+  // --large-desktop: 72.75em; /* 1164px */
 }
 
 
@@ -165,29 +169,18 @@
 }
 
 
+// Components.
 
-.page-banner {
-  background-position: center right;
-  background-repeat: no-repeat;
-  background-size: cover;
-  
-  .page-banner__overlay {
-    height: 100%;
-    display: flex;
-    align-items: center;
-    color: var(--white);
+// // Stremafield blocks. This class matches all DIV with a class starting with "block-".
+div[class^='block-'], div[class*=' block-'] {
+  padding-top: 16px;
+  padding-bottom: 8px;
 
-    @media (max-width: 61.875em) {
-      background-color: rgba(0,0,0,.2);
-    }
-
-    .page-banner__content {
-      width: 100%;
-    }
+  @media (max-width: 40.0625em)  {
+    padding-top: 8px;
+    padding-bottom: 8px;
   }
 }
-
-
 
 
 .tag-text {

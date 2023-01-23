@@ -1,11 +1,13 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 
 {% image self.banner_image original as banner_image %}
-<section class="page-banner" style="background-image: url('{{ banner_image.url }}'); height: {{ banner_image.height }}px">
 
-  <div class="page-banner__overlay">
+<section class="app-page-banner" style="background-image: url('{{ banner_image.url }}'); height: {{ self.banner_height|default:banner_image.height }}px">
 
-    <div class="nhsuk-width-container app-width-container page-banner__content text-align-{{ self.alignment }}">
+  <div class="app-page-banner__overlay">
+
+    <div class="nhsuk-width-container app-width-container app-page-banner__content alignment-{{ self.alignment }}">
+
       {% if self.layout == 'text-title' %}
         <p class="nhsuk-u-margin-0 nhsuk-u-padding-0">{{ self.supporting_text }}</p>
         <h2 class="nhsuk-u-margin-0 nhsuk-u-padding-0">{{ self.title }}</h2>
@@ -13,7 +15,12 @@
         <h2 class="nhsuk-u-margin-0 nhsuk-u-padding-0">{{ self.title }}</h2>
         <p class="nhsuk-u-margin-0 nhsuk-u-padding-0">{{ self.supporting_text }}</p>
       {% endif %}
-    </div>
+
+      {% if self.call_to_action_page %}
+        <a href="{{ self.call_to_action_page.url }}" class="round-button-link d-inline-block nhsuk-u-margin-top-4">{{ self.call_to_action_label }}</a>
+      {% endif %}
+
+  </div>
 
   </div>
 

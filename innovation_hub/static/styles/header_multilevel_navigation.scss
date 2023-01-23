@@ -92,7 +92,7 @@
     }
 
     &:focus-visible {
-      background-color: #ffeb3b;
+      background-color: var(--nhsuk-link-focus-color);
       border-bottom: 4px solid #212b32;
       box-shadow: none;
       color: #212b32;

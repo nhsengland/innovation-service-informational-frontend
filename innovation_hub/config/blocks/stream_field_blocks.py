@@ -4,17 +4,29 @@ from wagtail.images.blocks import ImageChooserBlock
 from wagtailnhsukfrontend.blocks import ActionLinkBlock, CardGroupBlock, InsetTextBlock
 
 
+class BannerBlockValues(blocks.StructValue):
+    def cssAligmentClass(self):
+        if self.get('alignment') == 'left' or self.get('alignment') == 'spaced-left':
+            return 'text-align-left'
+        else:
+            return 'text-align-center'
+
+
 class BannerBlock(blocks.StructBlock):
 
     banner_image = ImageChooserBlock(required=True)
     title = blocks.CharBlock(label='Title', required=True)
     supporting_text = blocks.CharBlock(label='Supporting text', required=False)
+    call_to_action_label = blocks.CharBlock(required=False)
+    call_to_action_page = blocks.PageChooserBlock(required=False)
+    banner_height = blocks.IntegerBlock(required=False, help_text='Choose a numeric value in pixels. If empty, height will default to the chosen image height')
     layout = blocks.ChoiceBlock([
         ('title-text', 'Title - Text'),
         ('text-title', 'Text - Title')
     ], default='title-text', required=True)
     alignment = blocks.ChoiceBlock([
         ('left', 'Left'),
+        ('spaced-left', 'Spaced left'),
         ('center', 'Center')
     ], default='left', required=True)
 
@@ -23,6 +35,7 @@ class BannerBlock(blocks.StructBlock):
         label = 'Banner'
         label_format = 'Banner'
         template = 'blocks/banner_block.html'
+        value_class = BannerBlockValues
 
 
 class ButtonLinkBlock(blocks.StructBlock):
@@ -50,11 +63,11 @@ class VerticalStepperBlock(blocks.StructBlock):
         icon = 'list-ol'
         label = 'Vertical stepper'
         label_format = 'Vertical stepper'
-        template = "blocks/vertical_stepper_block.html"
+        template = 'blocks/vertical_stepper_block.html'
 
 
 class ContentSeparatorBlock(blocks.StructBlock):
-    """Empty block to make decisions on templates. """
+    """Empty block to make decisions on templates."""
 
     class Meta:
         icon = 'code'

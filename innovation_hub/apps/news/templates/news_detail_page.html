@@ -10,16 +10,7 @@
 
       {{ self.content }}
 
-      {% comment %} <h2>Types</h2>
-
-      {% for item in self.news_type.all %}
- 
-        <a href="{{ self.get_parent.url }}?types={{ item.name }}">{{ item.name }}</a>
-        <br />
- 
-      {% endfor %} {% endcomment %}
-
-      {% include "partials/content_navigation.html" with previous_url=self.previous_sibling.url previous_label=self.previous_sibling.title next_url=self.next_sibling.url next_label=self.next_sibling.title %}
+      {% include "partials/content_navigation.html" with previous_url=self.get_prev_sibling.url previous_label=self.get_prev_sibling.title next_url=self.get_next_sibling.url next_label=self.get_next_sibling.title %}
 
     </div>
   </div>
