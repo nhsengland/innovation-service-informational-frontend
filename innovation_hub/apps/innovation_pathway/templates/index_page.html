@@ -1,6 +1,14 @@
 {% extends "theme/base.html" %}
 {% load static wagtailcore_tags %}
 
+{% block extra_css %}
+  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/accordion_component.scss' %}" />
+{% endblock extra_css %}
+
+{% block extra_js %}
+  <script type="text/javascript" src="{% static 'js/accordion_component.js' %}" defer></script>
+{% endblock extra_js %}
+
 {% block content %}
 
   <div class="nhsuk-grid-row">
@@ -16,40 +24,45 @@
   <div class="nhsuk-grid-row">
     <div class="nhsuk-grid-column-full">
 
-      <div class="app-accordion nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-5">
+      <div class="app-loader">
+        <div class="loader"></div>
+        <div>Loading stages...</div>
+      </div>
 
-        <button type="button"
-                class="app-accordion__show-hide-all-button nhsuk-u-font-size-16 nhsuk-u-margin-bottom-2">
-          <span class="app-accordion__chevron app-accordion__chevron--down"></span>
-          <span class="app-accordion__show-hide-all-button__label">Show all sections</span>
-        </button>
+      <div id="page-innovation-pathway-index" class="app-accordion nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-5 d-none">
+
+        <div class="text-align-right">
+
+          <button type="button"
+                  data-type="show-hide-all-sections"
+                  data-label="stages steps"
+                  class="app-accordion__button nhsuk-u-font-size-16 nhsuk-u-padding-3 nhsuk-u-margin-bottom-2">
+            <span class="app-accordion__button__label">Show all sections</span>
+            <span class="app-accordion__chevron app-accordion__chevron--down"></span>
+          </button>
+        </div>
  
         {% for stage_page in self.get_children.specific %}
 
           <div class="app-accordion__section">
- 
-            <h2>
+
+            <div class="app-accordion__section-heading nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-5">
+              <div>
+                <h2 class="nhsuk-u-margin-bottom-1">{{ stage_page.title }}</h2>
+                <a href="{{ stage_page.url }}">{{ stage_page.search_description }}</a>
+              </div>
+
               <button type="button"
-                      data-label="{{ stage.grouper }}"
-                      class="app-accordion__section-button nhsuk-u-padding-bottom-3"
+                      data-type="show-hide-section"
+                      data-label="{{ stage_page.title|lower }} section guides"
+                      class="app-accordion__button nhsuk-u-padding-3 ml-auto"
                       aria-controls="accordion-section-content-{{ forloop.counter }}"
                       aria-expanded="true">
-
-                <div id="accordion-section-heading-{{ forloop.counter }}"
-                     class="nhsuk-u-font-size-32 nhsuk-u-font-weight-bold nhsuk-u-margin-bottom-1">
-                  <span class="link-focus">
-                    <a href="{{ stage_page.url }}">{{ stage_page.title }}</a>
-                  </span>
-                </div>
- 
-                <div class="app-accordion__section-toggle nhsuk-u-font-size-14">
-                  <span class="link-focus">
-                    <span class="app-accordion__chevron"></span>
-                    <span class="app-accordion__section-toggle-text">Show</span>
-                  </span>
-                </div>
+                <span class="app-accordion__button__label nhsuk-u-font-size-16">Show section</span>
+                <span class="app-accordion__chevron"></span>
               </button>
-            </h2>
+
+            </div>
  
             <div id="accordion-section-content-{{ forloop.counter }}"
                  class="app-accordion__section-content d-none"

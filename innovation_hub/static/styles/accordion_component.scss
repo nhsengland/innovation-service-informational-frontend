@@ -1,0 +1,109 @@
+.app-accordion {
+
+  border-bottom: 1px solid var(--color_nhsuk-grey-3);
+
+  .app-accordion__button {
+
+    border: 0;
+    color: var(--nhsuk-link-color);
+    border-radius: 5px;
+    cursor: pointer;
+
+    .app-accordion__button__label {
+      vertical-align: middle;
+    }
+
+    &:hover {
+      background: var(--color_nhsuk-grey-4);
+
+      .app-accordion__chevron {
+        color: var(--nhsuk-text-color);
+        background: var(--nhsuk-text-color);
+      }
+
+      .app-accordion__chevron:after {
+        color: var(--white);
+      }
+    }
+
+    &:focus {
+      outline: 0;
+      color: var(--nhsuk-text-color);
+      background-color: #fd0;
+      box-shadow: 0 -2px #fd0, 0 4px #0b0c0c;
+      text-decoration: none;
+    }
+
+  }
+
+
+  .app-accordion__section {
+
+    .app-accordion__section-heading {
+      border-top: 1px solid var(--color_nhsuk-grey-1);
+      display: flex;
+      align-items: center;
+    }
+
+  }
+
+  .app-accordion__chevron {
+
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    display: inline-block;
+    position: relative;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: .0625rem solid;
+    border-radius: 50%;
+    vertical-align: middle;
+
+    &:after {
+      content: "";
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      display: block;
+      position: absolute;
+      bottom: .3125rem;
+      left: .375rem;
+      width: .375rem;
+      height: .375rem;
+      -webkit-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+      transform: rotate(-45deg);
+      border-top: .125rem solid;
+      border-right: .125rem solid
+    }
+
+    &.app-accordion__chevron--down {
+      -webkit-transform: rotate(180deg);
+      -ms-transform: rotate(180deg);
+      transform: rotate(180deg)
+    }
+
+  }
+
+  // @media print {
+  //   .app-accordion__section-button {
+  //     font-size: 18pt;
+  //     line-height: 1.15
+  //   }
+  // }
+
+  // @media print {
+  //   .app-accordion__section-button {
+  //     color: #000
+  //   }
+  // }
+
+  // For tables in content section, remove border from last row.
+  .nhsuk-table__body {
+    tr:last-child {
+      td {
+        border-bottom: none;
+      }
+    }
+  }
+
+}

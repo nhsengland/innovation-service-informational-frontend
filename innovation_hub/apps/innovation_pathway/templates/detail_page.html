@@ -1,6 +1,10 @@
 {% extends "theme/base.html" %}
 {% load static wagtailcore_tags base_filters %}
 
+{% block extra_css %}
+  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/left_menu_layout.scss' %}" />
+{% endblock extra_css %}
+
 {% block content %}
 
   <div class="nhsuk-grid-row">

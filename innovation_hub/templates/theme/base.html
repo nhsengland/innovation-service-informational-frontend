@@ -29,18 +29,17 @@
   <link rel="stylesheet" type="text/css" href="{% static "wagtailnhsukfrontend/css/nhsuk.min.css" %}" />
   {% compress css %}
   <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/styles.scss' %}" />
-  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/accordion.scss' %}" />
   <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/banner_block.scss' %}" />
   <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/header_multilevel_navigation.scss' %}" />
-  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/left_menu_layout.scss' %}" />
   <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/vertical_stepper_block.scss' %}" />
-  {% endcompress %}
-
   {% block extra_css %}{% endblock extra_css %}
+  {% endcompress %}
 
 </head>
 
 <body class="{% block body_class %}{% endblock body_class %}">
+
+  {% wagtailuserbar 'bottom-right' %}
 
   {% include "theme/header.html" %}
 
@@ -68,7 +67,6 @@
   {# Global javascript #}
   <script type="text/javascript" src="{% static 'wagtailnhsukfrontend/js/nhsuk.min.js' %}" defer></script>
   <script type="text/javascript" src="{% static 'js/innovation_hub.js' %}" defer></script>
-
   {% block extra_js %}{% endblock extra_js %}
 
 </body>
