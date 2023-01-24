@@ -1,3 +1,10 @@
+
+/**
+ * Add CSS class to body if javacript is enabled.
+ */
+document.body.classList.add('js-enabled');
+
+
 /**
  * Header multilevel navigation component behaviours.
  */
@@ -5,7 +12,7 @@
 // Handle menu opening and closing.
 function headerOpenCloseNavigationMenu(e) {
 
-  const navElement = document.getElementById('header-navigation').classList;
+  const navElement = document.querySelector('#header-navigation').classList;
   const isMenuOpened = navElement.contains('children-items-height');
 
   if (isMenuOpened) {
@@ -42,9 +49,34 @@ for (let e of document.getElementsByClassName('app-multilevel-navigation__toggle
 //         e.nextElementSibling.classList.add('d-none');
 //         e.ariaLabel = `Open ${e.getAttribute('data-label')} menu`;
 //         e.ariaExpanded = false;
-//         document.getElementById('header-navigation').classList.remove('children-items-height');
+//         document.querySelector('#header-navigation').classList.remove('children-items-height');
 //       }
 //     }
 //   }
 
 // }
+
+
+/**
+ * Header cookies management behaviours.
+ */
+(function () {
+
+  if (!getConsentCookie().consented) {
+    document.querySelector('#cookie-banner').classList.remove('d-none');
+  }
+
+  document.querySelector('#save-cookies-button-ok')?.addEventListener('click', () => {
+    document.querySelector('#cookie-banner').classList.add('d-none');
+    document.querySelector('#cookie-banner-success').classList.remove('d-none');
+    setConsentCookie(true);
+  });
+
+  document.querySelector('#save-cookies-button-nok')?.addEventListener('click', function () {
+    document.querySelector('#cookie-banner').classList.add('d-none')
+    document.querySelector('#cookie-banner-success').classList.remove('d-none');
+    setConsentCookie(false);
+    deleteAnalyticsCookies();
+  });
+
+})();

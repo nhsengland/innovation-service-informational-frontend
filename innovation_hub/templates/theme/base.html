@@ -35,6 +35,11 @@
   {% block extra_css %}{% endblock extra_css %}
   {% endcompress %}
 
+  {% if environment_variables.ENABLE_ANALYTICS %}
+    <script type="text/javascript" src="{% static 'js/cookies_helper.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/analytics.js' %}"></script>
+  {% endif %}
+
 </head>
 
 <body class="{% block body_class %}{% endblock body_class %}">
@@ -70,5 +75,12 @@
   {% block extra_js %}{% endblock extra_js %}
 
 </body>
+
+{% if environment_variables.ENABLE_ANALYTICS %}
+  <noscript>
+    <!-- Google Tag Manager (noscript) -->
+    <iframe title="Google Tag Manager frame" src="https://www.googletagmanager.com/ns.html?id=GTM-M8KK8NB" height="0" width="0" style="display:none;visibility:hidden"></iframe>
+  </noscript>
+{% endif %}
 
 </html>

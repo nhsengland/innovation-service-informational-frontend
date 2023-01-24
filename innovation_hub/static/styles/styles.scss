@@ -1,8 +1,8 @@
 :root {
   --primary-color: #005eb8;
-  // --success-color: #007f3b;
-  // --warning-color: 	#ffeb3b;
-  // --error-color: #d5281b;
+  --success-color: #007f3b;
+  --warning-color: 	#ffeb3b;
+  --error-color: #d5281b;
 
   --nhsuk-text-color: #212b32;
   --nhsuk-secondary-text-color: #4c6272;
@@ -34,12 +34,10 @@
 .d-flex { display: flex; }
 .d-none { display: none; }
 
-.flex-auto { flex: auto; }
-
 .align-items-center { align-items: center; }
-.text-align-center { text-align: center; }
-
 /* .justify-content-space-between { justify-content: space-between; } */
+
+.flex-auto { flex: auto; }
 /* .flex-direction-column { flex-direction: column; } */
 
 .ml-auto { margin-left: auto; }
@@ -49,40 +47,16 @@
 .text-align-center { text-align: center; }
 .text-align-right { text-align: end; }
 
-
-.app-width-container-fluid {
-  margin: 0;
-  max-width: none;
-}
-
-.full-width-section {
-  margin-left: -1000rem;
-  margin-right: -1000rem;
-  padding-left: 1000rem;
-
-  // margin: 0 -9999rem;
-  // padding: 0.25rem 9999rem;
-}
-
-// .overflow-hidden { overflow: hidden; }
-.overflow-x-hidden { overflow-x: hidden; }
-// .overflow-x-scroll {
-//   @media (max-width: 767px) {
-//     overflow-x: scroll;
-//   }
-// }
+.font-color-text { color: var(--nhsuk-text-color); }
+.font-color-secondary { color: var(--nhsuk-secondary-text-color); }
 
 
 .bg-color-white { background-color: var(--white); }
-
-.font-color-secondary {
-  color: var(--nhsuk-secondary-text-color);
-}
+.bg-color-warning { background-color: var(--warning-color); }
 
 .border-bottom-separator-dark {
   border-bottom: 2px solid #212b32;
 }
-
 
 
 /* App custom width */
@@ -171,7 +145,18 @@
 
 // Components.
 
-// Loader component.
+// // Header.
+.cookie-success-banner {
+
+  background-color: var(--success-color);
+  color: var(--white);
+
+  a, a:visited { color: var(--white); }
+  a:focus { color: var(--nhsuk-text-color); }
+
+}
+
+// // Loader component.
 .app-loader {
   display: flex;
   flex-direction: column;
