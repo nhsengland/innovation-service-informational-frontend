@@ -19,7 +19,7 @@ def pagetypename(obj):
             return 'News'
         case 'InnovationPathwayDetailPage':
             return 'Innovation pathway'
-        case 'CaseStudiesDetailsPage':
+        case 'CaseStudiesDetailPage':
             return 'Case Studies'
         case _:
             return ''

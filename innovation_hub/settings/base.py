@@ -25,7 +25,8 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 
 INSTALLED_APPS = [
     "innovation_hub.apps.base",
-    "innovation_hub.apps.base_menus",
+    "innovation_hub.apps.base_navigation",
+    "innovation_hub.apps.case_studies",
     "innovation_hub.apps.contact_us",
     "innovation_hub.apps.generic",
     "innovation_hub.apps.home",
@@ -89,6 +90,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "wagtail.contrib.settings.context_processors.settings",
 
                 'innovation_hub.config.context_processors.environment.environment_variables'
 

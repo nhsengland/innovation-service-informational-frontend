@@ -8,6 +8,7 @@ from wagtail.search.models import Query
 
 from urllib.parse import urlencode
 
+from innovation_hub.apps.case_studies.models import CaseStudiesDetailPage
 from innovation_hub.apps.innovation_pathway.models import InnovationPathwayDetailPage
 from innovation_hub.apps.news.models import NewsDetailPage
 
@@ -15,8 +16,9 @@ from innovation_hub.apps.news.models import NewsDetailPage
 def search(request):
 
     pages_types_list = [
-        {'name': 'News', 'model_type': NewsDetailPage, 'qp': '', 'is_active': False},
-        {'name': 'Innovation Pathway', 'model_type': InnovationPathwayDetailPage, 'qp': '', 'is_active': False}
+        {'name': 'Case studies', 'model_type': CaseStudiesDetailPage, 'qp': '', 'is_active': False},
+        {'name': 'Innovation Pathway', 'model_type': InnovationPathwayDetailPage, 'qp': '', 'is_active': False},
+        {'name': 'News', 'model_type': NewsDetailPage, 'qp': '', 'is_active': False}
     ]
 
     url_qp_query = request.GET.get('query', None)

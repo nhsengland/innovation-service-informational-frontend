@@ -45,11 +45,7 @@
 
   {% include "theme/header.html" %}
   
-  <main id="maincontent" role="main">
-    <div class="nhsuk-width-container app-width-container nhsuk-main-wrapper">
-      {% block content %}{% endblock content %}
-    </div>
-  </main>
+  <main id="maincontent" role="main">{% block content %}{% endblock content %}</main>
 
   {% include "theme/footer.html" %}
 

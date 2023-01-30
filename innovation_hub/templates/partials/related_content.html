@@ -1,21 +1,23 @@
 {% load static wagtailcore_tags base_filters %}
 
-{% if content %}
+{% if pages_group_list %}
 
-  <nav role="navigation" class="nhsuk-contents-list" aria-label="Related content">
+  <nav class="nhsuk-contents-list" role="navigation" aria-label="Related content">
 
-    {% for c in content %}
+    {% for page_group in pages_group_list %}
 
-      {% if c.0|classname == 'NewsDetailPage' %}
+      {% if page_group.0|classname == 'CaseStudiesDetailPage' %}
+        <h2>Relates innovation pathway guides</h2>
+      {% elif page_group.0|classname == 'NewsDetailPage' %}
         <h2>Related news</h2>
-      {% elif c.0|classname == 'InnovationPathwayDetailPage' %}
+      {% elif page_group.0|classname == 'InnovationPathwayDetailPage' %}
         <h2>Relates innovation pathway guides</h2>
       {% endif %}
 
       <ol class="nhsuk-contents-list__list">
-        {% for item in c %}
+        {% for page_item in page_group %}
           <li class="nhsuk-contents-list__item">
-            <a href="{{ item.url }}" class="nhsuk-contents-list__link">{{ item.title }}</a>
+            <a href="{{ page_item.url }}" class="nhsuk-contents-list__link">{{ page_item.title }}</a>
           </li>
         {% endfor %}
       </ol>

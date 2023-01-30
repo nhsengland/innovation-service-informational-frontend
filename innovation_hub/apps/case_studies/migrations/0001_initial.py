@@ -2,6 +2,7 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
+import django_extensions.db.fields
 import modelcluster.contrib.taggit
 import modelcluster.fields
 import wagtail.blocks
@@ -16,31 +17,55 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('taggit', '0005_auto_20220424_2025'),
         ('wagtailimages', '0024_index_image_file_hash'),
         ('wagtailcore', '0078_referenceindex'),
+        ('taggit', '0005_auto_20220424_2025'),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='GenericPage',
+            name='CaseStudiesDetailPage',
             fields=[
                 ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
-                ('is_title_visible', models.BooleanField(default=True)),
                 ('content', wagtail.fields.StreamField([('fixed', wagtail.blocks.StructBlock([('background_color', wagtail.blocks.ChoiceBlock(choices=[('default', 'Default'), ('white', 'White')])), ('column', wagtail.blocks.ChoiceBlock(choices=[('full', 'Full width'), ('one-half', 'One half'), ('one-third', 'One third'), ('two-thirds', 'Two thirds')])), ('content', wagtail.blocks.StreamBlock([('inset_text', wagtail.blocks.StructBlock([('body', wagtail.blocks.RichTextBlock(required=True))], group='Text')), ('rich_text', wagtail.blocks.RichTextBlock(group='Text')), ('action_link', wagtail.blocks.StructBlock([('text', wagtail.blocks.CharBlock(label='Link text', required=True)), ('external_url', wagtail.blocks.URLBlock(label='URL', required=False)), ('new_window', wagtail.blocks.BooleanBlock(label='Open in new window', required=False)), ('internal_page', wagtail.blocks.PageChooserBlock(label='Internal Page', required=False))], group='Buttons and Links')), ('button_link', wagtail.blocks.StructBlock([('text', wagtail.blocks.CharBlock(label='Link text', required=True)), ('internal_page', wagtail.blocks.PageChooserBlock(label='Internal Page', required=True))], group='Buttons and Links')), ('table', wagtail.contrib.typed_table_block.blocks.TypedTableBlock([('rich_text', wagtail.blocks.RichTextBlock())], group='Components')), ('card_group', wagtail.blocks.StructBlock([('column', wagtail.blocks.ChoiceBlock(choices=[('', 'Full-width'), ('one-half', 'One-half'), ('one-third', 'One-third')], required=False)), ('body', wagtail.blocks.StreamBlock([('card_basic', wagtail.blocks.StructBlock([('heading', wagtail.blocks.CharBlock(required=True)), ('heading_level', wagtail.blocks.IntegerBlock(default=3, help_text='The heading level affects users with screen readers. Ignore this if there is no label. Default=3, Min=2, Max=6.', max_value=6, min_value=2)), ('heading_size', wagtail.blocks.ChoiceBlock(choices=[('', 'Default'), ('small', 'Small'), ('medium', 'Medium'), ('large', 'Large')], help_text="The heading size affects the visual size, this follows the front-end library's sizing.", required=False)), ('body', wagtail.blocks.RichTextBlock(required=False))])), ('card_clickable', wagtail.blocks.StructBlock([('heading', wagtail.blocks.CharBlock(required=True)), ('heading_level', wagtail.blocks.IntegerBlock(default=3, help_text='The heading level affects users with screen readers. Ignore this if there is no label. Default=3, Min=2, Max=6.', max_value=6, min_value=2)), ('heading_size', wagtail.blocks.ChoiceBlock(choices=[('', 'Default'), ('small', 'Small'), ('medium', 'Medium'), ('large', 'Large')], help_text="The heading size affects the visual size, this follows the front-end library's sizing.", required=False)), ('body', wagtail.blocks.RichTextBlock(required=False)), ('internal_page', wagtail.blocks.PageChooserBlock(help_text='Interal Page Link for the card', label='Internal Page', required=False)), ('url', wagtail.blocks.URLBlock(help_text='External Link for the card', label='URL', required=False))])), ('card_image', wagtail.blocks.StructBlock([('heading', wagtail.blocks.CharBlock(required=True)), ('heading_level', wagtail.blocks.IntegerBlock(default=3, help_text='The heading level affects users with screen readers. Ignore this if there is no label. Default=3, Min=2, Max=6.', max_value=6, min_value=2)), ('heading_size', wagtail.blocks.ChoiceBlock(choices=[('', 'Default'), ('small', 'Small'), ('medium', 'Medium'), ('large', 'Large')], help_text="The heading size affects the visual size, this follows the front-end library's sizing.", required=False)), ('body', wagtail.blocks.RichTextBlock(required=False)), ('content_image', wagtail.images.blocks.ImageChooserBlock(label='Image', required=True)), ('alt_text', wagtail.blocks.CharBlock(required=True)), ('url', wagtail.blocks.URLBlock(help_text='Optional, if there is a link the entire card will be clickable.', label='URL', required=False)), ('internal_page', wagtail.blocks.PageChooserBlock(help_text='Optional, if there is a link the entire card will be clickable.', label='Internal Page', required=False))])), ('card_feature', wagtail.blocks.StructBlock([('feature_heading', wagtail.blocks.CharBlock(required=True)), ('heading_level', wagtail.blocks.IntegerBlock(default=3, help_text='The heading level affects users with screen readers. Ignore this if there is no label. Default=3, Min=2, Max=6.', max_value=6, min_value=2)), ('heading_size', wagtail.blocks.ChoiceBlock(choices=[('', 'Default'), ('small', 'Small'), ('medium', 'Medium'), ('large', 'Large')], help_text="The heading size affects the visual size, this follows the front-end library's sizing.", required=False)), ('body', wagtail.blocks.RichTextBlock(required=True))]))], required=True))], group='Components', label='NHS Cards')), ('icon_text_card_group', wagtail.blocks.StructBlock([('column', wagtail.blocks.ChoiceBlock(choices=[('full', 'Full width'), ('one-half', 'One half'), ('one-third', 'One third')])), ('cards', wagtail.blocks.ListBlock(wagtail.blocks.StructBlock([('icon', wagtail.blocks.ChoiceBlock(choices=[('success', 'Success icon'), ('error', 'Error icon')], required=False)), ('text', wagtail.blocks.TextBlock(required=True))], icon='arrow-right')))], group='Components', label='Icon text cards')), ('vertical_stepper', wagtail.blocks.StructBlock([('steps', wagtail.blocks.ListBlock(wagtail.blocks.StructBlock([('title', wagtail.blocks.CharBlock(max_length=100, required=True)), ('text', wagtail.blocks.TextBlock(required=True))])))], group='Components', label='Vertical stepper')), ('banner', wagtail.blocks.StructBlock([('banner_image', wagtail.images.blocks.ImageChooserBlock(required=True)), ('title', wagtail.blocks.CharBlock(label='Title', required=True)), ('supporting_text', wagtail.blocks.CharBlock(label='Supporting text', required=False)), ('call_to_action_label', wagtail.blocks.CharBlock(required=False)), ('call_to_action_page', wagtail.blocks.PageChooserBlock(required=False)), ('banner_height', wagtail.blocks.IntegerBlock(help_text='Choose a numeric value in pixels. If empty, height will default to the chosen image height', required=False)), ('layout', wagtail.blocks.ChoiceBlock(choices=[('title-text', 'Title - Text'), ('text-title', 'Text - Title')])), ('alignment', wagtail.blocks.ChoiceBlock(choices=[('left', 'Left'), ('center', 'Center')]))], group='Images')), ('image_gallery', wagtail.blocks.StructBlock([('columns', wagtail.blocks.ChoiceBlock(choices=[(2, 2), (3, 3), (4, 4)], help_text='Choose the number of columns to show on each row (when viewing in desktop size.')), ('row_height', wagtail.blocks.IntegerBlock(help_text='Choose a numeric value in pixels.', required=False)), ('gallery', wagtail.blocks.ListBlock(wagtail.blocks.StructBlock([('column_span', wagtail.blocks.ChoiceBlock(choices=[(1, 1), (2, 2), (3, 3), (4, 4)])), ('image', wagtail.images.blocks.ImageChooserBlock(required=True)), ('url', wagtail.blocks.URLBlock(required=False))])))], group='Images'))], blank=True, collapsed=True, null=True, use_json_field=True))], icon='resubmit', label='Fixed layout')), ('fluid', wagtail.blocks.StructBlock([('background_color', wagtail.blocks.ChoiceBlock(choices=[('default', 'Default'), ('white', 'White')])), ('content', wagtail.blocks.StreamBlock([('banner', wagtail.blocks.StructBlock([('banner_image', wagtail.images.blocks.ImageChooserBlock(required=True)), ('title', wagtail.blocks.CharBlock(label='Title', required=True)), ('supporting_text', wagtail.blocks.CharBlock(label='Supporting text', required=False)), ('call_to_action_label', wagtail.blocks.CharBlock(required=False)), ('call_to_action_page', wagtail.blocks.PageChooserBlock(required=False)), ('banner_height', wagtail.blocks.IntegerBlock(help_text='Choose a numeric value in pixels. If empty, height will default to the chosen image height', required=False)), ('layout', wagtail.blocks.ChoiceBlock(choices=[('title-text', 'Title - Text'), ('text-title', 'Text - Title')])), ('alignment', wagtail.blocks.ChoiceBlock(choices=[('left', 'Left'), ('center', 'Center')]))], group='Images'))], blank=True, collapsed=True, null=True, use_json_field=True))], icon='resubmit', label='Fluid layout'))], blank=True, null=True, use_json_field=True)),
-                ('search_image', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.image', verbose_name='Search image')),
             ],
             options={
-                'verbose_name': 'Generic page',
-                'verbose_name_plural': 'Generic page',
+                'verbose_name': 'Case studies detail page',
+                'verbose_name_plural': 'Case studies detail pages',
             },
             bases=(wagtailmetadata.models.WagtailImageMetadataMixin, 'wagtailcore.page', models.Model),
         ),
         migrations.CreateModel(
-            name='GenericPageTag',
+            name='CaseStudiesTypeSnippet',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('content_object', modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='tagged_items', to='generic.genericpage')),
+                ('title', models.CharField(max_length=100)),
+                ('slug', django_extensions.db.fields.AutoSlugField(blank=True, editable=False, help_text='A slug to identify case studies by this type', populate_from='title')),
+            ],
+            options={
+                'verbose_name': 'Case studies type',
+                'verbose_name_plural': 'Case studies types',
+                'ordering': ['title'],
+            },
+        ),
+        migrations.CreateModel(
+            name='CaseStudiesIndexPage',
+            fields=[
+                ('page_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='wagtailcore.page')),
+                ('content', wagtail.fields.RichTextField(blank=True)),
+                ('search_image', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.image', verbose_name='Search image')),
+            ],
+            options={
+                'verbose_name': 'Case studies index page',
+                'verbose_name_plural': 'Case studies index pages',
+            },
+            bases=(wagtailmetadata.models.WagtailImageMetadataMixin, 'wagtailcore.page', models.Model),
+        ),
+        migrations.CreateModel(
+            name='CaseStudiesDetailPageTag',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('content_object', modelcluster.fields.ParentalKey(on_delete=django.db.models.deletion.CASCADE, related_name='tagged_items', to='case_studies.casestudiesdetailpage')),
                 ('tag', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='%(app_label)s_%(class)s_items', to='taggit.tag')),
             ],
             options={
@@ -48,8 +73,18 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.AddField(
-            model_name='genericpage',
+            model_name='casestudiesdetailpage',
+            name='case_studies_type',
+            field=modelcluster.fields.ParentalManyToManyField(to='case_studies.casestudiestypesnippet'),
+        ),
+        migrations.AddField(
+            model_name='casestudiesdetailpage',
+            name='search_image',
+            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='+', to='wagtailimages.image', verbose_name='Search image'),
+        ),
+        migrations.AddField(
+            model_name='casestudiesdetailpage',
             name='tags',
-            field=modelcluster.contrib.taggit.ClusterTaggableManager(blank=True, help_text='A comma-separated list of tags.', through='generic.GenericPageTag', to='taggit.Tag', verbose_name='Tags'),
+            field=modelcluster.contrib.taggit.ClusterTaggableManager(blank=True, help_text='A comma-separated list of tags.', through='case_studies.CaseStudiesDetailPageTag', to='taggit.Tag', verbose_name='Tags'),
         ),
     ]

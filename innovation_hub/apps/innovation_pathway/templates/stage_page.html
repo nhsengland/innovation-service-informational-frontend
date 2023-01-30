@@ -7,24 +7,25 @@
 
 {% block content %}
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
+  <div class="nhsuk-width-container app-width-container nhsuk-main-wrapper">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
 
-      <div class="app-pane">
+        <div class="app-pane">
 
-        <div class="app-pane__side-bar">
+          <div class="app-pane__side-bar">
+            {% include "partials/pages_list_menu.html" with pages=self.get_children.specific menu_title=self.title current_url=request.path %}
+          </div>
 
-          {% include "partials/pages_list_menu.html" with pages=self.get_children.specific menu_title=self.title current_url=request.path %}
+          <div class="app-pane__main-content">
 
-        </div>
+            <h1>{{ self.title }}</h1>
 
-        <div class="app-pane__main-content">
+            {{ self.content|heading_elements_add_id:'2' }}
 
-          <h1>{{ self.title }}</h1>
+            {% include "partials/content_navigation.html" with next_url=self.get_children.first.url next_label=self.get_children.first.title %}
 
-          {{ self.content|heading_elements_add_id:'2' }}
-
-        {% include "partials/content_navigation.html" with next_url=self.get_children.first.url next_label=self.get_children.first.title %}
+          </div>
 
         </div>
 
@@ -32,14 +33,10 @@
     </div>
   </div>
 
-{% endblock content %}
-
-{% block content_fluid %}
- 
   <div class="bg-color-white">
     <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5">
-      {% include "partials/related_content.html" with content=related_content_list %}
+      {% include "partials/related_content.html" with pages_group_list=related_content_list %}
     </div>
   </div>
-
-{% endblock content_fluid %}
+ 
+{% endblock content %}

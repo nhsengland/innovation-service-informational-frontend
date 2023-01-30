@@ -1,0 +1,74 @@
+{% extends "theme/base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+
+  <div class="nhsuk-width-container app-width-container nhsuk-main-wrapper">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-three-quarters">
+        <h1>{{ self.title }}</h1>
+        {{ self.content|richtext }}
+      </div>
+    </div>
+
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full nhsuk-u-padding-bottom-4">
+
+        <nav aria-labelledby="page-filter-heading">
+          <h2 id="page-filter-heading" class="nhsuk-heading-s nhsuk-u-margin-bottom-2">Filter by type</h2>
+          <ul class="nhsuk-u-padding-0">
+            {% for item in case_studies_types_list %}
+              <li class="d-inline-block nhsuk-u-margin-1">
+                <a href="?{{ item.qp }}"
+                   class="tag-link nhsuk-u-font-size-14{% if item.is_active %} selected{% endif %}">{{ item.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </nav>
+
+      </div>
+    </div>
+
+    <ul class="nhsuk-grid-row nhsuk-card-group">
+
+      {% for item in case_studies_list %}
+
+        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+
+          <div class="nhsuk-card nhsuk-card--clickable">
+
+            {% if item.search_image %}
+              {% image item.search_image height-250 as case_study_image %}
+              <img src="{{ case_study_image.url }}" class="nhsuk-card__img" alt="{{ case_study_image.alt }}" />
+            {% endif %}
+ 
+            <div class="nhsuk-card__content">
+              <h2 class="nhsuk-card__heading nhsuk-heading-m">
+                <a href="{{ item.url }}" class="nhsuk-card__link">{{ item.title }}</a>
+              </h2>
+              <p class="nhsuk-card__description">{{ item.search_description }}</p>
+              <p class="nhsuk-body-s font-color-secondary">{{ item.first_published_at|date:'F j, Y' }}</p>
+              <ul class="nhsuk-u-margin-0 nhsuk-u-padding-0">
+                {% for case_studies_type_item in item.case_studies_type.all %}
+                  <li class="tag-text tag-text__primary nhsuk-u-font-size-14">{{ case_studies_type_item.title }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+
+          </div>
+
+        </li>
+
+      {% endfor %}
+
+    </ul>
+
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        {% include "partials/pagination.html" with pages=case_studies_list range=pagination_range query_params=current_url_query_params %}
+      </div>
+    </div>
+
+  </div>
+
+{% endblock content %}

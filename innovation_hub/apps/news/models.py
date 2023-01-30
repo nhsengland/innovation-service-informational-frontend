@@ -18,7 +18,7 @@ from wagtail.search import index
 
 from innovation_hub.apps.base.models import BasePage
 from innovation_hub.apps.news.snippets import NewsTypeSnippet
-from innovation_hub.config.blocks.stream_field_blocks import BLOCKS_BASE_LIST
+from innovation_hub.config.blocks import FIXED_LAYOUT_BLOCK, FLUID_LAYOUT_BLOCK
 
 
 class NewsDetailPageTag(TaggedItemBase):
@@ -47,11 +47,11 @@ class NewsIndexPage(RoutablePageMixin, BasePage):
 
         news_list = NewsDetailPage.objects.live().public().order_by('-first_published_at')
 
-        news_types_list = list(map(lambda item: {'name': item.name, 'qp': '', 'is_active': False}, NewsTypeSnippet.objects.all()))
+        news_types_list = list(map(lambda item: {'title': item.title, 'qp': '', 'is_active': False}, NewsTypeSnippet.objects.all()))
 
         url_news_types_list = request.GET.getlist('types', None)
         if url_news_types_list:
-            news_list = news_list.filter(news_type__name__in=url_news_types_list)
+            news_list = news_list.filter(news_type__title__in=url_news_types_list)
 
         if request.GET.get('tags', None):
             tags = request.GET.getlist('tags')
@@ -74,11 +74,11 @@ class NewsIndexPage(RoutablePageMixin, BasePage):
 
             qp = copy(url_news_types_list)
 
-            if item['name'] in url_news_types_list:
-                qp.remove(item['name'])
+            if item['title'] in url_news_types_list:
+                qp.remove(item['title'])
                 item['is_active'] = True
             else:
-                qp.append(item['name'])
+                qp.append(item['title'])
                 item['is_active'] = False
 
             item['qp'] = f"types={'&types='.join(qp)}" if len(qp) > 0 else ''
@@ -117,9 +117,7 @@ class NewsDetailPage(BasePage):
 
     # Database fields.
     news_type = ParentalManyToManyField("news.NewsTypeSnippet", blank=False)
-
-    content = StreamField(BLOCKS_BASE_LIST, collapsed=True, null=True, use_json_field=True)
-
+    content = StreamField(FIXED_LAYOUT_BLOCK + FLUID_LAYOUT_BLOCK, collapsed=True, blank=True, null=True, use_json_field=True)
     tags = ClusterTaggableManager(through=NewsDetailPageTag, blank=True)
 
     # Editor panels configuration.

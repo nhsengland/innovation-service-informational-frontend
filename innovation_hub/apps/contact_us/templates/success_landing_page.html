@@ -1,10 +1,14 @@
-{% extends 'theme/base.html' %}
+{% extends "theme/views_base.html" %}
 {% load wagtailcore_tags %}
 
 {% block content %}
 
-<h1>Thank you</h1>
+  <div class="nhsuk-width-container app-width-container nhsuk-main-wrapper">
 
-{{ page.success_landing_content }}
+    <h1>Thank you</h1>
 
-{% endblock %}
+    {{ page.success_landing_content }}
+
+  </div>
+
+{% endblock content %}

@@ -1,8 +1,19 @@
+from django.db import models
+
+from modelcluster.contrib.taggit import ClusterTaggableManager
+from modelcluster.fields import ParentalKey
+
+from taggit.models import TaggedItemBase
+
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.fields import StreamField
 
 from innovation_hub.apps.base.models import BasePage
-from innovation_hub.config.blocks.stream_field_blocks import BLOCKS_BASE_LIST, BannerBlock, ButtonLinkBlock, ContentSeparatorBlock, SimpleTextCardGroupBlock, VerticalStepperBlock
+from innovation_hub.config.blocks import FIXED_LAYOUT_BLOCK, FLUID_LAYOUT_BLOCK
+
+
+class GenericPageTag(TaggedItemBase):
+    content_object = ParentalKey('generic.GenericPage', related_name='tagged_items', on_delete=models.CASCADE)
 
 
 class GenericPage(BasePage):
@@ -10,19 +21,22 @@ class GenericPage(BasePage):
     # Page rules.
     template = 'generic_page.html'
     parent_page_types = ['home.HomePage']
+    subpage_types = []
 
     # Database fields.
-    content = StreamField(BLOCKS_BASE_LIST + [
-        ('banner', BannerBlock()),
-        ('button_link', ButtonLinkBlock()),
-        ('content_separator', ContentSeparatorBlock()),
-        ('simple_text_card_group', SimpleTextCardGroupBlock()),
-        ('vertical_stepper', VerticalStepperBlock())
-    ], collapsed=True, blank=True, null=True, use_json_field=True)
+    is_title_visible = models.BooleanField(default=True)
+
+    content = StreamField(FIXED_LAYOUT_BLOCK + FLUID_LAYOUT_BLOCK, collapsed=True, blank=True, null=True, use_json_field=True)
+
+    tags = ClusterTaggableManager(through=GenericPageTag, blank=True)
 
     # Editor panels configuration.
     content_panels = BasePage.content_panels + [
+        FieldPanel('is_title_visible'),
         FieldPanel('content')
+    ]
+    promote_panels = BasePage.promote_panels + [
+        FieldPanel('tags')
     ]
 
     class Meta:

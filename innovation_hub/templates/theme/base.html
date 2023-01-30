@@ -29,7 +29,6 @@
   <link rel="stylesheet" type="text/css" href="{% static "wagtailnhsukfrontend/css/nhsuk.min.css" %}" />
   {% compress css %}
   <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/styles.scss' %}" />
-  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/banner_block.scss' %}" />
   <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/header_multilevel_navigation.scss' %}" />
   <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/vertical_stepper_block.scss' %}" />
   {% block extra_css %}{% endblock extra_css %}
@@ -50,22 +49,7 @@
 
   {% breadcrumb %}
 
-  <main id="maincontent" role="main">
-
-    {% blocktovariable content_var %}{% block content %}{% endblock content %}{% endblocktovariable %}
-    {% blocktovariable content_fluid_var %}{% block content_fluid %}{% endblock content_fluid %}{% endblocktovariable %}
-
-    {% if content_var %}
-      <div class="nhsuk-width-container app-width-container nhsuk-main-wrapper">
-        {{ content_var }}
-      </div>
-    {% endif %}
-
-    {% if content_fluid_var %}
-      {{ content_fluid_var }}
-    {% endif %}
-
-    </main>
+  <main id="maincontent" role="main">{% block content %}{% endblock content %}</main>
 
   {% include "theme/footer.html" %}
 

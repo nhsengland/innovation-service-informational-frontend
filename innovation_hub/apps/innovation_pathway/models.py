@@ -5,8 +5,6 @@ from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 
 from wagtail.admin.edit_handlers import FieldPanel
-from wagtail.contrib.typed_table_block.blocks import TypedTableBlock
-from wagtail.core import blocks
 from wagtail.fields import RichTextField, StreamField
 from wagtail.search import index
 from taggit.models import TaggedItemBase
@@ -14,7 +12,7 @@ from taggit.models import TaggedItemBase
 from innovation_hub.apps.base.models import BasePage
 from innovation_hub.apps.news.models import NewsDetailPage
 from innovation_hub.apps.innovation_pathway.snippets import InnovationPathwayStageSnippet
-from innovation_hub.config.blocks.stream_field_blocks import BLOCKS_BASE_LIST, BannerBlock, ButtonLinkBlock, VerticalStepperBlock
+from innovation_hub.config.blocks import FIXED_LAYOUT_BLOCKS_LIST, FLUID_LAYOUT_BLOCKS_LIST
 
 
 class InnovationPathwayStagePageTag(TaggedItemBase):
@@ -35,9 +33,7 @@ class InnovationPathwayIndexPage(BasePage):
 
     # Database fields.
     intro = RichTextField(verbose_name='Introduction', blank=True, help_text='Introduction text that appears before stages list')
-    content = StreamField(BLOCKS_BASE_LIST + [
-        ('banner', BannerBlock()),
-    ], collapsed=True, blank=True, null=True, use_json_field=True, help_text='This content appears after stages list')
+    content = StreamField(FIXED_LAYOUT_BLOCKS_LIST + FLUID_LAYOUT_BLOCKS_LIST, collapsed=True, blank=True, null=True, use_json_field=True, help_text='This content appears after stages list')
 
     # Editor panels configuration.
     content_panels = BasePage.content_panels + [
@@ -59,7 +55,7 @@ class InnovationPathwayStagePage(BasePage):
 
     # Database fields.
     stage = models.ForeignKey(InnovationPathwayStageSnippet, null=True, blank=False, on_delete=models.SET_NULL, related_name='+')
-    content = StreamField(BLOCKS_BASE_LIST, collapsed=True, null=True, use_json_field=True)
+    content = StreamField(FIXED_LAYOUT_BLOCKS_LIST, collapsed=True, blank=True, null=True, use_json_field=True)
     tags = ClusterTaggableManager(through=InnovationPathwayStagePageTag, blank=True)
 
     # Editor panels configuration.
@@ -91,17 +87,7 @@ class InnovationPathwayDetailPage(BasePage):
 
     # Database fields.
     stage = models.ForeignKey(InnovationPathwayStageSnippet, null=True, blank=False, on_delete=models.SET_NULL, related_name='+')
-
-    content = StreamField(BLOCKS_BASE_LIST + [
-        ('button_link', ButtonLinkBlock()),
-        # ('content_separator', ContentSeparatorBlock()),
-        # ('simple_text_card_group', SimpleTextCardGroupBlock()),
-        ('table', TypedTableBlock([
-            ('rich_text', blocks.RichTextBlock())
-        ])),
-        ('vertical_stepper', VerticalStepperBlock())
-    ], collapsed=True, null=True, use_json_field=True)
-
+    content = StreamField(FIXED_LAYOUT_BLOCKS_LIST, collapsed=True, blank=True, null=True, use_json_field=True)
     tags = ClusterTaggableManager(through=InnovationPathwayDetailPageTag, blank=True)
 
     # Editor panels configuration.

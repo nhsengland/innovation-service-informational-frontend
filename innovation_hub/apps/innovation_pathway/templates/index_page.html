@@ -2,7 +2,7 @@
 {% load static wagtailcore_tags %}
 
 {% block extra_css %}
-  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/accordion_component.scss' %}" />
+  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/accordion_component.scss' %}"/>
 {% endblock extra_css %}
 
 {% block extra_js %}
@@ -11,97 +11,98 @@
 
 {% block content %}
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-two-thirds">
+  <div class="nhsuk-width-container app-width-container nhsuk-main-wrapper">
 
-      <h1>{{ self.title }}</h1>
- 
-      {{ self.intro|richtext }}
- 
-    </div>
-  </div>
-
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">
-
-      <div class="app-loader">
-        <div class="loader"></div>
-        <div>Loading stages...</div>
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-two-thirds">
+        <h1>{{ self.title }}</h1>
+        {{ self.intro|richtext }}
       </div>
+    </div>
 
-      <div id="page-innovation-pathway-index" class="app-accordion nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-5 d-none">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
 
-        <div class="text-align-right">
-
-          <button type="button"
-                  data-type="show-hide-all-sections"
-                  data-label="stages steps"
-                  class="app-accordion__button nhsuk-u-font-size-16 nhsuk-u-padding-3 nhsuk-u-margin-bottom-2">
-            <span class="app-accordion__button__label">Show all sections</span>
-            <span class="app-accordion__chevron app-accordion__chevron--down"></span>
-          </button>
+        <div class="app-loader">
+          <div class="loader"></div>
+          <div>Loading stages...</div>
         </div>
- 
-        {% for stage_page in self.get_children.specific %}
 
-          <div class="app-accordion__section">
+        <div id="page-innovation-pathway-index" class="app-accordion nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-5 d-none">
 
-            <div class="app-accordion__section-heading nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-5">
-              <div>
-                <h2 class="nhsuk-u-margin-bottom-1">{{ stage_page.title }}</h2>
-                <a href="{{ stage_page.url }}">{{ stage_page.search_description }}</a>
-              </div>
-
-              <button type="button"
-                      data-type="show-hide-section"
-                      data-label="{{ stage_page.title|lower }} section guides"
-                      class="app-accordion__button nhsuk-u-padding-3 ml-auto"
-                      aria-controls="accordion-section-content-{{ forloop.counter }}"
-                      aria-expanded="true">
-                <span class="app-accordion__button__label nhsuk-u-font-size-16">Show section</span>
-                <span class="app-accordion__chevron"></span>
-              </button>
-
-            </div>
- 
-            <div id="accordion-section-content-{{ forloop.counter }}"
-                 class="app-accordion__section-content d-none"
-                 aria-labelledby="accordion-section-heading-{{ forloop.counter }}">
- 
-              <table class="nhsuk-table nhsuk-u-margin-bottom-0">
-                <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">{{ item.stage }} stage guides list</caption>
-                <thead role="rowgroup" class="nhsuk-table__head">
-                  <tr role="row">
-                    <th role="columnheader" scope="col">What to consider</th>
-                    <th role="columnheader" scope="col">Why is it important?</th>
-                  </tr>
-                </thead>
-                <tbody class="nhsuk-table__body">
- 
-                  {% for details_page in stage_page.get_children.specific %}
-                    <tr role="row" class="nhsuk-table__row">
-                      <td class="nhsuk-table__cell">
-                        <a href="{% pageurl details_page %}">{{ details_page.title }}</a>
-                      </td>
-                      <td class="nhsuk-table__cell ">{{ details_page.search_description }}</td>
-                    </tr>
- 
-                  {% endfor %}
- 
-                </tbody>
-              </table>
-
-            </div>
+          <div class="text-align-right">
+            <button type="button"
+                    data-type="show-hide-all-sections"
+                    data-label="stages steps"
+                    class="app-accordion__button nhsuk-u-font-size-16 nhsuk-u-padding-3 nhsuk-u-margin-bottom-2">
+              <span class="app-accordion__button__label">Show all sections</span>
+              <span class="app-accordion__chevron app-accordion__chevron--down"></span>
+            </button>
           </div>
  
-        {% endfor %}
+          {% for stage_page in self.get_children.specific %}
+
+            <div class="app-accordion__section">
+
+              <div class="app-accordion__section-heading nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-5">
+                <div>
+                  <h2 class="nhsuk-u-margin-bottom-1">{{ stage_page.title }}</h2>
+                  <a href="{{ stage_page.url }}">{{ stage_page.search_description }}</a>
+                </div>
+
+                <button type="button"
+                        data-type="show-hide-section"
+                        data-label="{{ stage_page.title|lower }} section guides"
+                        class="app-accordion__button nhsuk-u-padding-3 ml-auto"
+                        aria-controls="accordion-section-content-{{ forloop.counter }}"
+                        aria-expanded="true">
+                  <span class="app-accordion__button__label nhsuk-u-font-size-16">Show section</span>
+                  <span class="app-accordion__chevron"></span>
+                </button>
+              </div>
+ 
+              <div id="accordion-section-content-{{ forloop.counter }}"
+                   class="app-accordion__section-content d-none"
+                   aria-labelledby="accordion-section-heading-{{ forloop.counter }}">
+ 
+                <table class="nhsuk-table nhsuk-u-margin-bottom-0">
+                  <caption class="nhsuk-table__caption nhsuk-u-visually-hidden">{{ item.stage }} stage guides list</caption>
+                  <thead role="rowgroup" class="nhsuk-table__head">
+                    <tr role="row">
+                      <th role="columnheader" scope="col">What to consider</th>
+                      <th role="columnheader" scope="col">Why is it important?</th>
+                    </tr>
+                  </thead>
+                  <tbody class="nhsuk-table__body">
+ 
+                    {% for details_page in stage_page.get_children.specific %}
+                      <tr role="row" class="nhsuk-table__row">
+                        <td class="nhsuk-table__cell">
+                          <a href="{% pageurl details_page %}">{{ details_page.title }}</a>
+                        </td>
+                        <td class="nhsuk-table__cell ">{{ details_page.search_description }}</td>
+                      </tr>
+ 
+                    {% endfor %}
+ 
+                  </tbody>
+                </table>
+
+              </div>
+
+            </div>
+ 
+          {% endfor %}
+
+        </div>
+
       </div>
-
     </div>
-  </div>
 
-  <div class="nhsuk-grid-row">
-    <div class="nhsuk-grid-column-full">{{ self.content }}</div>
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">{{ self.content }}</div>
+    </div>
+
   </div>
 
 {% endblock content %}
