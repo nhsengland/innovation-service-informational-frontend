@@ -1,0 +1,54 @@
+{% extends "theme/base.html" %}
+{% load static wagtailcore_tags %}
+
+{% block extra_css %}
+  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/print.scss' %}" />
+{% endblock extra_css %}
+
+{% block content %}
+
+  <div class="frontcover">
+    <span class="nhsuk-caption-l">{{ self.get_parent.title }}</span>
+    <p class="nhsuk-heading-xl">{{ self.title }} stage</p>
+    Downloaded on {% now "F jS, Y" %}
+  </div>
+
+  <div class="contents">
+    <h1 class="nhsuk-heading-l">Contents</h1>
+    <ul class="table-of-contents">
+      {% for stage_page in self.get_children.specific %}
+        <li>
+          <a href="#stage-page-{{ stage_page.title|slugify }}">{{ stage_page.title }}</a>
+          <ul class="table-of-contents__inner-list">
+            {% for details_page in stage_page.get_children.specific %}
+              <li>
+                <a href="#detail-page-{{ details_page.title|slugify }}">{{ details_page.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  {% for stage_page in self.get_children.specific %}
+
+    <h1 id="stage-page-{{ stage_page.title|slugify }}" class="nhsuk-u-margin-bottom-1">
+      {{ stage_page.title }}<span class="nhsuk-u-visually-hidden"> guide </span>
+    </h1>
+ 
+    {{ stage_page.content }}
+
+    {% for details_page in stage_page.get_children.specific %}
+
+      <h2 id="detail-page-{{ details_page.title|slugify }}" class="nhsuk-u-margin-bottom-1">
+        {{ details_page.title }}
+      </h2>
+
+      {{ details_page.content }}
+
+    {% endfor %}
+
+  {% endfor %}
+
+{% endblock content %}

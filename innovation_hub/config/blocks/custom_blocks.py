@@ -1,65 +1,97 @@
+from django.forms.utils import ErrorList
+
+from wagtail.blocks.struct_block import StructBlockValidationError
 from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
 
 
+class CommonBlockValues(blocks.StructValue):
+    """
+    Common block values class wiht generic methods to be used on templates.
+    Note: Make sure that field names are equal on all classes using this one.
+    """
+
+    def link_url(self):
+        """ Returns the linked page url, linked document url, or the exact URL. """
+        link_page = self.get('link_page')
+        link_url = self.get('link_url')
+        link_document = self.get('link_document')
+        return link_page.url or link_url or link_document.url
+
+
 class BannerBlock(blocks.StructBlock):
 
-    banner_image = ImageChooserBlock(required=True)
+    background_image = ImageChooserBlock(required=True)
     title = blocks.CharBlock(label='Title', required=True)
     supporting_text = blocks.CharBlock(label='Supporting text', required=False)
-    call_to_action_label = blocks.CharBlock(required=False)
-    call_to_action_page = blocks.PageChooserBlock(required=False)
+    link_label = blocks.CharBlock(label='Call to action label', required=False)
+    link_page = blocks.PageChooserBlock(label='Call to action page', required=False)
+    link_url = blocks.URLBlock(label='Call to action url', required=False)
     banner_height = blocks.IntegerBlock(required=False, help_text='Choose a numeric value in pixels. If empty, height will default to the chosen image height')
-    layout = blocks.ChoiceBlock([
-        ('title-text', 'Title - Text'),
-        ('text-title', 'Text - Title')
-    ], default='title-text', required=True)
-    alignment = blocks.ChoiceBlock([
-        ('left', 'Left'),
-        ('center', 'Center')
-    ], default='left', required=True)
+    layout = blocks.ChoiceBlock([('title-text', 'Title - Text'), ('text-title', 'Text - Title')], default='title-text', required=True)
+    alignment = blocks.ChoiceBlock([('left', 'Left'), ('center', 'Center')], default='left', required=True)
+
+    def clean(self, value):
+        errors = {}
+        if value.get('link_page') and value.get('link_url'):
+            errors['link_page'] = errors['link_url'] = ErrorList(['Please select a call to action page or url (but not both)'])
+        if errors:
+            raise StructBlockValidationError(block_errors=errors)
+        return super().clean(value)
 
     class Meta:
-        icon = 'snippet'
+        icon = 'rectangle-ad'
         label = 'Banner'
-        label_format = 'Banner'
+        label_format = 'Banner: {title}'
         template = 'blocks/banner_block.html'
+        value_class = CommonBlockValues
 
 
-class ButtonLinkBlock(blocks.StructBlock):
+class ButtonBlock(blocks.StructBlock):
 
-    text = blocks.CharBlock(label='Link text', required=True)
-    internal_page = blocks.PageChooserBlock(label='Internal Page', required=True)
+    link_label = blocks.CharBlock(label='Label', required=True)
+    link_page = blocks.PageChooserBlock(label='Internal page', required=False)
+    link_url = blocks.URLBlock(label='External url', required=False)
+
+    def clean(self, value):
+        errors = {}
+        if not (bool(value.get('link_page')) ^ bool(value.get('link_url'))):
+            errors['link_page'] = errors['link_url'] = ErrorList(['Please select an internal page or an external url (but not both)'])
+        if errors:
+            raise StructBlockValidationError(block_errors=errors)
+        return super().clean(value)
 
     class Meta:
-        icon = 'doc-full'
-        label = 'Button link'
-        label_format = 'Button link'
-        template = 'blocks/button_link_block.html'
-
-
-class ContentSeparatorBlock(blocks.StructBlock):
-    """Empty block to make decisions on templates."""
-
-    class Meta:
-        icon = 'code'
-        label = 'Content separator'
-        label_format = 'Content separator'
+        icon = 'square-arrow-up-right'
+        label = 'Button'
+        label_format = 'Button: {link_label}'
+        template = 'blocks/button_block.html'
+        value_class = CommonBlockValues
 
 
 class HeroBlock(blocks.StructBlock):
 
     heading = blocks.CharBlock(required=True)
     text = blocks.TextBlock(required=False)
+    link_label = blocks.CharBlock(label='Call to action label', required=False)
+    link_page = blocks.PageChooserBlock(label='Call to action page', required=False)
+    link_url = blocks.URLBlock(label='Call to action url', required=False)
     image = ImageChooserBlock(required=False)
-    call_to_action_label = blocks.CharBlock(required=False)
-    call_to_action_page = blocks.PageChooserBlock(required=False)
+
+    def clean(self, value):
+        errors = {}
+        if value.get('link_page') and value.get('link_url'):
+            errors['link_page'] = errors['link_url'] = ErrorList(['Please select a call to action page or url (but not both)'])
+        if errors:
+            raise StructBlockValidationError(block_errors=errors)
+        return super().clean(value)
 
     class Meta:
-        icon = 'user'
+        icon = 'crown'
         label = 'Hero'
-        label_format = 'Hero'
+        label_format = 'Hero: {heading}'
         template = 'blocks/hero_block.html'
+        value_class = CommonBlockValues
 
 
 class ImageGalleryBlock(blocks.StructBlock):
@@ -76,33 +108,10 @@ class ImageGalleryBlock(blocks.StructBlock):
     )
 
     class Meta:
-        icon = 'list-ol'
+        icon = 'images'
         label = 'Image gallery'
-        label_format = 'Image gallery'
+        label_format = 'Image gallery: {gallery}'
         template = 'blocks/image_gallery_block.html'
-
-
-# class LayoutContainerBlock(blocks.StructBlock):
-
-#     column = blocks.ChoiceBlock([
-#         ('full', 'Full-width'),
-#         ('one-half', 'One-half'),
-#         ('one-third', 'One-third'),
-#         ('two-thirds', 'Two-thirds'),
-#     ], default='full', required=True)
-
-#     class BodyStreamBlock(blocks.StreamBlock):
-#         rich_text = blocks.RichTextBlock()
-#         action_link = ActionLinkBlock()
-#         inset_text = InsetTextBlock()
-
-#     content = BodyStreamBlock(required=True)
-
-#     class Meta:
-#         icon = 'placeholder'
-#         label = 'Layout container'
-#         label_format = 'Layout container'
-#         template = 'blocks/layout_container_block.html'
 
 
 class IconTextCardGroupBlock(blocks.StructBlock):
@@ -111,7 +120,6 @@ class IconTextCardGroupBlock(blocks.StructBlock):
         ('full', 'Full width'),
         ('one-half', 'One half'),
         ('one-third', 'One third')
-        # ('two-thirds', 'Two-thirds'),
     ], default='full', required=True)
 
     cards = blocks.ListBlock(
@@ -121,13 +129,13 @@ class IconTextCardGroupBlock(blocks.StructBlock):
                 ('error', 'Error icon')
             ], default='', required=False)),
             ('text', blocks.TextBlock(required=True))
-        ], icon='arrow-right')
+        ], label='Card', label_format='Card: {text}', icon='square-check-regular')
     )
 
     class Meta:
-        icon = 'pilcrow'
-        label = 'Icon text card'
-        label_format = 'Icon text card'
+        icon = 'square-check-solid'
+        label = 'Icon text cards'
+        label_format = 'Icon text cards: {cards}'
         template = 'blocks/icon_text_card_group_block.html'
 
 
@@ -137,11 +145,11 @@ class VerticalStepperBlock(blocks.StructBlock):
         blocks.StructBlock([
             ('title', blocks.CharBlock(required=True, max_length=100)),
             ('text', blocks.TextBlock(required=True))
-        ])
+        ], label='Step', label_format='Step: {title}', icon='list-check')
     )
 
     class Meta:
         icon = 'list-ol'
         label = 'Vertical stepper'
-        label_format = 'Vertical stepper'
+        label_format = 'Vertical stepper: {steps}'
         template = 'blocks/vertical_stepper_block.html'

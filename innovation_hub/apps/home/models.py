@@ -19,8 +19,8 @@ class HomePage(BasePage):
         FIXED_LAYOUT_BLOCK +
         [('fluid', blocks.StructBlock([
             ('background_color', blocks.ChoiceBlock([('default', 'Default'), ('white', 'White')], default='default', required=True)),
-            ('content', blocks.StreamBlock(FLUID_LAYOUT_BLOCKS_LIST + [('hero', HeroBlock(group='Components'))], collapsed=True, blank=True, null=True, use_json_field=True))
-        ], label='Fluid layout', icon='resubmit'))],
+            ('content', blocks.StreamBlock(FLUID_LAYOUT_BLOCKS_LIST + [('hero', HeroBlock(group='Components'))], collapsed=True, blank=True, null=True, block_counts={'hero': {'max_num': 1}}, use_json_field=True))
+        ], label='Fluid layout', label_format='Fluid layout: {background_color} background', icon='columns-gap'))],
         collapsed=True, blank=True, null=True, use_json_field=True
     )
 

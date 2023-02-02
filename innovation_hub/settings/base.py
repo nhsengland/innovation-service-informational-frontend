@@ -38,10 +38,12 @@ INSTALLED_APPS = [
     'wagtailnhsukfrontend',
     'wagtailnhsukfrontend.forms',
     'wagtailmetadata',
+    'wagtail_pdf_view',
 
     "wagtail.contrib.forms",
     'wagtail.contrib.modeladmin',
     "wagtail.contrib.redirects",
+    'wagtail.contrib.routable_page',
     'wagtail.contrib.settings',
     'wagtail.contrib.styleguide',
     "wagtail.contrib.typed_table_block",

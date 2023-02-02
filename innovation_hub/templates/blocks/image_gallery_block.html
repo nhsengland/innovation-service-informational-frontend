@@ -1,6 +1,7 @@
 {% load static wagtailcore_tags wagtailimages_tags %}
 
-<div class="image-gallery-block columns-{{ self.columns }} nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-5"{% if self.row_height %} style="grid-auto-rows: {{ self.row_height }}px;"{% endif %}>
+<div class="image-gallery-block columns-{{ self.columns }} nhsuk-u-padding-top-3 nhsuk-u-padding-bottom-5"
+     {% if self.row_height %} style="grid-auto-rows: {{ self.row_height }}px;"{% endif %}>
 
   {% for item in self.gallery %}
 
@@ -10,7 +11,7 @@
     <img src="{{ item_image.url }}"
          class="column-{{ item.column_span }}"
          alt="{{ item_image.alt }}"
-         {% if self.row_height %} style="max-height: {{ self.row_height }}px;"{% endif %} />
+         {% if self.row_height %} style="max-height: {{ self.row_height }}px;"{% endif %}/>
 
     {% if item.url %}</a>{% endif %}
 

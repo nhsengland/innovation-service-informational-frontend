@@ -1,0 +1,183 @@
+:root {
+  --default-font-size: 11pt;
+  --default-line-height: 1.5;
+}
+
+@page {
+
+  size: A4 portrait;
+  background-color: white;
+  margin: 25mm;
+
+  @top-left {
+    width: 100%;
+    margin: 8mm 0 10mm 0;
+    border-bottom: .25pt solid #666;
+    content: string(page-header-title);
+    font-size: 9pt;
+    color: #333;
+  }
+
+}
+
+// First page.
+@page :first {
+
+  margin: 0;
+
+  @bottom-right {
+    content: normal;
+    margin: 0;
+  }
+
+  @bottom-left {
+    content: normal;
+    margin: 0;
+  }
+
+}
+
+@page :left {
+  @bottom-left {
+    font-size: 9pt;
+    content: counter(page);
+  }
+}
+
+@page :right {
+  @bottom-right {
+    font-size: 9pt;
+    content: counter(page);
+  }
+}
+
+
+html {
+  background-color: transparent;
+}
+
+// Reset chapter and figure counters on the body.
+body {
+  // counter-reset: chapternum figurenum;
+  background-color: transparent;
+  line-height: 1.5;
+  font-size: 11pt;
+}
+
+p {
+  font-size: 11pt;
+  line-height: 1.5;
+}
+
+h1 {
+  string-set: page-header-title content(); // Get the title of the current chapter (content of the h1)
+  page-break-before: always;
+  counter-reset: figurenum;
+  counter-reset: footnote;
+  line-height: 1.3;
+}
+
+h1, h2, h3, h4, h5 {
+  font-weight: bold;
+  page-break-after: avoid;
+  page-break-inside: avoid;
+}
+
+h1+p, h2+p, h3+p {
+  page-break-before: avoid;
+}
+
+a {
+  color: #000;
+}
+
+table, figure {
+  page-break-inside: avoid;
+}
+
+ul {
+  font-size: var(--default-font-size);
+  line-height: var(--default-line-height);
+}
+
+img {
+  max-width: 100%;
+}
+
+
+div.frontcover {
+  margin: 25% 2cm;
+}
+
+
+/* increment chapter counter */
+// h1.chapter:before {
+//   counter-increment: chapternum;
+//   content: counter(chapternum) ". ";
+// }
+
+// /* increment and display figure counter */
+// figcaption:before {
+//   counter-increment: figurenum;
+//   content: counter(chapternum) "-" counter(figurenum) ". ";
+// }
+
+// /* footnotes */
+// .fn {
+//   float: footnote;
+// }
+
+// .fn {
+//   counter-increment: footnote;
+// }
+
+// .fn::footnote-call {
+//   content: counter(footnote);
+//   font-size: 9pt;
+//   vertical-align: super;
+//   line-height: none;
+// }
+
+// .fn::footnote-marker {
+//   font-weight: bold;
+// }
+
+// @page {
+//   @footnotes {
+//     border-top: 0.6pt solid black;
+//     padding-top: 8pt;
+//   }
+// }
+
+
+
+
+ul.table-of-contents {
+
+  font-size: var(--default-font-size);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  page-break-after: always;
+
+  li {
+    margin: 0;
+    line-height: var(--default-line-height);
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+  // Create page numbers using target-counter.
+  a::after {
+    font-size: var(--default-font-size);
+    content: leader('.') target-counter(attr(href), page);
+  }
+
+  .table-of-contents__inner-list {
+    margin: 0 0 0 1mm;
+    list-style: none;
+  }
+
+}

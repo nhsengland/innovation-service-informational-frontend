@@ -46,7 +46,7 @@ $ docker-compose -f .docker/docker-compose.yml up
 $ pipenv shell # This will create your new virtual environment, where everything runs.
 $ pip install -r requirements.txt # Install dependencies
 $ python3 manage.py migrate # Run migrations.
-$ python manage.py createsuperuser # Create admin user to access yout local admin area.
+$ python3 manage.py createsuperuser # Create admin user to access yout local admin area.
 
 ```
 Everything will be installed and ready to run from the virtual environment.

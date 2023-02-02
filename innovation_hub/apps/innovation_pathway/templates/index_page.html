@@ -1,5 +1,5 @@
 {% extends "theme/base.html" %}
-{% load static wagtailcore_tags %}
+{% load static wagtailcore_tags wagtailroutablepage_tags %}
 
 {% block extra_css %}
   <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/accordion_component.scss' %}"/>
@@ -96,6 +96,12 @@
 
         </div>
 
+      </div>
+    </div>
+
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+        <a href="{% routablepageurl page "pdf" %}" class="print-link-button" target="_blank">Print all guidance<span class="nhsuk-u-visually-hidden">(opens a PDF in a new page)</span></a>
       </div>
     </div>
 

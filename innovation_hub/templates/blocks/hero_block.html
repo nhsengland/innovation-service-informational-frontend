@@ -7,10 +7,7 @@
         <div class="nhsuk-hero__wrapper app-hero__wrapper">
           {% if self.heading %}<h1 class="nhsuk-u-margin-bottom-4">{{ self.heading }}</h1>{% endif %}
           {% if self.text %}<p class="nhsuk-body-l">{{ self.text }}</p>{% endif %}
-          {% if self.call_to_action_page %}
-            <a href="{{ self.call_to_action_page.url }}"
-               class="round-button-link">{{ self.call_to_action_label }}</a>
-          {% endif %}
+          {% if self.link_url %}<a href="{{ self.link_url }}" class="round-button-link">{{ self.link_label }}</a>{% endif %}
         </div>
       </div>
       {% if self.image %}

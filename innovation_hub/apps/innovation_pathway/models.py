@@ -7,6 +7,8 @@ from modelcluster.contrib.taggit import ClusterTaggableManager
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.fields import RichTextField, StreamField
 from wagtail.search import index
+
+from wagtail_pdf_view.mixins import PdfViewPageMixin
 from taggit.models import TaggedItemBase
 
 from innovation_hub.apps.base.models import BasePage
@@ -23,13 +25,14 @@ class InnovationPathwayDetailPageTag(TaggedItemBase):
     content_object = ParentalKey('innovation_pathway.InnovationPathwayDetailPage', related_name='tagged_items', on_delete=models.CASCADE)
 
 
-class InnovationPathwayIndexPage(BasePage):
+class InnovationPathwayIndexPage(PdfViewPageMixin, BasePage):
 
     # Page rules.
     template = 'index_page.html'
     max_count = 1
     parent_page_types = ['home.HomePage']
     subpage_types = ['innovation_pathway.InnovationPathwayStagePage']
+    ROUTE_CONFIG = [('html', r'^$'), ('pdf', r'^pdf/$')]  # Printing configuration.
 
     # Database fields.
     intro = RichTextField(verbose_name='Introduction', blank=True, help_text='Introduction text that appears before stages list')
@@ -41,17 +44,27 @@ class InnovationPathwayIndexPage(BasePage):
         FieldPanel('content')
     ]
 
+    def get_context(self, request, mode=None, **kwargs):
+
+        context = super().get_context(request, **kwargs)
+
+        if mode == 'pdf':
+            self.template = 'index_page_print.html'
+
+        return context
+
     class Meta:
         verbose_name = 'Innovation pathway index page'
         verbose_name_plural = 'Innovation pathway index page'
 
 
-class InnovationPathwayStagePage(BasePage):
+class InnovationPathwayStagePage(PdfViewPageMixin, BasePage):
 
     # Page rules.
     template = 'stage_page.html'
     parent_page_types = ['innovation_pathway.InnovationPathwayIndexPage']
     subpage_types = ['innovation_pathway.InnovationPathwayDetailPage']
+    ROUTE_CONFIG = [('html', r'^$'), ('pdf', r'^pdf/$')]  # Printing configuration.
 
     # Database fields.
     stage = models.ForeignKey(InnovationPathwayStageSnippet, null=True, blank=False, on_delete=models.SET_NULL, related_name='+')
@@ -73,17 +86,27 @@ class InnovationPathwayStagePage(BasePage):
         index.RelatedFields('tags', [index.SearchField('name')])
     ]
 
+    def get_context(self, request, mode=None, **kwargs):
+
+        context = super().get_context(request, **kwargs)
+
+        if mode == 'pdf':
+            self.template = 'stage_page_print.html'
+
+        return context
+
     class Meta:
         verbose_name = 'Innovation pathway stage page'
         verbose_name_plural = 'Innovation pathway stages page'
 
 
-class InnovationPathwayDetailPage(BasePage):
+class InnovationPathwayDetailPage(PdfViewPageMixin, BasePage):  # RoutablePageMixin
 
     # Page rules.
     template = 'detail_page.html'
     parent_page_types = ['innovation_pathway.InnovationPathwayStagePage']
     subpage_types = []
+    ROUTE_CONFIG = [('html', r'^$'), ('pdf', r'^pdf/$')]  # Printing configuration.
 
     # Database fields.
     stage = models.ForeignKey(InnovationPathwayStageSnippet, null=True, blank=False, on_delete=models.SET_NULL, related_name='+')
@@ -105,18 +128,24 @@ class InnovationPathwayDetailPage(BasePage):
         index.RelatedFields('tags', [index.SearchField('name')])
     ]
 
-    def get_context(self, request, *args, **kwargs):
+    def get_context(self, request, mode=None, **kwargs):
 
-        context = super().get_context(request, *args, **kwargs)
+        context = super().get_context(request, **kwargs)
 
-        page_tags = self.tags.all()
+        if mode == 'pdf':
+            self.template = 'detail_page_print.html'
 
-        related_content_news = NewsDetailPage.objects.live().public().filter(tags__in=page_tags)
-        related_content_news = related_content_news.annotate(Count('title')).exclude(pk=self.pk).order_by('-title__count')[:3]
-        related_content_ip = InnovationPathwayDetailPage.objects.live().public().filter(tags__in=page_tags)
-        related_content_ip = related_content_ip.annotate(Count('title')).exclude(pk=self.pk).order_by('-title__count')[:3]
+        else:
 
-        context['related_content_list'] = [related_content_news, related_content_ip]
+            page_tags = self.tags.all()
+
+            related_content_news = NewsDetailPage.objects.live().public().filter(tags__in=page_tags)
+            related_content_news = related_content_news.annotate(Count('title')).exclude(pk=self.pk).order_by('-title__count')[:3]
+            related_content_ip = InnovationPathwayDetailPage.objects.live().public().filter(tags__in=page_tags)
+            related_content_ip = related_content_ip.annotate(Count('title')).exclude(pk=self.pk).order_by('-title__count')[:3]
+
+            context['related_content_list'] = [related_content_news, related_content_ip]
+
         return context
 
     class Meta:
