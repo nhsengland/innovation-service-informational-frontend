@@ -1,0 +1,38 @@
+# Docker
+# Build a Docker image
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+
+trigger:
+- develop
+- main
+
+resources:
+- repo: self
+
+variables:
+  tag: '$(Build.BuildId)'
+
+name: NHSISINFORMATIONALCMS_$(SourceBranchName)_$(Date:yyyyMMdd)_$(Rev:.r)
+
+stages:
+- stage: Archive
+  displayName: Zip files
+  jobs:
+  - job: Archive
+    displayName: Zip and Archive
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(Build.SourcesDirectory)/src/nhs_is_informational_cms'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/nhs-is-informatinal-cms-build.zip'
+        replaceExistingArchive: true
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/nhs-is-informatinal-cms-build.zip'
+        ArtifactName: 'nhs_is_informational_cms'
+        publishLocation: 'Container'
