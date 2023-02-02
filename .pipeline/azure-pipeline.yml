@@ -25,7 +25,7 @@ stages:
     steps:
     - task: ArchiveFiles@2
       inputs:
-        rootFolderOrFile: '$(Build.SourcesDirectory)/src/nhs_is_informational_cms'
+        rootFolderOrFile: '$(Build.SourcesDirectory)/src/hub_homepage_cms'
         includeRootFolder: false
         archiveType: 'zip'
         archiveFile: '$(Build.ArtifactStagingDirectory)/nhs-is-informatinal-cms-build.zip'
@@ -34,5 +34,5 @@ stages:
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)/nhs-is-informatinal-cms-build.zip'
-        ArtifactName: 'nhs_is_informational_cms'
+        ArtifactName: 'hub_homepage_cms'
         publishLocation: 'Container'
