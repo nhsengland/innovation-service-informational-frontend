@@ -1,0 +1,52 @@
+{% extends "theme/base.html" %}
+{% load static wagtailcore_tags wagtailroutablepage_tags base_tags %}
+
+{% block extra_css %}
+  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/left_menu_layout.scss' %}" />
+{% endblock extra_css %}
+
+{% block content %}
+
+  <div class="nhsuk-width-container app-width-container nhsuk-main-wrapper">
+    <div class="nhsuk-grid-row">
+      <div class="nhsuk-grid-column-full">
+
+        <div class="app-pane">
+
+          <div class="app-pane__side-bar">
+            {% include "partials/pages_list_menu.html" with pages=self.get_siblings.specific menu_title=self.get_parent.title current_url=request.path %}
+          </div>
+
+          <div class="app-pane__main-content">
+ 
+            <h1>
+              <span class="nhsuk-caption-l">{{ self.get_parent.title }}<span class="nhsuk-u-visually-hidden"> - </span></span>{{ self.title }}
+            </h1>
+
+            {% html_headings_parse self.content '2' 'add-id-attribute' %}
+
+            <div>
+              <a href="{% routablepageurl page "pdf" %}" class="print-link-button" target="_blank">
+                Print this guide<span class="nhsuk-u-visually-hidden">(opens a PDF in a new page)</span>
+              </a>
+            </div>
+
+            {% include "partials/content_navigation.html" with previous_url=self.get_prev_sibling.url previous_label=self.get_prev_sibling.title next_url=self.get_next_sibling.url next_label=self.get_next_sibling.title %}
+
+          </div>
+
+        </div>
+ 
+      </div>
+    </div>
+  </div>
+
+  {% if related_content_count %}
+    <div class="bg-color-white">
+      <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-5 nhsuk-u-padding-bottom-5">
+        {% include "partials/related_content.html" with pages_group_list=related_content_list %}
+      </div>
+    </div>
+  {% endif %}
+
+{% endblock content %}

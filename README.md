@@ -1,5 +1,5 @@
-# NHS Innovation Hub
-NHS Innovation Hub is the entry point of all NHS services related to innovations.
+# NHS Innovation Service Homepage
+NHS Innovation Service Homepage is the entry point of all NHS services related to innovations.
 
 It is built with **Wagtail**, an open source content management framework.
 

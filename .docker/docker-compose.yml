@@ -9,7 +9,7 @@ services:
     environment:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=innovation_hub
+      - POSTGRES_DB=is_homepage
 
   pgadmin:
     image: dpage/pgadmin4
