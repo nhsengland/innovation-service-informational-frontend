@@ -8,7 +8,7 @@ from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.fields import RichTextField, StreamField
 from wagtail.search import index
 
-from wagtail_pdf_view.mixins import PdfViewPageMixin
+#from wagtail_pdf_view.mixins import PdfViewPageMixin
 from taggit.models import TaggedItemBase
 
 from is_homepage.apps.base.models import BasePage
@@ -24,15 +24,15 @@ class InnovationGuidesStagePageTag(TaggedItemBase):
 class InnovationGuidesDetailPageTag(TaggedItemBase):
     content_object = ParentalKey('innovation_guides.InnovationGuidesDetailPage', related_name='tagged_items', on_delete=models.CASCADE)
 
-
-class InnovationGuidesIndexPage(PdfViewPageMixin, BasePage):
+#class InnovationGuidesIndexPage(PdfViewPageMixin, BasePage):
+class InnovationGuidesIndexPage(BasePage):
 
     # Page rules.
     template = 'index_page.html'
     max_count = 1
     parent_page_types = ['home.HomePage']
     subpage_types = ['innovation_guides.InnovationGuidesStagePage']
-    ROUTE_CONFIG = [('html', r'^$'), ('pdf', r'^pdf/$')]  # Printing configuration.
+    #ROUTE_CONFIG = [('html', r'^$'), ('pdf', r'^pdf/$')]  # Printing configuration.
 
     # Database fields.
     intro = RichTextField(verbose_name='Introduction', blank=True, help_text='Introduction text that appears before stages list')
@@ -57,14 +57,14 @@ class InnovationGuidesIndexPage(PdfViewPageMixin, BasePage):
         verbose_name = 'Innovation guides index page'
         verbose_name_plural = 'Innovation guides index page'
 
-
-class InnovationGuidesStagePage(PdfViewPageMixin, BasePage):
+#class InnovationGuidesStagePage(PdfViewPageMixin, BasePage):
+class InnovationGuidesStagePage(BasePage):
 
     # Page rules.
     template = 'stage_page.html'
     parent_page_types = ['innovation_guides.InnovationGuidesIndexPage']
     subpage_types = ['innovation_guides.InnovationGuidesDetailPage']
-    ROUTE_CONFIG = [('html', r'^$'), ('pdf', r'^pdf/$')]  # Printing configuration.
+    #ROUTE_CONFIG = [('html', r'^$'), ('pdf', r'^pdf/$')]  # Printing configuration.
 
     # Database fields.
     stage = models.ForeignKey(InnovationGuidesStageSnippet, null=True, blank=False, on_delete=models.SET_NULL, related_name='+')
@@ -90,8 +90,8 @@ class InnovationGuidesStagePage(PdfViewPageMixin, BasePage):
 
         context = super().get_context(request, **kwargs)
 
-        if mode == 'pdf':
-            self.template = 'stage_page_print.html'
+        #if mode == 'pdf':
+        #    self.template = 'stage_page_print.html'
 
         return context
 
@@ -99,14 +99,14 @@ class InnovationGuidesStagePage(PdfViewPageMixin, BasePage):
         verbose_name = 'Innovation guides stage page'
         verbose_name_plural = 'Innovation guides stages page'
 
-
-class InnovationGuidesDetailPage(PdfViewPageMixin, BasePage):  # RoutablePageMixin
+#class InnovationGuidesDetailPage(PdfViewPageMixin, BasePage):
+class InnovationGuidesDetailPage(BasePage):  # RoutablePageMixin
 
     # Page rules.
     template = 'detail_page.html'
     parent_page_types = ['innovation_guides.InnovationGuidesStagePage']
     subpage_types = []
-    ROUTE_CONFIG = [('html', r'^$'), ('pdf', r'^pdf/$')]  # Printing configuration.
+    #ROUTE_CONFIG = [('html', r'^$'), ('pdf', r'^pdf/$')]  # Printing configuration.
 
     # Database fields.
     stage = models.ForeignKey(InnovationGuidesStageSnippet, null=True, blank=False, on_delete=models.SET_NULL, related_name='+')
