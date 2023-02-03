@@ -43,7 +43,9 @@
         <form id="search-page-form" method="get" action="{% url 'search' %}" role="search">
           <div class="nhsuk-form-group">
             {% wagtail_site as current_site %}
-            <label for="search-page-search-field" class="nhsuk-u-visually-hidden">Search on the {{ current_site.site_name }}</label>
+            <label for="search-page-search-field" class="nhsuk-u-visually-hidden">
+              Search on the {{ current_site.site_name }}
+            </label>
             <div class="d-flex">
               <input id="search-page-search-field"
                      name="query"
@@ -53,7 +55,7 @@
                      autocomplete="off"
                      class="nhsuk-input nhsuk-u-width-two-thirds"/>
               <button type="submit" class="nhsuk-button form-input-appended-button">
-                <svg class="" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" focusable="false" height="24" width="24">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" aria-hidden="true" focusable="false" height="24" width="24">
                   <path d="M19.71 18.29l-4.11-4.1a7 7 0 1 0-1.41 1.41l4.1 4.11a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42zM5 10a5 5 0 1 1 5 5 5 5 0 0 1-5-5z" />
                 </svg>
               </button>
@@ -65,18 +67,17 @@
       </div>
     </div>
 
-    <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
+    <div class="nhsuk-grid-row nhsuk-u-padding-top-5">
 
       <div class="nhsuk-grid-column-one-quarter">
-        <h2 class="nhsuk-heading-m nhsuk-u-padding-bottom-2 nhsuk-u-margin-bottom-3 border-bottom-separator-dark">
+        <h2 class="nhsuk-heading-m nhsuk-u-padding-bottom-2 nhsuk-u-margin-bottom-3 border-bottom-separator-black">
           Filter by type
         </h2>
         <nav>
           <ol class="nhsuk-u-padding-0">
             {% for item in pages_types_list %}
               <li class="navigation-list">
-                <a href="?{{ item.qp }}"
-                   class="tag-link nhsuk-u-font-size-14{% if item.is_active %} selected{% endif %}">{{ item.name }}</a>
+                <a href="?{{ item.qp }}" class="app-tag nhsuk-u-font-size-14{% if item.is_active %} app-tag__selected{% endif %}">{{ item.name }}</a>
               </li>
             {% endfor %}
           </ol>
@@ -87,15 +88,44 @@
 
         {% if search_results %}
 
-          <ul class="nhsuk-list">
+          <ul class="nhsuk-grid-row nhsuk-card-group">
 
             {% for item in search_results %}
 
-              <li class="nhsuk-grid-column-full">
-                <div class="d-flex align-items-center nhsuk-u-padding-4">
+              <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+                <div class="nhsuk-card d-flex align-items-center nhsuk-u-padding-5">
                   <div>
                     <h2 class="nhsuk-card__heading nhsuk-heading-m">
-                      <div class="tag-text tag-text__transparent nhsuk-u-font-size-14">{{ item|pagetypename }}</div>
+                      <span class="nhsuk-u-visually-hidden">{{ item|pagetypename }}:</span>
+                      <a href="{% pageurl item %}">{{ item.seo_title|default:item.title }}</a>
+                    </h2>
+                    {% if item.search_description %}<p class="nhsuk-card__description">{{ item.search_description }}</p>{% endif %}
+                    <p class="nhsuk-body-s font-color-secondary">{{ item.first_published_at|date:'F j, Y' }}</p>
+                    <div class="app-tag app-tag__selected nhsuk-u-font-size-14">{{ item|pagetypename }}</div>
+                  </div>
+
+                  {% if item.search_image %}
+                    {% comment %} <div style="min-width: 30%"> {% endcomment %}
+                    {% image item.search_image max-250x250 as search_image %}
+                    <img src="{{ search_image.url }}" class="nhsuk-card__img" alt="{{ search_image.alt }}" />
+                    {% comment %} </div> {% endcomment %}
+                  {% endif %}
+ 
+                </div>
+              </li>
+
+            {% endfor %}
+
+          </ul>
+
+          {% comment %} <ul class="nhsuk-list">
+
+            {% for item in search_results %}
+
+              <li class="d-flex align-items-center nhsuk-u-margin-4 border-bottom-separator-grey">
+                  <div>
+                    <h2 class="nhsuk-card__heading nhsuk-heading-m">
+                      <div class="app-tag nhsuk-u-font-size-14">{{ item|pagetypename }}</div>
                       <div class="nhsuk-u-padding-top-2">
                         <a href="{% pageurl item %}">{{ item.seo_title|default:item.title }}</a>
                       </div>
@@ -105,21 +135,33 @@
                   </div>
 
                   {% if item.search_image %}
-                    {% image item.search_image max-250x250 as case_study_image %}
-                    <img src="{{ case_study_image.url }}" class="nhsuk-card__img" alt="{{ case_study_image.alt }}" />
+                    {% image item.search_image max-250x250 as search_image %}
+                    <img src="{{ search_image.url }}" class="nhsuk-card__img" alt="{{ search_image.alt }}" />
                   {% endif %}
-
-                </div>
-                <hr class="nhsuk-section-break nhsuk-section-break--visible"/>
               </li>
 
             {% endfor %}
-          </ul>
+          </ul> {% endcomment %}
 
         {% elif search_query %}
-          No results found
+
+          <p class="nhsuk-u-font-weight-bold nhsuk-body-l nhsuk-u-padding-top-1 nhsuk-u-margin-bottom-3">
+            There are no matching results.
+          </p>
+          <p class="nhsuk-u-margin-bottom-2">You may improve search results by:</p>
+          <ul>
+            <li>removing any selected filter</li>
+            <li>double-checking your spelling</li>
+            <li>using fewer words</li>
+          </ul>
+ 
         {% else %}
-          Please, provide a search
+
+          <p class="nhsuk-u-font-weight-bold nhsuk-body-l nhsuk-u-padding-top-1 nhsuk-u-margin-bottom-3">
+            There are no matching results.
+          </p>
+          <p>You need to type in a search in order to find some results.</p>
+
         {% endif %}
  
         {% include "partials/pagination.html" with pages=search_results range=pagination_range query_params=current_url_query_params %}

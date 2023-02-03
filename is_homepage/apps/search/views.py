@@ -9,16 +9,18 @@ from wagtail.search.models import Query
 from urllib.parse import urlencode
 
 from is_homepage.apps.case_studies.models import CaseStudiesDetailPage
-from is_homepage.apps.innovation_guides.models import InnovationGuidesDetailPage
+from is_homepage.apps.generic.models import GenericPage
+from is_homepage.apps.innovation_guides.models import InnovationGuidesStagePage, InnovationGuidesDetailPage
 from is_homepage.apps.news.models import NewsDetailPage
 
 
 def search(request):
 
     pages_types_list = [
-        {'name': 'Case studies', 'model_type': CaseStudiesDetailPage, 'qp': '', 'is_active': False},
-        {'name': 'Innovation guides', 'model_type': InnovationGuidesDetailPage, 'qp': '', 'is_active': False},
-        {'name': 'News', 'model_type': NewsDetailPage, 'qp': '', 'is_active': False}
+        {'name': 'Innovation guides', 'model_type': (InnovationGuidesStagePage, InnovationGuidesDetailPage), 'qp': '', 'is_active': False},
+        {'name': 'News', 'model_type': (NewsDetailPage), 'qp': '', 'is_active': False},
+        {'name': 'Case studies', 'model_type': (CaseStudiesDetailPage), 'qp': '', 'is_active': False},
+        {'name': 'Other', 'model_type': (GenericPage), 'qp': '', 'is_active': False}
     ]
 
     url_qp_query = request.GET.get('query', None)

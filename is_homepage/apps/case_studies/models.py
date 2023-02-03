@@ -45,7 +45,7 @@ class CaseStudiesIndexPage(BasePage):
 
         context = super().get_context(request, *args, **kwargs)
 
-        case_studies_list = CaseStudiesDetailPage.objects.live().public().order_by('-first_published_at')
+        case_studies_list = CaseStudiesDetailPage.objects.distinct().live().public().order_by('-first_published_at')
 
         case_studies_types_list = list(map(lambda item: {'title': item.title, 'qp': '', 'is_active': False}, CaseStudiesTypeSnippet.objects.all()))
 

@@ -7,6 +7,7 @@ from taggit.models import TaggedItemBase
 
 from wagtail.admin.edit_handlers import FieldPanel
 from wagtail.fields import StreamField
+from wagtail.search import index
 
 from is_homepage.apps.base.models import BasePage
 from is_homepage.config.blocks import FIXED_LAYOUT_BLOCK, FLUID_LAYOUT_BLOCK
@@ -25,9 +26,7 @@ class GenericPage(BasePage):
 
     # Database fields.
     is_title_visible = models.BooleanField(default=True)
-
     content = StreamField(FIXED_LAYOUT_BLOCK + FLUID_LAYOUT_BLOCK, collapsed=True, blank=True, null=True, use_json_field=True)
-
     tags = ClusterTaggableManager(through=GenericPageTag, blank=True)
 
     # Editor panels configuration.
@@ -37,6 +36,11 @@ class GenericPage(BasePage):
     ]
     promote_panels = BasePage.promote_panels + [
         FieldPanel('tags')
+    ]
+
+    # Search index configuration.
+    search_fields = BasePage.search_fields + [
+        index.RelatedFields('tags', [index.SearchField('name')])
     ]
 
     class Meta:

@@ -11,11 +11,13 @@ def classname(obj):
 @register.filter
 def pagetypename(obj):
     match obj.__class__.__name__:
-        case 'NewsDetailPage':
-            return 'News'
-        case 'InnovationGuidesDetailPage':
-            return 'Innovation guides'
         case 'CaseStudiesDetailPage':
             return 'Case Studies'
+        case 'GenericPage':
+            return 'Other'
+        case 'InnovationGuidesStagePage' | 'InnovationGuidesDetailPage':
+            return 'Innovation guides'
+        case 'NewsDetailPage':
+            return 'News'
         case _:
             return ''

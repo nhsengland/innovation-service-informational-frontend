@@ -45,7 +45,7 @@ class NewsIndexPage(RoutablePageMixin, BasePage):
 
         context = super().get_context(request, *args, **kwargs)
 
-        news_list = NewsDetailPage.objects.live().public().order_by('-first_published_at')
+        news_list = NewsDetailPage.objects.distinct().live().public().order_by('-first_published_at')
 
         news_types_list = list(map(lambda item: {'title': item.title, 'qp': '', 'is_active': False}, NewsTypeSnippet.objects.all()))
 

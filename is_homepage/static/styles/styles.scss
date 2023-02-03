@@ -54,10 +54,12 @@
 .bg-color-white { background-color: var(--white); }
 .bg-color-warning { background-color: var(--warning-color); }
 
-.border-bottom-separator-dark {
-  border-bottom: 2px solid #212b32;
+.border-bottom-separator-black {
+  border-bottom: 1px solid var(--nhsuk-text-color);
 }
-
+.border-bottom-separator-grey {
+  border-bottom: 1px solid var(--color_nhsuk-grey-4);
+}
 
 /* App custom width */
 .app-header__navigation {
@@ -200,8 +202,8 @@
 }
 
 
-/* Print button */
-.print-link-button {
+// // Print button.
+.app-print-button {
   display: inline-block;
   border: 0;
   color: var(--primary-color);
@@ -210,86 +212,73 @@
   padding: 12px 12px 12px 36px;
   font-size: 0.9rem;
   box-shadow: inset 0 0 0 1px var(--primary-color);
-  text-decoration: none;  
-}
-.print-link-button:focus {
-  border: 0;
-  box-shadow: 0 3px govuk-colour("black");
-}
-@media print {
-  .print-link-button {
+  text-decoration: none;
+
+  &:link, &:visited {
+    color: var(--nhsuk-link-color);
+  }
+
+  @media print {
     display: none;
   }
 }
 
-
-.tag-text {
-  display: inline-block;
-  border-radius: 5px;
-  padding: 5px 10px;
-  text-decoration: none;
-  
-  &.tag-text__primary {
-    background: var(--primary-color);
-    color: var(--white);
-  }
-  &.tag-text__transparent {
-    border: 1px solid var(--color_nhsuk-grey-3);
-    color: var(--nhsuk-secondary-text-color);
-  }
-}
-
-.tag-link {
-  display: inline-block;
+// // Tag.
+.app-tag {
   border: 1px solid var(--primary-color);
   border-radius: 5px;
+  color: var(--primary-color);
+  display: inline-block;
   padding: 5px 10px;
-  // background: #dfe2e4;
+
+  &.app-tag__selected {
+    background: var(--primary-color);
+    border: none;
+    color: var(--white) !important;
+  }
+
+}
+
+a.app-tag {
+
   text-decoration: none;
 
-  &.tag-link:link,
-  &.tag-link:visited {
-    color: #005eb8;
+  &:link, &:visited {
+    color: var(--nhsuk-link-color);
   }
 
-  &.tag-link.selected,
-  &.tag-link:active,
-  &.tag-link:hover {
+  &:active, &:hover {
     color: var(--white);
     background: var(--primary-color);
-    // background: #425563;
   }
 
-  &.tag-link:focus {
+  &:focus {
     box-shadow: 0 0 0 4px #ffcd60;
   }
 }
 
+// // Round button link.
 .round-button-link {
   padding: 1em 1.8em;
   background: var(--white);
   border-radius: 1.22rem;
   font-weight: 600;
 
-  &.round-button-link:link,
-  &.round-button-link:visited {
-    color: #005eb8;
+  &:link, &:visited {
+    color: var(--nhsuk-link-color);
   }
 
-  &.round-button-link.selected,
-  &.round-button-link:active,
-  &.round-button-link:hover {
-    // box-shadow: 0 0 0 .167rem #fae100;
+  &:active, &:hover {
     color: var(--white);
     background: var(--color_nhsuk-grey-2);
   }
 
-  &.round-button-link:focus {
+  &:focus {
     box-shadow: 0 0 0 4px #ffcd60;
   }
 }
 
-
+// // Pagination.
 .app-pagination {
 
   padding: 0;
@@ -313,8 +302,6 @@
 
   }
 }
-
-
 
 
 // Blocks (used in streamfields).
@@ -431,4 +418,3 @@
   }
   
 }
-

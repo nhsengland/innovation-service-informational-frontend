@@ -39,7 +39,7 @@
               <p class="nhsuk-body-s font-color-secondary">{{ item.first_published_at|date:'F j, Y' }}</p>
               <ul class="nhsuk-u-margin-0 nhsuk-u-padding-0">
                 {% for case_studies_type_item in item.case_studies_type.all %}
-                  <li class="tag-text tag-text__primary nhsuk-u-font-size-14">{{ case_studies_type_item.title }}</li>
+                  <li class="app-tag app-tag__selected nhsuk-u-font-size-14">{{ case_studies_type_item.title }}</li>
                 {% endfor %}
               </ul>
             </div>
@@ -83,7 +83,7 @@
                   <p class="nhsuk-body-s font-color-secondary">{{ item.first_published_at|date:'F j, Y' }}</p>
                   <ul class="nhsuk-u-margin-0 nhsuk-u-padding-0">
                     {% for news_type_item in item.news_type.all %}
-                      <li class="tag-text tag-text__primary nhsuk-u-font-size-14">{{ news_type_item.title }}</li>
+                      <li class="app-tag app-tag__selected nhsuk-u-font-size-14">{{ news_type_item.title }}</li>
                     {% endfor %}
                   </ul>
                 </div>
@@ -106,7 +106,7 @@
                 <p class="nhsuk-body-s font-color-secondary">{{ item.first_published_at|date:'F j, Y' }}</p>
                 <ul class="nhsuk-u-margin-0 nhsuk-u-padding-0">
                   {% for news_type_item in item.news_type.all %}
-                    <li class="tag-text tag-text__primary nhsuk-u-font-size-14">{{ news_type_item.title }}</li>
+                    <li class="app-tag app-tag__selected nhsuk-u-font-size-14">{{ news_type_item.title }}</li>
                   {% endfor %}
                 </ul>
               </div>
