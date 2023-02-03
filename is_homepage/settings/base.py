@@ -196,7 +196,7 @@ WAGTAILADMIN_BASE_URL = "http://example.com"
 
 # Custom settings.
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 CSRF_TRUSTED_ORIGINS = [os.environ.get('CSRF_TRUSTED_ORIGINS')]
 
 COMPRESS_PRECOMPILERS = [('text/x-scss', 'django_libsass.SassCompiler')]
