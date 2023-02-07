@@ -1,5 +1,5 @@
-from wagtail.admin.edit_handlers import FieldPanel
-from wagtail.core import blocks
+from wagtail.admin.panels import FieldPanel
+from wagtail.blocks import ChoiceBlock, StreamBlock, StructBlock
 from wagtail.fields import StreamField
 
 from is_homepage.apps.base.models import BasePage
@@ -17,9 +17,9 @@ class HomePage(BasePage):
     # Database fields.
     content = StreamField(
         FIXED_LAYOUT_BLOCK +
-        [('fluid', blocks.StructBlock([
-            ('background_color', blocks.ChoiceBlock([('default', 'Default'), ('white', 'White')], default='default', required=True)),
-            ('content', blocks.StreamBlock(FLUID_LAYOUT_BLOCKS_LIST + [('hero', HeroBlock(group='Components'))], collapsed=True, blank=True, null=True, block_counts={'hero': {'max_num': 1}}, use_json_field=True))
+        [('fluid', StructBlock([
+            ('background_color', ChoiceBlock([('default', 'Default'), ('white', 'White')], default='default', required=True)),
+            ('content', StreamBlock(FLUID_LAYOUT_BLOCKS_LIST + [('hero', HeroBlock(group='Components'))], collapsed=True, blank=True, null=True, block_counts={'hero': {'max_num': 1}}, use_json_field=True))
         ], label='Fluid layout', label_format='Fluid layout: {background_color} background', icon='columns-gap'))],
         collapsed=True, blank=True, null=True, use_json_field=True
     )

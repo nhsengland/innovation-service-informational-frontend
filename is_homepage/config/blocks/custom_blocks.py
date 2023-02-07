@@ -1,11 +1,11 @@
 from django.forms.utils import ErrorList
 
+from wagtail.blocks import CharBlock, ChoiceBlock, IntegerBlock, ListBlock, PageChooserBlock, URLBlock, StructBlock, StructValue, TextBlock
 from wagtail.blocks.struct_block import StructBlockValidationError
-from wagtail.core import blocks
 from wagtail.images.blocks import ImageChooserBlock
 
 
-class CommonBlockValues(blocks.StructValue):
+class CommonBlockValues(StructValue):
     """
     Common block values class wiht generic methods to be used on templates.
     Note: Make sure that field names are equal on all classes using this one.
@@ -19,17 +19,17 @@ class CommonBlockValues(blocks.StructValue):
         return link_page.url or link_url or link_document.url
 
 
-class BannerBlock(blocks.StructBlock):
+class BannerBlock(StructBlock):
 
     background_image = ImageChooserBlock(required=True)
-    title = blocks.CharBlock(label='Title', required=True)
-    supporting_text = blocks.CharBlock(label='Supporting text', required=False)
-    link_label = blocks.CharBlock(label='Call to action label', required=False)
-    link_page = blocks.PageChooserBlock(label='Call to action page', required=False)
-    link_url = blocks.URLBlock(label='Call to action url', required=False)
-    banner_height = blocks.IntegerBlock(required=False, help_text='Choose a numeric value in pixels. If empty, height will default to the chosen image height')
-    layout = blocks.ChoiceBlock([('title-text', 'Title - Text'), ('text-title', 'Text - Title')], default='title-text', required=True)
-    alignment = blocks.ChoiceBlock([('left', 'Left'), ('center', 'Center')], default='left', required=True)
+    title = CharBlock(label='Title', required=True)
+    supporting_text = CharBlock(label='Supporting text', required=False)
+    link_label = CharBlock(label='Call to action label', required=False)
+    link_page = PageChooserBlock(label='Call to action page', required=False)
+    link_url = URLBlock(label='Call to action url', required=False)
+    banner_height = IntegerBlock(required=False, help_text='Choose a numeric value in pixels. If empty, height will default to the chosen image height')
+    layout = ChoiceBlock([('title-text', 'Title - Text'), ('text-title', 'Text - Title')], default='title-text', required=True)
+    alignment = ChoiceBlock([('left', 'Left'), ('center', 'Center')], default='left', required=True)
 
     def clean(self, value):
         errors = {}
@@ -47,11 +47,11 @@ class BannerBlock(blocks.StructBlock):
         value_class = CommonBlockValues
 
 
-class ButtonBlock(blocks.StructBlock):
+class ButtonBlock(StructBlock):
 
-    link_label = blocks.CharBlock(label='Label', required=True)
-    link_page = blocks.PageChooserBlock(label='Internal page', required=False)
-    link_url = blocks.URLBlock(label='External url', required=False)
+    link_label = CharBlock(label='Label', required=True)
+    link_page = PageChooserBlock(label='Internal page', required=False)
+    link_url = URLBlock(label='External url', required=False)
 
     def clean(self, value):
         errors = {}
@@ -69,13 +69,13 @@ class ButtonBlock(blocks.StructBlock):
         value_class = CommonBlockValues
 
 
-class HeroBlock(blocks.StructBlock):
+class HeroBlock(StructBlock):
 
-    heading = blocks.CharBlock(required=True)
-    text = blocks.TextBlock(required=False)
-    link_label = blocks.CharBlock(label='Call to action label', required=False)
-    link_page = blocks.PageChooserBlock(label='Call to action page', required=False)
-    link_url = blocks.URLBlock(label='Call to action url', required=False)
+    heading = CharBlock(required=True)
+    text = TextBlock(required=False)
+    link_label = CharBlock(label='Call to action label', required=False)
+    link_page = PageChooserBlock(label='Call to action page', required=False)
+    link_url = URLBlock(label='Call to action url', required=False)
     image = ImageChooserBlock(required=False)
 
     def clean(self, value):
@@ -94,16 +94,16 @@ class HeroBlock(blocks.StructBlock):
         value_class = CommonBlockValues
 
 
-class ImageGalleryBlock(blocks.StructBlock):
+class ImageGalleryBlock(StructBlock):
 
-    columns = blocks.ChoiceBlock([(2, 2), (3, 3), (4, 4)], default=4, required=True, help_text='Choose the number of columns to show on each row (when viewing in desktop size.')
-    row_height = blocks.IntegerBlock(required=False, help_text='Choose a numeric value in pixels.')
+    columns = ChoiceBlock([(2, 2), (3, 3), (4, 4)], default=4, required=True, help_text='Choose the number of columns to show on each row (when viewing in desktop size.')
+    row_height = IntegerBlock(required=False, help_text='Choose a numeric value in pixels.')
 
-    gallery = blocks.ListBlock(
-        blocks.StructBlock([
-            ('column_span', blocks.ChoiceBlock([(1, 1), (2, 2), (3, 3), (4, 4)], default=1, required=True)),
+    gallery = ListBlock(
+        StructBlock([
+            ('column_span', ChoiceBlock([(1, 1), (2, 2), (3, 3), (4, 4)], default=1, required=True)),
             ('image', ImageChooserBlock(required=True)),
-            ('url', blocks.URLBlock(required=False))
+            ('url', URLBlock(required=False))
         ])
     )
 
@@ -114,21 +114,21 @@ class ImageGalleryBlock(blocks.StructBlock):
         template = 'blocks/image_gallery_block.html'
 
 
-class IconTextCardGroupBlock(blocks.StructBlock):
+class IconTextCardGroupBlock(StructBlock):
 
-    column = blocks.ChoiceBlock([
+    column = ChoiceBlock([
         ('full', 'Full width'),
         ('one-half', 'One half'),
         ('one-third', 'One third')
     ], default='full', required=True)
 
-    cards = blocks.ListBlock(
-        blocks.StructBlock([
-            ('icon', blocks.ChoiceBlock([
+    cards = ListBlock(
+        StructBlock([
+            ('icon', ChoiceBlock([
                 ('success', 'Success icon'),
                 ('error', 'Error icon')
             ], default='', required=False)),
-            ('text', blocks.TextBlock(required=True))
+            ('text', TextBlock(required=True))
         ], label='Card', label_format='Card: {text}', icon='square-check-regular')
     )
 
@@ -139,12 +139,12 @@ class IconTextCardGroupBlock(blocks.StructBlock):
         template = 'blocks/icon_text_card_group_block.html'
 
 
-class VerticalStepperBlock(blocks.StructBlock):
+class VerticalStepperBlock(StructBlock):
 
-    steps = blocks.ListBlock(
-        blocks.StructBlock([
-            ('title', blocks.CharBlock(required=True, max_length=100)),
-            ('text', blocks.TextBlock(required=True))
+    steps = ListBlock(
+        StructBlock([
+            ('title', CharBlock(required=True, max_length=100)),
+            ('text', TextBlock(required=True))
         ], label='Step', label_format='Step: {title}', icon='list-check')
     )
 

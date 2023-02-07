@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.panels import FieldPanel
 from wagtail.models import Page
 from wagtailmetadata.models import MetadataPageMixin
 

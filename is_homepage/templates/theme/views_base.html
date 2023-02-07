@@ -32,8 +32,8 @@
   {% block extra_css %}{% endblock extra_css %}
   {% endcompress %}
 
+  <script type="text/javascript" src="{% static 'js/cookies_helper.js' %}"></script>
   {% if environment_variables.ENABLE_ANALYTICS %}
-    <script type="text/javascript" src="{% static 'js/cookies_helper.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/analytics.js' %}"></script>
   {% endif %}
 

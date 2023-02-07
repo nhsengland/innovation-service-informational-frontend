@@ -11,7 +11,7 @@ from modelcluster.fields import ParentalKey, ParentalManyToManyField
 
 from taggit.models import TaggedItemBase
 
-from wagtail.admin.edit_handlers import FieldPanel
+from wagtail.admin.panels import FieldPanel
 from wagtail.contrib.routable_page.models import RoutablePageMixin, route
 from wagtail.fields import RichTextField, StreamField
 from wagtail.search import index

@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 from modelcluster.fields import ParentalKey
 
-from wagtail.admin.edit_handlers import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
+from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
 from wagtail.fields import RichTextField, StreamField
 from wagtail.contrib.forms.models import AbstractForm, AbstractFormField, WagtailAdminFormPageForm
 
