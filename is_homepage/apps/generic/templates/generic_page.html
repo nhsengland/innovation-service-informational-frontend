@@ -3,16 +3,6 @@
 
 {% block content %}
 
-  {% if self.is_title_visible %}
-    <div class="nhsuk-width-container app-width-container nhsuk-main-wrapper">
-      <div class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-three-quarters">
-          <h1>{{ self.title }}</h1>
-        </div>
-      </div>
-    </div>
-  {% endif %}
-
-  {% include "partials/fixed_fluid_layouts.html" with content=self.content %}
+  {% include "partials/fixed_fluid_layout.html" with content=self.content %}
 
 {% endblock content %}

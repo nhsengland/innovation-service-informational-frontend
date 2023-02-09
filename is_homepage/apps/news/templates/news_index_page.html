@@ -20,36 +20,39 @@
   <div class="nhsuk-width-container app-width-container nhsuk-main-wrapper">
 
     <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-three-quarters app-component-reading-width">
+      <div class="nhsuk-grid-column-three-quarters nhsuk-u-padding-bottom-5">
         <h1>{{ self.title }}</h1>
-        {% if self.content %}<div class="nhsuk-u-padding-bottom-5">{{ self.content|richtext }}</div>{% endif %}
       </div>
     </div>
 
+    {% include "partials/fixed_fluid_layout.html" with content=self.content %}
+
     <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
 
-      <div class="nhsuk-grid-column-one-quarter">
-        <nav aria-labelledby="page-filter-heading">
-          <h2 id="page-filter-heading" class="nhsuk-heading-m nhsuk-u-padding-bottom-2 nhsuk-u-margin-bottom-3 border-bottom-separator-black">
-            Filter by type
-          </h2>
-          <ul class="nhsuk-u-padding-0">
-            {% for item in news_types_list %}
-              <li class="navigation-list">
-                <a href="?{{ item.qp }}" class="app-tag nhsuk-u-font-size-14{% if item.is_active %} app-tag__selected{% endif %}">{{ item.title }}</a>
-              </li>
-            {% endfor %}
-          </ul>
-        </nav>
-      </div>
+      {% if news_types_list %}
+        <div class="nhsuk-grid-column-one-quarter">
+          <nav aria-labelledby="page-filter-heading">
+            <h2 id="page-filter-heading" class="nhsuk-heading-m nhsuk-u-padding-bottom-2 nhsuk-u-margin-bottom-3 border-bottom-separator-black">
+              Filter by type
+            </h2>
+            <ul class="nhsuk-u-padding-0">
+              {% for item in news_types_list %}
+                <li class="navigation-list">
+                  <a href="?{{ item.qp }}" class="app-tag nhsuk-u-font-size-14{% if item.is_active %} app-tag__selected{% endif %}">{{ item.title }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </nav>
+        </div>
+      {% endif %}
 
-      <div class="nhsuk-grid-column-three-quarters">
+      <div class="nhsuk-grid-column-{% if news_types_list %}three-quarters{% else %}full{% endif %}">
 
         <ul class="nhsuk-grid-row nhsuk-card-group">
 
           {% for item in news_list %}
 
-            <li class="nhsuk-grid-column-full nhsuk-card-group__item">
+            <li class="nhsuk-grid-column-{% if news_types_list %}full{% else %}one-half{% endif %} nhsuk-card-group__item">
               <div class="nhsuk-card d-flex align-items-center nhsuk-u-padding-5">
                 <div>
                   <h2 class="nhsuk-card__heading nhsuk-heading-m">
@@ -57,11 +60,13 @@
                   </h2>
                   <p class="nhsuk-card__description">{{ item.search_description }}</p>
                   <p class="nhsuk-body-s font-color-secondary">{{ item.first_published_at|date:'F j, Y' }}</p>
-                  <ul class="nhsuk-u-margin-0 nhsuk-u-padding-0">
-                    {% for news_type_item in item.news_type.all %}
-                      <li class="app-tag app-tag__selected nhsuk-u-font-size-14">{{ news_type_item.title }}</li>
-                    {% endfor %}
-                  </ul>
+                  {% if news_types_list %}
+                    <ul class="nhsuk-u-margin-0 nhsuk-u-padding-0">
+                      {% for news_type_item in item.news_type.all %}
+                        <li class="app-tag app-tag__selected nhsuk-u-font-size-14">{{ news_type_item.title }}</li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
                 </div>
 
                 {% if item.search_image %}

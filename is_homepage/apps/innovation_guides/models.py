@@ -5,7 +5,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 
 from wagtail.admin.panels import FieldPanel
-from wagtail.fields import RichTextField, StreamField
+from wagtail.fields import StreamField
 from wagtail.search import index
 
 from wagtail_pdf_view.mixins import PdfViewPageMixin
@@ -14,7 +14,7 @@ from taggit.models import TaggedItemBase
 from is_homepage.apps.base.models import BasePage
 from is_homepage.apps.news.models import NewsDetailPage
 from is_homepage.apps.innovation_guides.snippets import InnovationGuidesStageSnippet
-from is_homepage.config.blocks import FIXED_LAYOUT_BLOCKS_LIST, FLUID_LAYOUT_BLOCKS_LIST
+from is_homepage.config.blocks import FIXED_LAYOUT_BLOCK, FLUID_LAYOUT_BLOCK, grid_layout_block
 
 
 class InnovationGuidesStagePageTag(TaggedItemBase):
@@ -35,8 +35,8 @@ class InnovationGuidesIndexPage(PdfViewPageMixin, BasePage):
     ROUTE_CONFIG = [('html', r'^$'), ('pdf', r'^pdf/$')]  # Printing configuration.
 
     # Database fields.
-    intro = RichTextField(verbose_name='Introduction', blank=True, help_text='Introduction text that appears before stages list')
-    content = StreamField(FIXED_LAYOUT_BLOCKS_LIST + FLUID_LAYOUT_BLOCKS_LIST, collapsed=True, blank=True, null=True, use_json_field=True, help_text='This content appears after stages list')
+    intro = StreamField([FIXED_LAYOUT_BLOCK, FLUID_LAYOUT_BLOCK], collapsed=True, blank=True, null=True, use_json_field=True, help_text='This content appears before stages list')
+    content = StreamField([FIXED_LAYOUT_BLOCK, FLUID_LAYOUT_BLOCK], collapsed=True, blank=True, null=True, use_json_field=True, help_text='This content appears after stages list')
 
     # Editor panels configuration.
     content_panels = BasePage.content_panels + [
@@ -68,7 +68,7 @@ class InnovationGuidesStagePage(PdfViewPageMixin, BasePage):
 
     # Database fields.
     stage = models.ForeignKey(InnovationGuidesStageSnippet, null=True, blank=False, on_delete=models.SET_NULL, related_name='+')
-    content = StreamField(FIXED_LAYOUT_BLOCKS_LIST, collapsed=True, blank=True, null=True, use_json_field=True)
+    content = StreamField([grid_layout_block('two-thirds')], collapsed=True, blank=True, null=True, use_json_field=True)
     tags = ClusterTaggableManager(through=InnovationGuidesStagePageTag, blank=True)
 
     # Editor panels configuration.
@@ -110,7 +110,7 @@ class InnovationGuidesDetailPage(PdfViewPageMixin, BasePage):  # RoutablePageMix
 
     # Database fields.
     stage = models.ForeignKey(InnovationGuidesStageSnippet, null=True, blank=False, on_delete=models.SET_NULL, related_name='+')
-    content = StreamField(FIXED_LAYOUT_BLOCKS_LIST, collapsed=True, blank=True, null=True, use_json_field=True)
+    content = StreamField([grid_layout_block('two-thirds')], collapsed=True, blank=True, null=True, use_json_field=True)
     tags = ClusterTaggableManager(through=InnovationGuidesDetailPageTag, blank=True)
 
     # Editor panels configuration.

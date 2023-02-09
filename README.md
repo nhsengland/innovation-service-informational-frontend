@@ -45,6 +45,7 @@ $ docker-compose -f .docker/docker-compose.yml up
 ``` bash
 $ pipenv shell # This will create your new virtual environment, where everything runs.
 $ pip install -r requirements.txt # Install dependencies
+$ wagtail updatemodulepaths # Update dependencies with changes in module paths. This will be needed until all dependencies are updated to the wagtail version used. (https://docs.wagtail.org/en/stable/releases/3.0.html#changes-to-module-paths)
 $ python3 manage.py migrate # Run migrations.
 $ python3 manage.py createsuperuser # Create admin user to access yout local admin area.
 

@@ -34,7 +34,7 @@ class CaseStudiesIndexPage(BasePage):
     subpage_types = ['case_studies.CaseStudiesDetailPage']
 
     # Database fields.
-    content = RichTextField(blank=True)
+    content = StreamField([FIXED_LAYOUT_BLOCK, FLUID_LAYOUT_BLOCK], collapsed=True, blank=True, null=True, use_json_field=True)
 
     # Editor panels configuration.
     content_panels = BasePage.content_panels + [
@@ -102,9 +102,9 @@ class CaseStudiesDetailPage(BasePage):
     subpage_types = []
 
     # Database fields.
-    case_studies_type = ParentalManyToManyField("case_studies.CaseStudiesTypeSnippet", blank=False)
+    case_studies_type = ParentalManyToManyField("case_studies.CaseStudiesTypeSnippet", blank=True)
 
-    content = StreamField(FIXED_LAYOUT_BLOCK + FLUID_LAYOUT_BLOCK, collapsed=True, blank=True, null=True, use_json_field=True)
+    content = StreamField([FIXED_LAYOUT_BLOCK, FLUID_LAYOUT_BLOCK], collapsed=True, blank=True, null=True, use_json_field=True)
 
     tags = ClusterTaggableManager(through=CaseStudiesDetailPageTag, blank=True)
 

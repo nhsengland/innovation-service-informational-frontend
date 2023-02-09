@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     "is_homepage.apps.case_studies",
     "is_homepage.apps.contact_us",
     "is_homepage.apps.generic",
+    "is_homepage.apps.generic_navigation",
     "is_homepage.apps.home",
     "is_homepage.apps.innovation_guides",
     "is_homepage.apps.news",

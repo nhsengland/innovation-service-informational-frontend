@@ -15,12 +15,12 @@ class HomePage(BasePage):
     max_count = 1
 
     # Database fields.
-    content = StreamField(
-        FIXED_LAYOUT_BLOCK +
-        [('fluid', StructBlock([
+    content = StreamField([
+        FIXED_LAYOUT_BLOCK,
+        ('fluid', StructBlock([
             ('background_color', ChoiceBlock([('default', 'Default'), ('white', 'White')], default='default', required=True)),
             ('content', StreamBlock(FLUID_LAYOUT_BLOCKS_LIST + [('hero', HeroBlock(group='Components'))], collapsed=True, blank=True, null=True, block_counts={'hero': {'max_num': 1}}, use_json_field=True))
-        ], label='Fluid layout', label_format='Fluid layout: {background_color} background', icon='columns-gap'))],
+        ], group='Layout', label='Fluid layout', label_format='Fluid layout: {background_color} background', icon='columns-gap'))],
         collapsed=True, blank=True, null=True, use_json_field=True
     )
 

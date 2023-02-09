@@ -23,7 +23,15 @@
               <span class="nhsuk-caption-l">{{ self.get_parent.title }}<span class="nhsuk-u-visually-hidden"> - </span></span>{{ self.title }}
             </h1>
 
-            {% html_headings_parse self.content '2' 'add-id-attribute' %}
+            {% for block in self.content %}
+              <div class="nhsuk-grid-row">
+                {% for layout_grid_block in block.value %}
+                  <div class="nhsuk-grid-column-{{ layout_grid_block.column_width }}">
+                    {% html_headings_parse layout_grid_block.content '2' 'add-id-attribute' %}
+                  </div>
+                {% endfor %}
+              </div>
+            {% endfor %}
 
             <div>
               <a href="{% routablepageurl page "pdf" %}" class="app-print-button" target="_blank">

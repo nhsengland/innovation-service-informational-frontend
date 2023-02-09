@@ -1,8 +1,11 @@
 from django.forms.utils import ErrorList
 
-from wagtail.blocks import CharBlock, ChoiceBlock, IntegerBlock, ListBlock, PageChooserBlock, URLBlock, StructBlock, StructValue, TextBlock
+from wagtail.blocks import CharBlock, ChoiceBlock, IntegerBlock, ListBlock, PageChooserBlock, RichTextBlock, StreamBlock, StructBlock, StructValue, TextBlock, URLBlock
 from wagtail.blocks.struct_block import StructBlockValidationError
+from wagtail.contrib.typed_table_block.blocks import TypedTableBlock
 from wagtail.images.blocks import ImageChooserBlock
+
+from wagtailnhsukfrontend.blocks import ActionLinkBlock, InsetTextBlock, SummaryListBlock
 
 
 class CommonBlockValues(StructValue):
@@ -69,6 +72,36 @@ class ButtonBlock(StructBlock):
         value_class = CommonBlockValues
 
 
+class CollapsibleDetailsBlock(StructBlock):
+
+    class BodyStreamBlock(StreamBlock):
+        description_list = SummaryListBlock(group='Lists', label='Description list', label_format='Description list: {rows}')
+        table = TypedTableBlock([('rich_text', RichTextBlock())], group='Lists')
+        action_link = ActionLinkBlock(group='Navigation', label='Action link', label_format='Action link: {text}')
+        inset_text = InsetTextBlock(group='Text', label='Inset text', label_format='Inset text: {body}', icon='indent')
+        rich_text = RichTextBlock(group='Text')
+
+    title = CharBlock(required=True)
+    content = BodyStreamBlock(required=True)
+
+    class Meta:
+        icon = 'collapse-down'
+        template = 'blocks/collapsible_details_block.html'
+
+
+class HeadingBlock(StructBlock):
+
+    column_width = ChoiceBlock([('full', 'Full'), ('one-half', 'One half'), ('two-thirds', 'Two thirds')], default='full', required=True)
+    heading = CharBlock(group='Page', label='Page heading', help_text='This is a H1 heading, and only one per page is allowed. For different heading levels, please use Rich text.')
+    # heading_level = ChoiceBlock((1, 1), [(2, 2), (3, 3), (4, 4)], default=1, required=True)
+
+    class Meta:
+        icon = 'title'
+        label = 'Heading'
+        label_format = 'Heading: {heading}'
+        template = 'blocks/heading_block.html'
+
+
 class HeroBlock(StructBlock):
 
     heading = CharBlock(required=True)
@@ -94,6 +127,23 @@ class HeroBlock(StructBlock):
         value_class = CommonBlockValues
 
 
+class TextCardGroupBlock(StructBlock):
+
+    column_width = ChoiceBlock([('full', 'Full'), ('one-half', 'One half'), ('one-third', 'One third')], default='full', required=True)
+    cards = ListBlock(
+        StructBlock([
+            ('icon', ChoiceBlock([('success', 'Success icon'), ('error', 'Error icon')], default='success', required=False)),
+            ('text', TextBlock(required=True))
+        ], label='Card', label_format='Card: {text}', icon='square-check-regular')
+    )
+
+    class Meta:
+        icon = 'square-check-solid'
+        label = 'Text cards'
+        label_format = 'Text cards: {cards}'
+        template = 'blocks/text_card_group_block.html'
+
+
 class ImageGalleryBlock(StructBlock):
 
     columns = ChoiceBlock([(2, 2), (3, 3), (4, 4)], default=4, required=True, help_text='Choose the number of columns to show on each row (when viewing in desktop size.')
@@ -112,31 +162,6 @@ class ImageGalleryBlock(StructBlock):
         label = 'Image gallery'
         label_format = 'Image gallery: {gallery}'
         template = 'blocks/image_gallery_block.html'
-
-
-class IconTextCardGroupBlock(StructBlock):
-
-    column = ChoiceBlock([
-        ('full', 'Full width'),
-        ('one-half', 'One half'),
-        ('one-third', 'One third')
-    ], default='full', required=True)
-
-    cards = ListBlock(
-        StructBlock([
-            ('icon', ChoiceBlock([
-                ('success', 'Success icon'),
-                ('error', 'Error icon')
-            ], default='', required=False)),
-            ('text', TextBlock(required=True))
-        ], label='Card', label_format='Card: {text}', icon='square-check-regular')
-    )
-
-    class Meta:
-        icon = 'square-check-solid'
-        label = 'Icon text cards'
-        label_format = 'Icon text cards: {cards}'
-        template = 'blocks/icon_text_card_group_block.html'
 
 
 class VerticalStepperBlock(StructBlock):

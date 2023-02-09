@@ -14,7 +14,7 @@
         <div class="app-pane">
 
           <div class="app-pane__side-bar">
-            {% include "partials/pages_list_menu.html" with pages=self.get_children.specific menu_title=self.title current_url=request.path %}
+            {% include "partials/pages_list_menu.html" with pages=navigation_pages current_url=request.path %}
           </div>
 
           <div class="app-pane__main-content">
@@ -30,12 +30,6 @@
                 {% endfor %}
               </div>
             {% endfor %}
-
-            <div>
-              <a href="{% routablepageurl page "pdf" %}" class="app-print-button" target="_blank">Print this stage<span class="nhsuk-u-visually-hidden">(opens a PDF in a new page)</span></a>
-            </div>
-
-            {% include "partials/content_navigation.html" with next_url=self.get_children.first.url next_label=self.get_children.first.title %}
 
           </div>
 

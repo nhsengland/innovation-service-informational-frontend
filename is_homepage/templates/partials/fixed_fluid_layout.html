@@ -1,0 +1,36 @@
+{% load static wagtailcore_tags %}
+
+{% for block in content %}
+
+  {% if block.value.background_color == 'white' %}<div class="bg-color-white">{% endif %}
+
+  {% if block.block_type == 'fluid' %}
+
+    {% include_block block.value.content %}
+
+  {% else %}
+
+    <div class="nhsuk-width-container app-width-container">
+
+      {% if block.block_type == 'heading' %}
+        <div class="nhsuk-grid-row">
+            <div class="nhsuk-grid-column-{{ block.value.column_width }}">{% include_block block %}</div>
+        </div>
+
+      {% elif block.block_type == 'fixed' %}
+
+        <div class="nhsuk-grid-row">
+          {% for layout_grid in block.value.layout_grid %}
+            <div class="nhsuk-grid-column-{{ layout_grid.column_width }}">{{ layout_grid.content }}</div>
+          {% endfor %}
+        </div>
+
+      {% endif %}
+
+    </div>
+
+  {% endif %}
+
+  {% if block.value.background_color == 'white' %}</div>{% endif %}
+
+{% endfor %}

@@ -34,7 +34,7 @@ class NewsIndexPage(RoutablePageMixin, BasePage):
     subpage_types = ['news.NewsDetailPage']
 
     # Database fields.
-    content = RichTextField(blank=True)
+    content = StreamField([FIXED_LAYOUT_BLOCK, FLUID_LAYOUT_BLOCK], collapsed=True, blank=True, null=True, use_json_field=True)
 
     # Editor panels configuration.
     content_panels = BasePage.content_panels + [
@@ -116,8 +116,8 @@ class NewsDetailPage(BasePage):
     subpage_types = []
 
     # Database fields.
-    news_type = ParentalManyToManyField("news.NewsTypeSnippet", blank=False)
-    content = StreamField(FIXED_LAYOUT_BLOCK + FLUID_LAYOUT_BLOCK, collapsed=True, blank=True, null=True, use_json_field=True)
+    news_type = ParentalManyToManyField('news.NewsTypeSnippet', blank=True)
+    content = StreamField([FIXED_LAYOUT_BLOCK, FLUID_LAYOUT_BLOCK], collapsed=True, blank=True, null=True, use_json_field=True)
     tags = ClusterTaggableManager(through=NewsDetailPageTag, blank=True)
 
     # Editor panels configuration.

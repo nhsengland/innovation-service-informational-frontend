@@ -3,7 +3,7 @@
 
 {% block content %}
 
-  {% include "partials/fixed_fluid_layouts.html" with content=self.content %}
+  {% include "partials/fixed_fluid_layout.html" with content=self.content %}
  
   {% comment %} Get background color used on last block. {% endcomment %}
   {% if last_block_background_color == 'white' %}

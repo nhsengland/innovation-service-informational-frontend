@@ -10,7 +10,7 @@ from wagtail.fields import StreamField
 from wagtail.search import index
 
 from is_homepage.apps.base.models import BasePage
-from is_homepage.config.blocks import FIXED_LAYOUT_BLOCK, FLUID_LAYOUT_BLOCK
+from is_homepage.config.blocks import FIXED_LAYOUT_BLOCK, FLUID_LAYOUT_BLOCK, HeadingBlock
 
 
 class GenericPageTag(TaggedItemBase):
@@ -21,17 +21,20 @@ class GenericPage(BasePage):
 
     # Page rules.
     template = 'generic_page.html'
-    parent_page_types = ['home.HomePage']
-    subpage_types = []
+    parent_page_types = ['home.HomePage', 'generic.GenericPage']
+    subpage_types = ['generic.GenericPage']
+    page_description = 'Make usage of the available blocks and components to build content without restrictions.'
 
     # Database fields.
-    is_title_visible = models.BooleanField(default=True)
-    content = StreamField(FIXED_LAYOUT_BLOCK + FLUID_LAYOUT_BLOCK, collapsed=True, blank=True, null=True, use_json_field=True)
+    content = StreamField([
+        FIXED_LAYOUT_BLOCK,
+        FLUID_LAYOUT_BLOCK,
+        ('heading', HeadingBlock(group='Page'))
+    ], collapsed=True, blank=True, null=True, block_counts={'heading': {'max_num': 1}}, use_json_field=True)
     tags = ClusterTaggableManager(through=GenericPageTag, blank=True)
 
     # Editor panels configuration.
     content_panels = BasePage.content_panels + [
-        FieldPanel('is_title_visible'),
         FieldPanel('content')
     ]
     promote_panels = BasePage.promote_panels + [
