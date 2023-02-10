@@ -1,0 +1,19 @@
+:root {
+
+  --w-color-primary: #003087;
+  --w-color-primary-200: #005eb8;
+
+  --w-color-secondary: #005eb8;
+  --w-color-secondary-400: #005eb8;
+  --w-color-secondary-600: #005eb8;
+
+  --w-color-positive-100: #007f3b;
+  --w-color-critical-100: #d5281b;
+  --w-color-critical-200: #d5281b;
+
+}
+
+.admin-nhs-logo {
+  background-color: var(--w-color-primary-200);
+  padding: 9px 9px 2px;
+}

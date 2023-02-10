@@ -1,0 +1,9 @@
+{% extends "wagtailadmin/admin_base.html" %}
+{% load static nhsukfrontend_tags %}
+
+{% block branding_favicon %}
+  {% include "wagtailnhsukfrontend/favicons.html" %}
+    {% comment %} <link rel="shortcut icon" href="{% static 'images/favicon.ico' %}" /> {% endcomment %}
+{% endblock branding_favicon %}
+
+{% block branding_title %}NHS IS Homepage administration{% endblock branding_title %}
