@@ -11,15 +11,17 @@
 
 {% block content %}
 
-  <div class="nhsuk-width-container app-width-container nhsuk-main-wrapper">
-
+  <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-7">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-two-thirds">
-        <h1>{{ self.title }}</h1>
+        <h1 class="nhsuk-u-margin-0">{{ self.title }}</h1>
       </div>
     </div>
+  </div>
 
-    {% include "partials/fixed_fluid_layout.html" with content=self.intro %}
+  {% include "partials/fixed_fluid_layout.html" with content=self.intro %}
+
+  <div class="nhsuk-width-container app-width-container">
 
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-full">
@@ -29,13 +31,13 @@
           <div>Loading stages...</div>
         </div>
 
-        <div id="page-innovation-guides-index" class="app-accordion nhsuk-u-margin-top-5 nhsuk-u-margin-bottom-5 d-none">
+        <div id="page-innovation-guides-index" class="app-accordion nhsuk-u-margin-bottom-5 d-none">
 
           <div class="text-align-right">
             <button type="button"
                     data-type="show-hide-all-sections"
                     data-label="stages steps"
-                    class="app-accordion__button nhsuk-u-font-size-16 nhsuk-u-padding-3 nhsuk-u-margin-bottom-2">
+                    class="app-accordion__button nhsuk-u-font-size-16 nhsuk-u-padding-2 nhsuk-u-margin-bottom-2">
               <span class="app-accordion__button__label">Show all sections</span>
               <span class="app-accordion__chevron app-accordion__chevron--down"></span>
             </button>
@@ -54,7 +56,7 @@
                 <button type="button"
                         data-type="show-hide-section"
                         data-label="{{ stage_page.title|lower }} section guides"
-                        class="app-accordion__button nhsuk-u-padding-3 ml-auto"
+                        class="app-accordion__button nhsuk-u-padding-2 ml-auto"
                         aria-controls="accordion-section-content-{{ forloop.counter }}"
                         aria-expanded="true">
                   <span class="app-accordion__button__label nhsuk-u-font-size-16">Show section</span>
@@ -106,8 +108,8 @@
       </div>
     </div>
 
-    {% include "partials/fixed_fluid_layout.html" with content=self.content %}
-
   </div>
+  
+  {% include "partials/fixed_fluid_layout.html" with content=self.content %}
 
 {% endblock content %}

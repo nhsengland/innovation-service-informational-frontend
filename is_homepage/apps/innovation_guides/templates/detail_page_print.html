@@ -8,7 +8,7 @@
 {% block content %}
 
   <div class="frontcover">
-    <span class="nhsuk-caption-l">{{ self.get_parent.title }}</span>
+    <span class="nhsuk-caption-l">{{ self.get_parent.title }} stage</span>
     <p class="nhsuk-heading-xl">{{ self.title }} guide</p>
     Downloaded on {% now "F jS, Y" %}
   </div>
@@ -18,11 +18,11 @@
   <div class="contents">
     <h1 class="nhsuk-heading-l">Contents</h1>
     <ul class="table-of-contents">
-      {% for stage_page in page_headings_list %}
+      {% for page_headings in page_headings_list %}
         <li>
-          <a href="#{{ stage_page.title|slugify }}">{{ stage_page.title }}</a>
+          <a href="#{{ page_headings.title|slugify }}">{{ page_headings.title }}</a>
           <ul class="table-of-contents__inner-list">
-            {% for details_page in stage_page.get_children.specific %}
+            {% for details_page in page_headings.get_children.specific %}
               <li>
                 <a href="#detail-page-{{ details_page.title|slugify }}">{{ details_page.title }}</a>
               </li>
@@ -33,6 +33,14 @@
     </ul>
   </div>
 
-  {% html_headings_parse self.content '2' 'add-id-attribute' 'replace-level:1' %}
+  {% for block in self.content %}
+    <div class="nhsuk-grid-row">
+      {% for layout_grid_block in block.value %}
+        <div class="nhsuk-grid-column-{{ layout_grid_block.column_width }}">
+          {% html_headings_parse layout_grid_block.content '2' 'add-id-attribute' 'replace-level:1' %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endfor %}
 
 {% endblock content %}

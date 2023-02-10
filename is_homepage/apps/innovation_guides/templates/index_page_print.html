@@ -33,49 +33,31 @@
   {% for stage_page in self.get_children.specific %}
 
     <h1 id="stage-page-{{ stage_page.title|slugify }}" class="nhsuk-u-margin-bottom-1">
-      {{ stage_page.title }}<span class="nhsuk-u-visually-hidden"> stage </span>
+      {{ stage_page.title }}<span class="nhsuk-u-visually-hidden"> stage</span>
     </h1>
 
     {% for block in stage_page.content %}
-    <div class="nhsuk-grid-row">
-      {% for layout_grid_block in block.value %}
-        <div class="nhsuk-grid-column-{{ layout_grid_block.column_width }}">
-          {{ layout_grid_block.content }}
-        </div>
-      {% endfor %}
-    </div>
-  {% endfor %}
-
-
-    {{ stage_page.content }}
-
-    {% for details_page in stage_page.get_children.specific %}
-
-      <h2 id="detail-page-{{ details_page.title|slugify }}" class="nhsuk-u-margin-bottom-1">{{ details_page.title }}</h2>
-
-      {% for block in details_page.content %}
       <div class="nhsuk-grid-row">
         {% for layout_grid_block in block.value %}
-          <div class="nhsuk-grid-column-{{ layout_grid_block.column_width }}">
-            {{ layout_grid_block.content }}
-          </div>
+          <div class="nhsuk-grid-column-{{ layout_grid_block.column_width }}">{{ layout_grid_block.content }}</div>
         {% endfor %}
       </div>
     {% endfor %}
 
+    {% for details_page in stage_page.get_children.specific %}
 
-      {% comment %} {{ details_page.content }} {% endcomment %}
+      <h1 id="detail-page-{{ details_page.title|slugify }}" class="nhsuk-u-margin-bottom-1">
+        <span class="nhsuk-u-visually-hidden">{{ stage_page.title }} stage \ </span>
+        {{ details_page.title }}<span class="nhsuk-u-visually-hidden"> guide</span>
+      </h1>
 
-{% comment %}       
-        {% for layout_grid in details_page %}
-        {{ layout_grid }}
-          <div class="nhsuk-grid-column-{{ layout_grid.column_width }}">{{ layout_grid.content }}</div>
-        {% endfor %}
-       {% endcomment %}
-
-
-
-
+      {% for block in details_page.content %}
+        <div class="nhsuk-grid-row">
+          {% for layout_grid_block in block.value %}
+            <div class="nhsuk-grid-column-{{ layout_grid_block.column_width }}">{{ layout_grid_block.content }}</div>
+          {% endfor %}
+        </div>
+      {% endfor %}
 
     {% endfor %}
 

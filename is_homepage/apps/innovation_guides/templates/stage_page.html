@@ -32,7 +32,9 @@
             {% endfor %}
 
             <div>
-              <a href="{% routablepageurl page "pdf" %}" class="app-print-button" target="_blank">Print this stage<span class="nhsuk-u-visually-hidden">(opens a PDF in a new page)</span></a>
+              <a href="{% routablepageurl page "pdf" %}" class="app-print-button" target="_blank">
+                Print this stage<span class="nhsuk-u-visually-hidden">(opens a PDF in a new page)</span>
+              </a>
             </div>
 
             {% include "partials/content_navigation.html" with next_url=self.get_children.first.url next_label=self.get_children.first.title %}
