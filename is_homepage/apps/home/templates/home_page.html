@@ -1,6 +1,52 @@
 {% extends "theme/base.html" %}
 {% load static wagtailcore_tags wagtailimages_tags base_tags %}
 
+{% block extra_css %}
+  <style>
+    ul.news-grid{
+      display: grid;
+      grid-template-columns: auto auto auto;
+      grid-template-rows: 16px auto auto 16px;
+    }
+
+    li.news-block {
+      display: flex;
+    }
+
+    div.news-content {
+      display: flex;
+    }
+
+    li.news-latest {
+      grid-row-start: 2;
+      grid-row-end: span 2;
+      grid-column: 1;
+    }
+
+    li.news-2 {
+      grid-column-start: 2;
+      grid-column-end: span 2;
+      grid-row: 2;
+    }
+
+    li.news-3 {
+      grid-column-start: 2;
+      grid-column-end: span 2;
+      grid-row: 3;
+    }
+    
+    @media (max-width: 48.0625em) {
+        ul.news-grid {
+          display: flex;
+        }
+
+        il.news-block {
+          display: block;
+        }
+    }
+  </style>
+{% endblock extra_css %}
+
 {% block content %}
 
   {% include "partials/fixed_fluid_layout.html" with content=self.content %}
@@ -62,14 +108,12 @@
 
     <h2>News</h2>
 
-    <ul class="nhsuk-grid-row nhsuk-card-group nhsuk-u-margin-bottom-0">
+    <ul class="nhsuk-grid-row nhsuk-card-group nhsuk-u-margin-bottom-0 news-grid">
       {% for item in news_list %}
 
         {% if forloop.counter == 1 %}
 
-          <div class="nhsuk-grid-column-one-third d-flex flex-auto">
-
-            <li class="nhsuk-card-group__item">
+            <li class="nhsuk-grid-column-full news-latest news-block">
               <div class="nhsuk-card nhsuk-u-margin-bottom-3">
                 {% if item.search_image %}
                   {% image item.search_image width-250 as news_image %}
@@ -90,14 +134,11 @@
               </div>
             </li>
 
-          </div>
 
         {% else %}
 
-          {% if forloop.counter == 2 %}<div class="nhsuk-grid-column-two-thirds flex-auto">{% endif %}
-
-          <li class=" nhsuk-card-group__item">
-            <div class="nhsuk-card d-flex align-items-center">
+          <li class="nhsuk-grid-column-full news-block {% if forloop.counter == 2 %} news-2 {% endif %} {% if forloop.counter == 3 %} news-3 {% endif %}">
+            <div class="nhsuk-card align-items-center news-content">
               <div class="nhsuk-card__content">
                 <h2 class="nhsuk-card__heading nhsuk-heading-m">
                   <a href="{{ item.url }}" class="nhsuk-card__link">{{ item.title }}</a>
@@ -117,8 +158,6 @@
  
             </div>
           </li>
-
-          {% if forloop.last %}</div>{% endif %}
 
         {% endif %}
 
