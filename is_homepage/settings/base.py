@@ -198,10 +198,12 @@ WAGTAILADMIN_BASE_URL = "http://example.com"
 # Custom settings.
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
-CSRF_TRUSTED_ORIGINS = [os.environ.get('CSRF_TRUSTED_ORIGINS')]
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS').split(',')
 
 COMPRESS_PRECOMPILERS = [('text/x-scss', 'django_libsass.SassCompiler')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 FORM_RENDERER = 'wagtailnhsukfrontend.forms.renderers.NHSUKFrontendRenderer'
+
+ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(',')
