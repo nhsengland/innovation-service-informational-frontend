@@ -205,5 +205,3 @@ COMPRESS_PRECOMPILERS = [('text/x-scss', 'django_libsass.SassCompiler')]
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 FORM_RENDERER = 'wagtailnhsukfrontend.forms.renderers.NHSUKFrontendRenderer'
-
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(',')
