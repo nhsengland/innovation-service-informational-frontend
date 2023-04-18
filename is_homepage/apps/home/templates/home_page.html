@@ -74,7 +74,7 @@
  
             {% if item.search_image %}
               {% image item.search_image height-250 as case_study_image %}
-              <img src="{{ case_study_image.url }}" class="nhsuk-card__img" alt="{{ case_study_image.alt }}" />
+              <img src="{{ case_study_image.url }}" class="nhsuk-card__img" alt="" />
             {% endif %}
  
             <div class="nhsuk-card__content">
@@ -117,7 +117,7 @@
               <div class="nhsuk-card nhsuk-u-margin-bottom-3">
                 {% if item.search_image %}
                   {% image item.search_image width-250 as news_image %}
-                  <img src="{{ news_image.url }}" class="nhsuk-card__img" alt="{{ news_image.alt }}" />
+                  <img src="{{ news_image.url }}" class="nhsuk-card__img" alt="" />
                 {% endif %}
                 <div class="nhsuk-card__content">
                   <h2 class="nhsuk-card__heading nhsuk-heading-m">

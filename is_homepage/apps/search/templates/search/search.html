@@ -107,7 +107,7 @@
                   {% if item.search_image %}
                     {% comment %} <div style="min-width: 30%"> {% endcomment %}
                     {% image item.search_image max-250x250 as search_image %}
-                    <img src="{{ search_image.url }}" class="nhsuk-card__img" alt="{{ search_image.alt }}" />
+                    <img src="{{ search_image.url }}" class="nhsuk-card__img" alt="" />
                     {% comment %} </div> {% endcomment %}
                   {% endif %}
  
@@ -136,7 +136,7 @@
 
                   {% if item.search_image %}
                     {% image item.search_image max-250x250 as search_image %}
-                    <img src="{{ search_image.url }}" class="nhsuk-card__img" alt="{{ search_image.alt }}" />
+                    <img src="{{ search_image.url }}" class="nhsuk-card__img" alt="" />
                   {% endif %}
               </li>
 
