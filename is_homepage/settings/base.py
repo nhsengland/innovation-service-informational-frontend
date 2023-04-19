@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
+import mimetypes
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 
@@ -198,10 +199,12 @@ WAGTAILADMIN_BASE_URL = "http://example.com"
 # Custom settings.
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
-CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS').split(',')
+CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS').split(',') if os.environ.get('CSRF_TRUSTED_ORIGINS') else []
 
 COMPRESS_PRECOMPILERS = [('text/x-scss', 'django_libsass.SassCompiler')]
 
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 FORM_RENDERER = 'wagtailnhsukfrontend.forms.renderers.NHSUKFrontendRenderer'
+
+mimetypes.add_type("text/css", ".css", True)

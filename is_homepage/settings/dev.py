@@ -6,8 +6,6 @@ DEBUG = True
 # SECURITY WARNING: define the correct hosts in production!
 ALLOWED_HOSTS = ["*"]
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
-
 # Debug toolbar config.
 INSTALLED_APPS = INSTALLED_APPS + ['debug_toolbar']
 MIDDLEWARE = MIDDLEWARE + ['debug_toolbar.middleware.DebugToolbarMiddleware']

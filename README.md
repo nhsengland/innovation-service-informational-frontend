@@ -67,3 +67,9 @@ To exit from the virtual environment, type `$ deactivate`
 $ python3 manage.py runserver
 ```
 
+### Running in production
+To run in production mode update the .env
+`DJANGO_SETTINGS_MODULE="is_homepage.settings.production"`
+
+Also you need to collect the static files (only need to do this when the static files change)
+`./manage.py collectstatic --noinput`
