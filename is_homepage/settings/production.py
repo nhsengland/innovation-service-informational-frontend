@@ -5,6 +5,7 @@ DEBUG = False
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(',') if os.environ.get("ALLOWED_HOSTS") else []
 
 # Static files
+COMPRESS_OFFLINE = True
 STATICFILES_STORAGE = ('whitenoise.storage.CompressedManifestStaticFilesStorage')
 INSTALLED_APPS += ["whitenoise.runserver_nostatic"]
 MIDDLEWARE += ["whitenoise.middleware.WhiteNoiseMiddleware"]

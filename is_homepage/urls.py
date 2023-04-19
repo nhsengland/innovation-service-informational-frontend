@@ -1,9 +1,9 @@
 from django.conf import settings
-from django.urls import include, path
 from django.contrib import admin
-
-from wagtail.admin import urls as wagtailadmin_urls
+from django.urls import include, path, re_path
+from django.views.static import serve
 from wagtail import urls as wagtail_urls
+from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.documents import urls as wagtaildocs_urls
 
 from .apps.search import views as search_views
@@ -29,6 +29,9 @@ if settings.DEBUG:
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls))
     ] + urlpatterns
+else:
+    # Serve media files
+    urlpatterns += [re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})]
 
 urlpatterns = urlpatterns + [
     # For anything not caught by a more specific rule above, hand over to
