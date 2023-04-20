@@ -105,6 +105,12 @@ class ContactUsPage(AbstractForm):
         ], heading='Email recipients')
     ]
 
+    promote_panels = [
+        FieldPanel('slug'),
+        FieldPanel('seo_title'),
+        FieldPanel('search_description')
+    ]
+
     def serve(self, request):
 
         if request.method == 'POST':

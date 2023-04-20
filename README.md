@@ -52,7 +52,7 @@ $ python3 manage.py createsuperuser # Create admin user to access yout local adm
 ```
 Everything will be installed and ready to run from the virtual environment.
 
-## Running an app
+## Running locally
 ### 1. Start local DB server through docker and docker compose.
 ```bash
 $ docker-compose -f .docker/docker-compose.yml up
@@ -67,9 +67,15 @@ To exit from the virtual environment, type `$ deactivate`
 $ python3 manage.py runserver
 ```
 
-### Running in production
-To run in production mode update the .env
-`DJANGO_SETTINGS_MODULE="is_homepage.settings.production"`
+## Running in production
+To run in production mode update .env file with:
+```bash
+DJANGO_SETTINGS_MODULE=is_homepage.settings.production
+ALLOWED_HOSTS={YOUR_HOSTS_HERE}
+```
 
-Also you need to collect the static files (only need to do this when the static files change)
-`./manage.py collectstatic --noinput`
+You also need to collect the static files by running the following command (only need to do this when the static files change):
+```bash
+$ python3 manage.py collectstatic --clear --noinput
+$ python3 manage.py comprress
+```

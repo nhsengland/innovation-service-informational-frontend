@@ -15,23 +15,33 @@
  
   {% html_headings_elements_list self.content '2' as page_headings_list %}
 
-  <div class="contents">
-    <h1 class="nhsuk-heading-l">Contents</h1>
-    <ul class="table-of-contents">
-      {% for page_headings in page_headings_list %}
-        <li>
-          <a href="#{{ page_headings.title|slugify }}">{{ page_headings.title }}</a>
-          <ul class="table-of-contents__inner-list">
-            {% for details_page in page_headings.get_children.specific %}
-              <li>
-                <a href="#detail-page-{{ details_page.title|slugify }}">{{ details_page.title }}</a>
-              </li>
-            {% endfor %}
-          </ul>
-        </li>
-      {% endfor %}
-    </ul>
-  </div>
+  {% if page_headings_list|length > 0 %}
+    <div class="contents">
+      <h1 class="nhsuk-heading-l">Contents</h1>
+      <ul class="table-of-contents">
+        {% for page_headings in page_headings_list %}
+          <li>
+            <a href="#{{ page_headings.title|slugify }}">{{ page_headings.title }}</a>
+            <ul class="table-of-contents__inner-list">
+              {% for details_page in page_headings.get_children.specific %}
+                <li>
+                  <a href="#detail-page-{{ details_page.title|slugify }}">{{ details_page.title }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+  {% else %}
+    {% comment %} Needed for breaking page when no content is showed. {% endcomment %}
+    <h1>{{ self.title }}</h1>
+
+  {% endif %}
+
+  {% comment %} Needed to put header title when there's no child heading. {% endcomment %}
+  <h1 class="nhsuk-u-visually-hidden">{{ self.title }}</h1>
 
   {% for block in self.content %}
     <div class="nhsuk-grid-row">

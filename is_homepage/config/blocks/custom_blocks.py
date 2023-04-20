@@ -132,7 +132,7 @@ class TextCardGroupBlock(StructBlock):
     column_width = ChoiceBlock([('full', 'Full'), ('one-half', 'One half'), ('one-third', 'One third')], default='full', required=True)
     cards = ListBlock(
         StructBlock([
-            ('icon', ChoiceBlock([('success', 'Success icon'), ('error', 'Error icon')], default='success', required=False)),
+            ('icon', ChoiceBlock([('success', 'Success icon'), ('error', 'Error icon'), ('bullet', 'Bullet icon')], default='success', required=False)),
             ('text', TextBlock(required=True))
         ], label='Card', label_format='Card: {text}', icon='square-check-regular')
     )

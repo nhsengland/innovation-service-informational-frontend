@@ -56,6 +56,10 @@ html {
   background-color: transparent;
 }
 
+html * {
+  font-family: Frutiger W01, Arial, Sans-serif;
+}
+
 // Reset chapter and figure counters on the body.
 body {
   // counter-reset: chapternum figurenum;

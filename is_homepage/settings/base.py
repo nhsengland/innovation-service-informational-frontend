@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
+    "django.contrib.sitemaps",
     "django.contrib.staticfiles",
 ]
 
@@ -206,5 +207,3 @@ COMPRESS_PRECOMPILERS = [('text/x-scss', 'django_libsass.SassCompiler')]
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 FORM_RENDERER = 'wagtailnhsukfrontend.forms.renderers.NHSUKFrontendRenderer'
-
-mimetypes.add_type("text/css", ".css", True)

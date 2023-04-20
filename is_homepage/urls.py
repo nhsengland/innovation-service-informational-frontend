@@ -4,6 +4,7 @@ from django.urls import include, path, re_path
 from django.views.static import serve
 from wagtail import urls as wagtail_urls
 from wagtail.admin import urls as wagtailadmin_urls
+from wagtail.contrib.sitemaps.views import sitemap
 from wagtail.documents import urls as wagtaildocs_urls
 
 from .apps.search import views as search_views
@@ -34,6 +35,7 @@ else:
     urlpatterns += [re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})]
 
 urlpatterns = urlpatterns + [
+    path('sitemap.xml', sitemap),
     # For anything not caught by a more specific rule above, hand over to
     # Wagtail's page serving mechanism. This should be the last pattern in
     # the list:

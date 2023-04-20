@@ -13,7 +13,7 @@ class BasePage(MetadataPageMixin, Page):
         FieldPanel('seo_title'),
         # FieldPanel('show_in_menus'),
         FieldPanel('search_description'),
-        FieldPanel('search_image'),
+        FieldPanel('search_image')
     ]
 
     def full_clean(self, *args, **kwargs):

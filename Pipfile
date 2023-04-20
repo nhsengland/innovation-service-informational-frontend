@@ -18,6 +18,7 @@ psycopg2 = "==2.9.5"
 wagtail-metadata = "==4.0.2"
 wagtail-nhsuk-frontend = "==1.5.2"
 wagtail-pdf-view = "==0.2.1"
+whitenoise = "*"
 
 [dev-packages]
 

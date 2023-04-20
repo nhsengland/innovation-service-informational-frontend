@@ -3,45 +3,41 @@
 
 {% block extra_css %}
   <style>
-    ul.news-grid{
-      display: grid;
-      grid-template-columns: auto auto auto;
-      grid-template-rows: 16px auto auto 16px;
+    ul.news-grid {
+        display: grid;
+        grid-template-columns: auto auto auto;
+        grid-template-rows: 16px auto auto 16px;
     }
 
     li.news-block {
-      display: flex;
+        display: flex;
     }
 
     div.news-content {
-      display: flex;
+        display: flex;
     }
 
     li.news-latest {
-      grid-row-start: 2;
-      grid-row-end: span 2;
-      grid-column: 1;
+        grid-row-start: 2;
+        grid-row-end: span 2;
+        grid-column: 1;
     }
 
     li.news-2 {
-      grid-column-start: 2;
-      grid-column-end: span 2;
-      grid-row: 2;
+        grid-column-start: 2;
+        grid-column-end: span 2;
+        grid-row: 2;
     }
 
     li.news-3 {
-      grid-column-start: 2;
-      grid-column-end: span 2;
-      grid-row: 3;
+        grid-column-start: 2;
+        grid-column-end: span 2;
+        grid-row: 3;
     }
-    
+
     @media (max-width: 48.0625em) {
         ul.news-grid {
-          display: flex;
-        }
-
-        il.news-block {
-          display: block;
+            display: flex;
         }
     }
   </style>
@@ -73,7 +69,7 @@
           <div class="nhsuk-card nhsuk-card--clickable">
  
             {% if item.search_image %}
-              {% image item.search_image height-250 as case_study_image %}
+              {% image item.search_image fill-400x300 as case_study_image %}
               <img src="{{ case_study_image.url }}" class="nhsuk-card__img" alt="" />
             {% endif %}
  
@@ -82,7 +78,7 @@
                 <a href="{{ item.url }}" class="nhsuk-card__link">{{ item.title }}</a>
               </h2>
               <p class="nhsuk-card__description">{{ item.search_description }}</p>
-              <p class="nhsuk-body-s font-color-secondary">{{ item.first_published_at|date:'F j, Y' }}</p>
+              <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">{{ item.first_published_at|date:'F j, Y' }}</p>
               <ul class="nhsuk-u-margin-0 nhsuk-u-padding-0">
                 {% for case_studies_type_item in item.case_studies_type.all %}
                   <li class="app-tag app-tag__selected nhsuk-u-font-size-14">{{ case_studies_type_item.title }}</li>
@@ -97,6 +93,16 @@
       {% endfor %}
  
     </ul>
+
+    <div class="nhsuk-action-link">
+      <a class="nhsuk-action-link__link" href="{% slugurl 'case-studies' %}">
+        <svg class="nhsuk-icon nhsuk-icon__arrow-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" width="36" height="36">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path d="M12 2a10 10 0 0 0-9.95 9h11.64L9.74 7.05a1 1 0 0 1 1.41-1.41l5.66 5.65a1 1 0 0 1 0 1.42l-5.66 5.65a1 1 0 0 1-1.41 0 1 1 0 0 1 0-1.41L13.69 13H2.05A10 10 0 1 0 12 2z" />
+        </svg>
+        <span class="nhsuk-action-link__text">Read all case studies</span>
+      </a>
+    </div>
  
   </div>
   {% if section_bgcolor == 'white' %}</div>{% endif %}
@@ -104,7 +110,7 @@
   {% comment %} News section {% endcomment %}
   {% cycle section_bgcolor %}
   {% if section_bgcolor == 'white' %}<div class="bg-color-white">{% endif %}
-  <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-7">
+  <div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-7 nhsuk-u-padding-bottom-1">
 
     <h2>News</h2>
 
@@ -113,38 +119,37 @@
 
         {% if forloop.counter == 1 %}
 
-            <li class="nhsuk-grid-column-full news-latest news-block">
-              <div class="nhsuk-card nhsuk-u-margin-bottom-3">
-                {% if item.search_image %}
-                  {% image item.search_image width-250 as news_image %}
-                  <img src="{{ news_image.url }}" class="nhsuk-card__img" alt="" />
-                {% endif %}
-                <div class="nhsuk-card__content">
-                  <h2 class="nhsuk-card__heading nhsuk-heading-m">
-                    <a href="{{ item.url }}" class="nhsuk-card__link">{{ item.title }}</a>
-                  </h2>
-                  <p class="nhsuk-card__description">{{ item.search_description }}</p>
-                  <p class="nhsuk-body-s font-color-secondary">{{ item.first_published_at|date:'F j, Y' }}</p>
-                  <ul class="nhsuk-u-margin-0 nhsuk-u-padding-0">
-                    {% for news_type_item in item.news_type.all %}
-                      <li class="app-tag app-tag__selected nhsuk-u-font-size-14">{{ news_type_item.title }}</li>
-                    {% endfor %}
-                  </ul>
-                </div>
-              </div>
-            </li>
-
-
-        {% else %}
-
-          <li class="nhsuk-grid-column-full news-block {% if forloop.counter == 2 %} news-2 {% endif %} {% if forloop.counter == 3 %} news-3 {% endif %}">
-            <div class="nhsuk-card align-items-center news-content">
+          <li class="nhsuk-grid-column-full news-latest news-block">
+            <div class="nhsuk-card nhsuk-u-margin-bottom-2">
+              {% if item.search_image %}
+                {% image item.search_image width-250 as news_image %}
+                <img src="{{ news_image.url }}" class="nhsuk-card__img" alt="" />
+              {% endif %}
               <div class="nhsuk-card__content">
                 <h2 class="nhsuk-card__heading nhsuk-heading-m">
                   <a href="{{ item.url }}" class="nhsuk-card__link">{{ item.title }}</a>
                 </h2>
                 <p class="nhsuk-card__description">{{ item.search_description }}</p>
-                <p class="nhsuk-body-s font-color-secondary">{{ item.first_published_at|date:'F j, Y' }}</p>
+                <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">{{ item.first_published_at|date:'F j, Y' }}</p>
+                <ul class="nhsuk-u-margin-0 nhsuk-u-padding-0">
+                  {% for news_type_item in item.news_type.all %}
+                    <li class="app-tag app-tag__selected nhsuk-u-font-size-14">{{ news_type_item.title }}</li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+          </li>
+
+        {% else %}
+
+          <li class="nhsuk-grid-column-full news-block{% if forloop.counter == 2 %} news-2{% endif %}{% if forloop.counter == 3 %} news-3 nhsuk-u-margin-bottom-2{% endif %}">
+            <div class="nhsuk-card align-items-center news-content nhsuk-u-margin-bottom-2">
+              <div class="nhsuk-card__content">
+                <h2 class="nhsuk-card__heading nhsuk-heading-m">
+                  <a href="{{ item.url }}" class="nhsuk-card__link">{{ item.title }}</a>
+                </h2>
+                <p class="nhsuk-card__description">{{ item.search_description }}</p>
+                <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">{{ item.first_published_at|date:'F j, Y' }}</p>
                 <ul class="nhsuk-u-margin-0 nhsuk-u-padding-0">
                   {% for news_type_item in item.news_type.all %}
                     <li class="app-tag app-tag__selected nhsuk-u-font-size-14">{{ news_type_item.title }}</li>
@@ -163,6 +168,16 @@
 
       {% endfor %}
     </ul>
+
+    <div class="nhsuk-action-link">
+      <a class="nhsuk-action-link__link" href="{% slugurl 'news' %}">
+        <svg class="nhsuk-icon nhsuk-icon__arrow-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" width="36" height="36">
+          <path d="M0 0h24v24H0z" fill="none" />
+          <path d="M12 2a10 10 0 0 0-9.95 9h11.64L9.74 7.05a1 1 0 0 1 1.41-1.41l5.66 5.65a1 1 0 0 1 0 1.42l-5.66 5.65a1 1 0 0 1-1.41 0 1 1 0 0 1 0-1.41L13.69 13H2.05A10 10 0 1 0 12 2z" />
+        </svg>
+        <span class="nhsuk-action-link__text">Read all news</span>
+      </a>
+    </div>
 
   </div>
   {% if section_bgcolor == 'white' %}</div>{% endif %}

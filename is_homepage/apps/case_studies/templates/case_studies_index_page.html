@@ -41,7 +41,7 @@
           <div class="nhsuk-card nhsuk-card--clickable">
 
             {% if item.search_image %}
-              {% image item.search_image height-250 as case_study_image %}
+            {% image item.search_image fill-400x300 as case_study_image %}
               <img src="{{ case_study_image.url }}" class="nhsuk-card__img" alt="" />
             {% endif %}
  
@@ -50,7 +50,7 @@
                 <a href="{{ item.url }}" class="nhsuk-card__link">{{ item.title }}</a>
               </h2>
               <p class="nhsuk-card__description">{{ item.search_description }}</p>
-              <p class="nhsuk-body-s font-color-secondary">{{ item.first_published_at|date:'F j, Y' }}</p>
+              <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">{{ item.first_published_at|date:'F j, Y' }}</p>
               {% if case_studies_types_list %}
                 <ul class="nhsuk-u-margin-0 nhsuk-u-padding-0">
                   {% for case_studies_type_item in item.case_studies_type.all %}

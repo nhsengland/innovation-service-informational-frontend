@@ -15,7 +15,7 @@ def pagetypename(obj):
             return 'Case Studies'
         case 'GenericPage' | 'GenericNavigationIndexPage' | 'GenericNavigationDetailPage':
             return 'Other'
-        case 'InnovationGuidesStagePage' | 'InnovationGuidesDetailPage':
+        case 'InnovationGuidesIndexPage' | 'InnovationGuidesStagePage' | 'InnovationGuidesDetailPage':
             return 'Innovation guides'
         case 'NewsDetailPage':
             return 'News'
