@@ -1,0 +1,22 @@
+<div class="app-vertical-stepper">
+  <ol class="nhsuk-u-padding-0">
+
+    {% for step in self.steps %}
+      <li class="app-vertical-stepper__step">
+        <div class="app-vertical-stepper__header">
+          <h3 class="app-vertical-stepper__title">
+            <span class="app-vertical-stepper__circle app-vertical-stepper__circle--number">
+              <span class="app-vertical-stepper__circle-inner">
+                <span class="nhsuk-u-visually-hidden">Step</span>
+                {{ forloop.counter }}
+              </span>
+            </span>
+            <div class="nhsuk-heading-m nhsuk-u-margin-bottom-2">{{ step.title }}</div>
+          </h3>
+        </div>
+        <p class="nhsuk-u-margin-0">{{ step.text }}</p>
+      </li>
+    {% endfor %}
+
+  </ol>
+</div>

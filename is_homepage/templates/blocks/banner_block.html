@@ -1,0 +1,27 @@
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% image self.background_image original as background_image %}
+
+<section class="app-banner-block" style="background-image: url('{{ background_image.url }}'); height: {{ self.banner_height|default:background_image.height }}px">
+
+  <div class="app-banner-block__overlay">
+
+    <div class="nhsuk-width-container app-width-container app-banner-block__content alignment-{{ self.alignment }}">
+
+      {% if self.layout == 'text-title' %}
+        <p class="nhsuk-u-margin-0 nhsuk-u-padding-0">{{ self.supporting_text }}</p>
+        <h2 class="nhsuk-u-margin-0 nhsuk-u-padding-0">{{ self.title }}</h2>
+      {% else %}
+        <h2 class="nhsuk-u-margin-0 nhsuk-u-padding-0">{{ self.title }}</h2>
+        <p class="nhsuk-u-margin-0 nhsuk-u-padding-0">{{ self.supporting_text }}</p>
+      {% endif %}
+
+      {% if self.link_url %}
+        <a href="{{ self.link_url }}" class="round-button-link d-inline-block nhsuk-u-margin-top-4">{{ self.link_label }}</a>
+      {% endif %}
+
+    </div>
+
+  </div>
+
+</section>

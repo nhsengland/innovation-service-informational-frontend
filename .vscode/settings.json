@@ -1,0 +1,8 @@
+{
+  "python.formatting.autopep8Args": [
+    "--max-line-length=240"
+  ],
+  "djlint.formatCss": true,
+  "djlint.formatJs": true,
+  "djlint.preserveBlankLines": true
+}

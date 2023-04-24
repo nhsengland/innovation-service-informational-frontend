@@ -1,0 +1,19 @@
+{% load static menus_tags %}
+
+{% get_navigation_menu "footer" as footer_navigation %}
+
+<footer role="contentinfo">
+  <div class="nhsuk-footer" id="nhsuk-footer">
+    <div class="nhsuk-width-container app-width-container">
+      <h2 class="nhsuk-u-visually-hidden">Support links</h2>
+      <ul class="nhsuk-footer__list">
+        {% for item in footer_navigation.navigation_menu_items.all %}
+          <li class="nhsuk-footer__list-item">
+            <a class="nhsuk-footer__list-item-link" href="{{ item.link }}">{{ item.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+      <p class="nhsuk-footer__copyright">&copy; Crown copyright</p>
+    </div>
+  </div>
+</footer>

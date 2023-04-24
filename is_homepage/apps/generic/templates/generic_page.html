@@ -1,0 +1,8 @@
+{% extends "theme/base.html" %}
+{% load static wagtailcore_tags wagtailimages_tags %}
+
+{% block content %}
+
+  {% include "partials/fixed_fluid_layout.html" with content=self.content %}
+
+{% endblock content %}

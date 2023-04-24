@@ -1,0 +1,66 @@
+{% extends "theme/base.html" %}
+{% load static wagtailcore_tags %}
+
+{% block extra_css %}
+  <link rel="stylesheet" type="text/x-scss" href="{% static 'styles/print.scss' %}" />
+{% endblock extra_css %}
+
+{% block content %}
+
+  <div class="frontcover">
+    <p class="nhsuk-heading-xl">{{ self.title }}</p>
+    Downloaded on {% now "F jS, Y" %}
+  </div>
+
+  <div class="contents">
+    <h1 class="nhsuk-heading-l">Contents</h1>
+    <ul class="table-of-contents">
+      {% for stage_page in self.get_children.specific %}
+        <li>
+          <a href="#stage-page-{{ stage_page.title|slugify }}">{{ stage_page.title }}</a>
+          <ul class="table-of-contents__inner-list">
+            {% for details_page in stage_page.get_children.specific %}
+              <li>
+                <a href="#detail-page-{{ details_page.title|slugify }}">{{ details_page.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  {% for stage_page in self.get_children.specific %}
+
+    <h1 id="stage-page-{{ stage_page.title|slugify }}" class="nhsuk-u-margin-bottom-1">
+      {{ stage_page.title }}<span class="nhsuk-u-visually-hidden"> stage</span>
+    </h1>
+
+    {% for block in stage_page.content %}
+      <div class="nhsuk-grid-row">
+        {% for layout_grid_block in block.value %}
+          <div class="nhsuk-grid-column-{{ layout_grid_block.column_width }}">{{ layout_grid_block.content }}</div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+
+    {% for details_page in stage_page.get_children.specific %}
+
+      <h1 id="detail-page-{{ details_page.title|slugify }}" class="nhsuk-u-margin-bottom-1">
+        <span class="nhsuk-u-visually-hidden">{{ stage_page.title }} stage \ </span>
+        {{ details_page.title }}<span class="nhsuk-u-visually-hidden"> guide</span>
+      </h1>
+
+      {% for block in details_page.content %}
+        <div class="nhsuk-grid-row">
+          {% for layout_grid_block in block.value %}
+            <div class="nhsuk-grid-column-{{ layout_grid_block.column_width }}">{{ layout_grid_block.content }}</div>
+          {% endfor %}
+        </div>
+      {% endfor %}
+
+    {% endfor %}
+
+  {% endfor %}
+
+{% endblock content %}

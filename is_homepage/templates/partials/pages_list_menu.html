@@ -1,0 +1,38 @@
+{% load static base_tags %}
+
+<nav class="app-side-nav" role="navigation" aria-labelledby="pages-list-menu-heading">
+
+  <h2 id="pages-list-menu-heading" class="app-side-nav__heading nhsuk-u-font-size-19{% if not menu_title %} nhsuk-u-visually-hidden{% endif %}">
+    {{ menu_title }}<span class="nhsuk-u-visually-hidden">navigation</span>
+  </h2>
+
+  <ul class="nhsuk-list app-side-nav__list">
+
+    {% for page_item in pages %}
+
+      <li class="app-side-nav__item{% if current_url == page_item.url %} app-side-nav__item--current{% endif %}">
+
+        <a href="{{ page_item.url }}" class="app-side-nav__link">{{ page_item.title }}</a>
+
+        {% html_headings_elements_list page_item.content '2' as page_headings_list %}
+
+        {% if current_url == page_item.url and page_headings_list|length > 0 %}
+
+          <ul class="app-side-nav__list app-side-nav__list--nested">
+            {% for page_heading in page_headings_list %}
+              <li class="app-side-nav__item">
+                <a href="#{{ page_heading.slug }}" class="app-side-nav__link govuk-link govuk-link--no-visited-state">
+                  {{ page_heading.title }}
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+
+        {% endif %}
+
+      </li>
+
+    {% endfor %}
+
+  </ul>
+</nav>

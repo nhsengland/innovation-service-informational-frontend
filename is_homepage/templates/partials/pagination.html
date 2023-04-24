@@ -1,0 +1,31 @@
+{% if pages.paginator.num_pages > 1 %}
+
+  <ul class="app-pagination">
+
+    {% if pages.has_previous %}
+      <li>
+        <a href="{% if query_params %}?{{ query_params }}&{% else %}?{% endif %}page={{ pages.previous_page_number }}">Previous</a>
+      </li>
+    {% endif %}
+
+    {% for page_number in range %}
+      <li>
+        {% if page_number == pages.paginator.ELLIPSIS %}
+          {{ pages.paginator.ELLIPSIS }}
+        {% else %}
+          <a href="{% if query_params %}?{{ query_params }}&{% else %}?{% endif %}page={{ page_number }}" class="{% if page_number == pages.number %}selected{% endif %}">
+            {{ page_number }}
+          </a>
+        {% endif %}
+      </li>
+    {% endfor %}
+
+    {% if pages.has_next %}
+      <li>
+        <a href="{% if query_params %}?{{ query_params }}&{% else %}?{% endif %}page={{ pages.next_page_number }}">Next</a>
+      </li>
+    {% endif %}
+
+  </ul>
+
+{% endif %}
