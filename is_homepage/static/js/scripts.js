@@ -1,4 +1,3 @@
-
 /**
  * Add CSS class to body if javacript is enabled.
  */

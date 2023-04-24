@@ -1,15 +1,28 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+{% extends "theme/views_base.html" %}
 
-<head>
-  <meta charset="utf-8" />
-  <title>Internal server error</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-</head>
+{% block title %}Internal server error{% endblock %}
 
-<body>
-  <h1>Internal server error</h1>
-  <h2>Sorry, there seems to be an error. Please try again soon.</h2>
-</body>
+{% block content %}
 
-</html>
+<div class="nhsuk-width-container app-width-container nhsuk-u-padding-top-7 nhsuk-u-padding-bottom-7">
+  <div class="nhsuk-grid-row">
+    <div class="nhsuk-grid-column-two-thirds">
+  
+      <h1>Internal server error</h1>
+      <p>It appears that something went wrong. An unexpected error has occurred.</p>
+  
+      <div class="nhsuk-action-link">
+        <a href="/" class="nhsuk-action-link__link">
+          <svg class="nhsuk-icon nhsuk-icon__arrow-right-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 2a10 10 0 0 0-9.95 9h11.64L9.74 7.05a1 1 0 0 1 1.41-1.41l5.66 5.65a1 1 0 0 1 0 1.42l-5.66 5.65a1 1 0 0 1-1.41 0 1 1 0 0 1 0-1.41L13.69 13H2.05A10 10 0 1 0 12 2z"></path>
+          </svg>
+          <span class="nhsuk-action-link__text">Go back to home</span>
+        </a>
+      </div>
+  
+    </div>
+  </div>
+</div>
+
+{% endblock %}

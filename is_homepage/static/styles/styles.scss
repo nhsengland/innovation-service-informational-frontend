@@ -95,6 +95,15 @@
 }
 
 
+// Overrides.
+
+// // Hotjar button focus.
+._hj_feedback_container button:focus {
+  box-shadow: -5px 0px #212b32, -5px 0px #212b32,  0px 5px #212b32, 0px -5px #212b32;
+  outline: 3px solid #ffeb3b;
+}
+
+
 // Components.
 
 // // Header.

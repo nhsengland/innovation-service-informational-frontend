@@ -29,7 +29,7 @@
 
     <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
 
-      {% if news_types_list %}
+      {% if news_types_list|length > 0 %}
         <div class="nhsuk-grid-column-one-quarter">
           <nav aria-labelledby="page-filter-heading">
             <h2 id="page-filter-heading" class="nhsuk-heading-m nhsuk-u-padding-bottom-2 nhsuk-u-margin-bottom-3 border-bottom-separator-black">
@@ -60,13 +60,15 @@
                   </h2>
                   <p class="nhsuk-card__description">{{ item.search_description }}</p>
                   <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">{{ item.first_published_at|date:'F j, Y' }}</p>
-                  {% if news_types_list %}
-                    <ul class="nhsuk-u-margin-0 nhsuk-u-padding-0">
+
+                  {% if item.news_type.all|length > 0 %}
+                    <ul class="nhsuk-u-margin-0 nhsuk-u-margin-top-3 nhsuk-u-padding-0">
                       {% for news_type_item in item.news_type.all %}
                         <li class="app-tag app-tag__selected nhsuk-u-font-size-14">{{ news_type_item.title }}</li>
                       {% endfor %}
                     </ul>
                   {% endif %}
+
                 </div>
 
                 {% if item.search_image %}

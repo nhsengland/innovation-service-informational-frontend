@@ -13,7 +13,7 @@
 
     {% include "partials/fixed_fluid_layout.html" with content=self.content %}
 
-    {% if case_studies_types_list %}
+    {% if case_studies_types_list|length > 0 %}
 
       <div class="nhsuk-grid-row">
         <div class="nhsuk-grid-column-full nhsuk-u-padding-bottom-4">
@@ -51,13 +51,15 @@
               </h2>
               <p class="nhsuk-card__description">{{ item.search_description }}</p>
               <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">{{ item.first_published_at|date:'F j, Y' }}</p>
-              {% if case_studies_types_list %}
-                <ul class="nhsuk-u-margin-0 nhsuk-u-padding-0">
+
+              {% if item.case_studies_type.all|length > 0 %}
+                <ul class="nhsuk-u-margin-top-3 nhsuk-u-padding-0">
                   {% for case_studies_type_item in item.case_studies_type.all %}
                     <li class="app-tag app-tag__selected nhsuk-u-font-size-14">{{ case_studies_type_item.title }}</li>
                   {% endfor %}
                 </ul>
               {% endif %}
+
             </div>
 
           </div>
