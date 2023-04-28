@@ -303,7 +303,14 @@ a.app-tag {
 }
 
 // // Hero block.
-.nhsuk-width-container {
+.nhsuk-hero {
+  @media (min-width: 48.0525em) { 
+  .nhsuk-grid-row { display: flex; }
+  .nhsuk-grid-column-one-third { text-align: center; } // Image right container.
+  }
+}
+
+.nhsuk-width-container { // Specific scenario where the hero is used inside the main container.
   .nhsuk-hero {
     .nhsuk-grid-row {
       padding: 56px;

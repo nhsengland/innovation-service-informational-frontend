@@ -16,8 +16,8 @@
         <p class="nhsuk-u-margin-0 nhsuk-u-padding-0">{{ self.supporting_text }}</p>
       {% endif %}
 
-      {% if self.link_url %}
-        <a href="{{ self.link_url }}" class="round-button-link d-inline-block nhsuk-u-margin-top-4">{{ self.link_label }}</a>
+      {% if self.get_full_url %}
+        <a href="{{ self.get_full_url }}"{% if self.get_open_new_window %} target="_blank"{% endif %} class="round-button-link d-inline-block nhsuk-u-margin-top-4">{{ self.link_label }}</a>
       {% endif %}
 
     </div>

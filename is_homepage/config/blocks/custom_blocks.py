@@ -14,12 +14,15 @@ class CommonBlockValues(StructValue):
     Note: Make sure that field names are equal on all classes using this one.
     """
 
-    def link_url(self):
+    def get_full_url(self):
         """ Returns the linked page url, linked document url, or the exact URL. """
-        link_page = self.get('link_page')
+        link_page = self.get('link_page').url if self.get('link_page') else None
         link_url = self.get('link_url')
-        link_document = self.get('link_document')
-        return link_page.url or link_url or link_document.url
+        link_document = self.get('link_document').url if self.get('link_document') else None
+        return link_page or link_url or link_document
+
+    def get_open_new_window(self):
+        return True if self.get('link_url') else False
 
 
 class BannerBlock(StructBlock):
