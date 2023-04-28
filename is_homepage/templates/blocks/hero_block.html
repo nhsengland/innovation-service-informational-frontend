@@ -2,16 +2,16 @@
 
 <section class="nhsuk-hero">
   <div class="nhsuk-width-container app-width-container nhsuk-hero--border">
-    <div class="nhsuk-grid-row d-flex align-items-center">
+    <div class="nhsuk-grid-row align-items-center">
       <div class="nhsuk-grid-column-two-thirds">
-        <div class="nhsuk-hero__wrapper app-hero__wrapper">
+        <div class="nhsuk-hero__wrapper">
           {% if self.heading %}<h1 class="nhsuk-u-margin-bottom-4">{{ self.heading }}</h1>{% endif %}
           {% if self.text %}<p class="nhsuk-body-l">{{ self.text }}</p>{% endif %}
-          {% if self.link_url %}<a href="{{ self.link_url }}" class="round-button-link">{{ self.link_label }}</a>{% endif %}
+          {% if self.get_full_url %}<a href="{{ self.get_full_url }}" class="round-button-link d-inline-block"{% if self.get_open_new_window %} target="_blank"{% endif %}>{{ self.link_label }}</a>{% endif %}
         </div>
       </div>
       {% if self.image %}
-        <div class="nhsuk-grid-column-one-third text-align-center">
+        <div class="nhsuk-grid-column-one-third nhsuk-u-padding-bottom-7">
           {% image self.image max-250x250 as hero_image %}
           <img src="{{ hero_image.url }}" alt="" />
         </div>

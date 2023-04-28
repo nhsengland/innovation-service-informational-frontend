@@ -58,7 +58,7 @@ class CaseStudiesIndexPage(BasePage):
             case_studies_list = case_studies_list.filter(tags__name__in=tags)
 
         # Pagination.
-        paginator = Paginator(case_studies_list, 5)
+        paginator = Paginator(case_studies_list, 3)
         page = request.GET.get('page')
         try:
             case_studies_list = paginator.page(page)
