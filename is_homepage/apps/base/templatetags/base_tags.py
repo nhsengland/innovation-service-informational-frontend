@@ -51,7 +51,7 @@ def html_headings_parse(html, element_h_number, *args):
         element_content = match.group(3)
         element_id = f' id="{slugify(element_content)}"' if 'add-id-attribute' in actions else ''
 
-        print(f'<h{element_h_number}{element_id}{element_attributes}>{ element_content }</h{element_h_number}>')
+        # print(f'<h{element_h_number}{element_id}{element_attributes}>{ element_content }</h{element_h_number}>')
 
         return f'<h{element_h_number}{element_id}{element_attributes}>{ element_content }</h{element_h_number}>'
 
