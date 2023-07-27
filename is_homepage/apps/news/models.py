@@ -58,7 +58,7 @@ class NewsIndexPage(RoutablePageMixin, BasePage):
             news_list = news_list.filter(tags__name__in=tags)
 
         # Pagination.
-        paginator = Paginator(news_list, 5)
+        paginator = Paginator(news_list, 50)
         page = request.GET.get('page')
         try:
             news_list = paginator.page(page)
