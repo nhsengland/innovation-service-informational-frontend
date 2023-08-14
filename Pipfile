@@ -4,21 +4,21 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-django = "<4.3,>=4.2"
-wagtail = "<5.1,>=5.0"
-autopep8 = "==2.0.2"
-django-compressor = "==4.4"
-django-extensions = "==3.2.3"
+django = ">=4.1,<4.2"
+wagtail = "<4.3,>=4.2"
+autopep8 = "==2.0.1"
+django-compressor = "==4.3.1"
+django-extensions = "==3.2.1"
 django-libsass = "==0.9"
 django-weasyprint = "==2.2.0"
-django-debug-toolbar = "==4.2"
-djlint = "==1.32.1"
-notifications-python-client = "==8.0.1"
-psycopg2 = "==2.9.7"
-wagtail-metadata = "==4.0.3"
+django-debug-toolbar = "==3.8.1"
+djlint = "==1.19.13"
+notifications-python-client = "==6.4.1"
+psycopg2 = "==2.9.5"
+wagtail-metadata = "==4.0.2"
 wagtail-nhsuk-frontend = "==1.5.2"
 wagtail-pdf-view = "==0.2.1"
-weasyprint = ">=58.0,<59.0"
+weasyprint = "<59.0,>=58.0"
 
 [dev-packages]
 
