@@ -12,4 +12,6 @@ psycopg2==2.9.5
 wagtail-metadata==4.0.2
 wagtail-nhsuk-frontend==1.5.2
 wagtail-pdf-view==0.2.1
-weasyprint>=58.0,<59.0
+
+# Needs to be this version until weasyprint fixes some things: https://github.com/fdemmer/django-weasyprint/issues/71 
+weasyprint>=58.0,<59.0 
