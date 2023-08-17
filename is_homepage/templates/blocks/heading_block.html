@@ -1,1 +1,4 @@
-<h1 class="nhsuk-u-margin-0">{{ self.heading }}</h1>
+<h1 class="nhsuk-u-margin-0">
+  {% if self.caption %}<span class="nhsuk-caption-l">{{ self.caption }}<span class="nhsuk-u-visually-hidden"> - </span></span>{% endif %}
+  {{ self.heading }}
+</h1>

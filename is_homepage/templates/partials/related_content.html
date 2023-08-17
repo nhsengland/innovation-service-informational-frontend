@@ -1,24 +1,45 @@
 {% load static wagtailcore_tags base_filters %}
 
-<nav class="nhsuk-contents-list" role="navigation" aria-label="Related content">
+<nav class="nhsuk-contents-list nhsuk-u-margin-0" role="navigation" aria-label="Related content">
 
   {% for page_group in pages_group_list %}
 
-    {% if page_group.0|classname == 'CaseStudiesDetailPage' %}
-      <h2>Related case studies</h2>
-    {% elif page_group.0|classname == 'NewsDetailPage' %}
-      <h2>Related news</h2>
-    {% elif page_group.0|classname == 'InnovationGuidesDetailPage' %}
-      <h2>Related innovation guides</h2>
-    {% endif %}
+    {% if page_group|length > 0 %}
 
-    <ol class="nhsuk-contents-list__list">
-      {% for page_item in page_group %}
-        <li class="nhsuk-contents-list__item">
-          <a href="{{ page_item.url }}" class="nhsuk-contents-list__link">{{ page_item.title }}</a>
-        </li>
-      {% endfor %}
-    </ol>
+      <h2 class="nhsuk-u-margin-bottom-2">
+        {% if page_group.0|classname == 'CaseStudiesDetailPage' %}
+          Related case studies
+        {% elif page_group.0|classname == 'NewsDetailPage' %}
+          Related news
+        {% elif page_group.0|classname == 'InnovationGuidesDetailPage' %}
+          Related innovation guides
+        {% elif page_group.0|classname == 'HelpResourcesMenuItemPage' %}
+          Related help resources
+        {% elif page_group.0|classname == 'Document' %}
+          Related documents
+        {% endif %}
+      </h2>
+
+      <ul class="nhsuk-contents-list__list nhsuk-u-margin-bottom-2">
+        {% for item in page_group %}
+
+          <li class="nhsuk-contents-list__item">
+            {% if item.is_page_model %}
+              <a href="{% pageurl item %}" class="nhsuk-contents-list__link">{{ item.seo_title|default:item.title }}</a>
+            {% elif item|classname == 'Document' %}
+              <a href="{{ item.url }}" class="nhsuk-link nhsuk-link--no-visited-state nhsuk-body-s link-with-icon nhsuk-u-margin-bottom-0">
+                <svg class="nhsuk-u-margin-right-2" xmlns="http://www.w3.org/2000/svg" id="icon-download" viewBox="0 0 16 16">
+                  <path d="M12.609 9.802v3.013h-9.218v-3.013h-1.751v3.888c0 0.489 0.386 0.901 0.875 0.901h10.969c0.489 0 0.875-0.412 0.875-0.901v-3.888zM7.846 9.493l-2.549-3.038c0 0-0.386-0.386 0.051-0.386 0.412 0 1.416 0 1.416 0s0-0.232 0-0.618c0-1.056 0-3.038 0-3.837 0 0-0.051-0.206 0.283-0.206 0.309 0 1.751 0 2.008 0 0.232 0 0.206 0.18 0.206 0.18 0 0.772 0 2.807 0 3.837 0 0.335 0 0.566 0 0.566s0.824 0 1.339 0c0.489 0 0.129 0.386 0.129 0.386s-2.163 2.858-2.472 3.141c-0.206 0.232-0.412-0.026-0.412-0.026z"></path>
+                </svg>
+                {{ item.title }} ({{ item.file_extension|upper }} only, {{ item.file_size | filesizeformat }})
+              </a>
+            {% endif %}
+          </li>
+
+        {% endfor %}
+      </ul>
+
+    {% endif %}
 
   {% endfor %}
 

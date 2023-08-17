@@ -1,9 +1,10 @@
 from wagtail.blocks import ChoiceBlock, ListBlock, RichTextBlock, StreamBlock, StructBlock
 from wagtail.contrib.typed_table_block.blocks import TypedTableBlock
 
-from wagtailnhsukfrontend.blocks import ActionLinkBlock, CardGroupBlock, InsetTextBlock, SummaryListBlock
+from wagtailnhsukfrontend.blocks import ActionLinkBlock, InsetTextBlock, SummaryListBlock
 
 from .custom_blocks import BannerBlock, ButtonBlock, CollapsibleDetailsBlock, ImageGalleryBlock, TextCardGroupBlock, VerticalStepperBlock
+from .extended_blocks import CardGroupBlock
 
 
 FIXED_LAYOUT_BLOCKS_LIST = [

@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "is_homepage.apps.innovation_guides",
     "is_homepage.apps.news",
     "is_homepage.apps.search",
+    "is_homepage.apps.help_resources",
 
     'compressor',
     'wagtailnhsukfrontend',
@@ -207,3 +208,5 @@ COMPRESS_PRECOMPILERS = [('text/x-scss', 'django_libsass.SassCompiler')]
 DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 FORM_RENDERER = 'wagtailnhsukfrontend.forms.renderers.NHSUKFrontendRenderer'
+
+WAGTAILEMBEDS_RESPONSIVE_HTML = True

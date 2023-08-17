@@ -85,6 +85,9 @@ class GenericNavigationDetailPage(BasePage):
         context['navigation_pages'] = self.get_siblings().specific()
         return context
 
+    def is_child_page(self):
+        return True
+
     class Meta:
         verbose_name = 'Generic navigation bar detail page'
         verbose_name_plural = 'Generic navigation bar detail pages'
