@@ -22,6 +22,6 @@ def modeltypename(obj):
         case 'HelpResourcesIndexPage' | 'HelpResourcesGroupPage' | 'HelpResourcesMenuItemPage' | 'HelpResourcesGenericPage':
             return 'Help and resources'
         case 'Document':
-            return 'Document'
+            return 'Documents'
         case _:
             return ''

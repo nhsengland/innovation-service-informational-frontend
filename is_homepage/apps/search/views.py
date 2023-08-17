@@ -5,7 +5,7 @@ from django.template.response import TemplateResponse
 
 from wagtail.documents.models import Document
 from wagtail.models import Page
-from wagtail.search.models import Query
+from wagtail.contrib.search_promotions.models import Query
 
 from urllib.parse import urlencode
 
