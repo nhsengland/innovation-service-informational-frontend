@@ -9,6 +9,7 @@
 
   --nhsuk-link-color: #005eb8;
   --nhsuk-link-focus-color: #ffeb3b;
+  --nhsuk-link-hover-color: #7C2855;
 
   --white: #ffffff;
 
@@ -17,15 +18,6 @@
   --color_nhsuk-grey-3: #aeb7bd;
   --color_nhsuk-grey-4: #d8dde0;
   --color_nhsuk-grey-5: #f0f4f5;
-
-  // --nhsuk-border-color:	#d8dde0;
-  // --nhsuk-button-color:	#007f3b;
-
-  // --mobile:  20em; /* 320px */
-  // --tablet:  40.0625em; /* 641px */
-  // --desktop-breakpoint: 48.0625em; /* 769px */
-  // --large-desktop: 61.875em; /* 990px */
-  // --large-desktop: 72.75em; /* 1164px */
 }
 
 
@@ -56,11 +48,30 @@
 .border-bottom-separator-black { border-bottom: 1px solid var(--nhsuk-text-color); }
 .border-bottom-separator-grey { border-bottom: 1px solid var(--color_nhsuk-grey-4); }
 
-/* App custom width */
+a.link-with-icon {
+  display: flex;
+  align-items: start;
+  fill: var(--primary-color);
+
+  svg {
+    width: 24px;
+    min-width: 24px;
+    margin-top: 2px;
+  }
+  &.nhsuk-body-s {
+    svg { width: 19px; min-width: 19px; }
+  }
+
+  &:hover {
+    fill: var(--nhsuk-link-hover-color);
+  }
+}
+
+
+// App custom width.
 .app-header__navigation {
   max-width: 1164px;
 }
-
 .app-width-container,
 .nhsuk-hero .nhsuk-width-container,
 .nhsuk-breadcrumb .nhsuk-width-container {
@@ -72,19 +83,17 @@
 }
 
 
-/* Content visibility. */
+// Content visibility.
 @media (max-width: 48.0525em) {
   .app-u-hide-mobile {
     display: none;
   }
 }
-
 @media (min-width: 48.0625em) {
   .app-u-hide-desktop {
     display: none;
   }
 }
-
 @media print {
   .app-u-hide-print { display: none; }
   a:after { content: none; }
@@ -95,7 +104,19 @@
 }
 
 
-// Overrides.
+// Configurations and overrides.
+
+// // This works together with the WAGTAILEMBEDS_RESPONSIVE_HTML setting.
+.responsive-object {
+  position: relative;
+  iframe, object, embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
 
 // // Hotjar button focus.
 ._hj_feedback_container button:focus {

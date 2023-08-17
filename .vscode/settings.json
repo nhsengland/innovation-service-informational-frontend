@@ -1,8 +1,15 @@
 {
-  "python.formatting.autopep8Args": [
+  "autopep8.args": [
     "--max-line-length=240"
   ],
+  "editor.defaultFormatter": "ms-python.autopep8",
+  "editor.formatOnType": true,
   "djlint.formatCss": true,
   "djlint.formatJs": true,
-  "djlint.preserveBlankLines": true
+  "djlint.preserveBlankLines": true,
+  "python.analysis.typeCheckingMode": "basic",
+  "python.defaultInterpreterPath": "./.venv",
+  "[django-html]": {
+    "editor.defaultFormatter": "monosans.djlint"
+  }
 }

@@ -78,11 +78,11 @@ class ButtonBlock(StructBlock):
 class CollapsibleDetailsBlock(StructBlock):
 
     class BodyStreamBlock(StreamBlock):
-        description_list = SummaryListBlock(group='Lists', label='Description list', label_format='Description list: {rows}')
-        table = TypedTableBlock([('rich_text', RichTextBlock())], group='Lists')
-        action_link = ActionLinkBlock(group='Navigation', label='Action link', label_format='Action link: {text}')
-        inset_text = InsetTextBlock(group='Text', label='Inset text', label_format='Inset text: {body}', icon='indent')
-        rich_text = RichTextBlock(group='Text')
+        description_list = SummaryListBlock(label='Description list', label_format='Description list: {rows}')
+        table = TypedTableBlock([('rich_text', RichTextBlock())])
+        action_link = ActionLinkBlock(label='Action link', label_format='Action link: {text}')
+        inset_text = InsetTextBlock(label='Inset text', label_format='Inset text: {body}', icon='indent')
+        rich_text = RichTextBlock()
 
     title = CharBlock(required=True)
     content = BodyStreamBlock(required=True)
@@ -95,8 +95,8 @@ class CollapsibleDetailsBlock(StructBlock):
 class HeadingBlock(StructBlock):
 
     column_width = ChoiceBlock([('full', 'Full'), ('one-half', 'One half'), ('two-thirds', 'Two thirds')], default='full', required=True)
-    heading = CharBlock(group='Page', label='Page heading', help_text='This is a H1 heading, and only one per page is allowed. For different heading levels, please use Rich text.')
-    # heading_level = ChoiceBlock((1, 1), [(2, 2), (3, 3), (4, 4)], default=1, required=True)
+    heading = CharBlock(label='Heading', help_text='This is a H1 heading, and only one per page is allowed. For different heading levels, please use Rich text.')
+    caption = CharBlock(label='Caption', required=False, help_text='This text appears on top of the heading. Use it to provide context to the heading itself.')
 
     class Meta:
         icon = 'title'

@@ -19,7 +19,11 @@
 
           <div class="app-pane__main-content">
 
-            <h1>{{ self.title }}</h1>
+            {% if self.is_child_page %}
+              <h1><span class="nhsuk-caption-l">{{ self.get_parent.title }}<span class="nhsuk-u-visually-hidden"> - </span></span>{{ self.title }}</h1>
+            {% else %}
+              <h1>{{ self.title }}</h1>
+            {% endif %}
 
             {% for block in self.content %}
               <div class="nhsuk-grid-row">
@@ -30,6 +34,14 @@
                 {% endfor %}
               </div>
             {% endfor %}
+
+            {% if self.is_child_page %}
+              {% firstof self.get_prev_sibling.url self.get_parent.url as previous_child_page %}
+              {% firstof self.get_prev_sibling.title self.get_parent.title as previous_child_title %}
+              {% include "partials/content_navigation.html" with previous_url=previous_child_page previous_label=previous_child_title next_url=self.get_next_sibling.url next_label=self.get_next_sibling.title %}
+            {% else %}
+              {% include "partials/content_navigation.html" with next_url=self.get_children.first.url next_label=self.get_children.first.title %}
+            {% endif %}
 
           </div>
 

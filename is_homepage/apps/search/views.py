@@ -3,6 +3,7 @@ from copy import copy
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.template.response import TemplateResponse
 
+from wagtail.documents.models import Document
 from wagtail.models import Page
 from wagtail.search.models import Query
 
@@ -13,15 +14,20 @@ from is_homepage.apps.generic.models import GenericPage
 from is_homepage.apps.generic_navigation.models import GenericNavigationIndexPage, GenericNavigationDetailPage
 from is_homepage.apps.innovation_guides.models import InnovationGuidesIndexPage, InnovationGuidesStagePage, InnovationGuidesDetailPage
 from is_homepage.apps.news.models import NewsDetailPage
+from is_homepage.apps.help_resources.models import HelpResourcesGenericPage, HelpResourcesGroupPage, HelpResourcesIndexPage, HelpResourcesMenuItemPage
+
+from itertools import chain
 
 
 def search(request):
 
     pages_types_list = [
-        {'name': 'Innovation guides', 'model_type': (InnovationGuidesIndexPage, InnovationGuidesStagePage, InnovationGuidesDetailPage), 'qp': '', 'is_active': False},
-        {'name': 'News', 'model_type': (NewsDetailPage), 'qp': '', 'is_active': False},
-        {'name': 'Case studies', 'model_type': (CaseStudiesDetailPage), 'qp': '', 'is_active': False},
-        {'name': 'Other', 'model_type': (GenericPage, GenericNavigationIndexPage, GenericNavigationDetailPage), 'qp': '', 'is_active': False}
+        {'name': 'Innovation guides', 'model_type': 'page', 'models': (InnovationGuidesIndexPage, InnovationGuidesStagePage, InnovationGuidesDetailPage), 'qp': '', 'is_active': False},
+        {'name': 'News', 'model_type': 'page', 'models': (NewsDetailPage), 'qp': '', 'is_active': False},
+        {'name': 'Case studies', 'model_type': 'page', 'models': (CaseStudiesDetailPage), 'qp': '', 'is_active': False},
+        {'name': 'Help and resources', 'model_type': 'page', 'models': (HelpResourcesIndexPage, HelpResourcesGroupPage, HelpResourcesMenuItemPage, HelpResourcesGenericPage), 'qp': '', 'is_active': False},
+        {'name': 'Documents', 'model_type': 'document', 'models': (Document), 'qp': '', 'is_active': False},
+        {'name': 'Other', 'model_type': 'page', 'models': (GenericPage, GenericNavigationIndexPage, GenericNavigationDetailPage), 'qp': '', 'is_active': False},
     ]
 
     url_qp_query = request.GET.get('query', None)
@@ -49,16 +55,37 @@ def search(request):
             'types': qp if len(qp) > 0 else None
         }.items() if value}), True)
 
-    # Pages filter and search.
+    # Models filter and search.
     if url_qp_query:
 
-        search_results = Page.objects.live().public().specific()
+        pages = None
+        documents = None
 
-        pages_types_filter = tuple(value['model_type'] for value in pages_types_list if value['name'] in url_qp_types)
-        if len(pages_types_filter) > 0:
-            search_results = search_results.type(pages_types_filter)
+        page_types_filter = tuple(value['models'] for value in pages_types_list if value['model_type'] == 'page' and value['name'] in url_qp_types)
+        document_types_filter = tuple(value['models'] for value in pages_types_list if value['model_type'] == 'document' and value['name'] in url_qp_types)
 
-        search_results = search_results.search(url_qp_query)
+        if len(page_types_filter) == 0 and len(document_types_filter) == 0:
+            # No filters applied, return everything.
+            pages = Page.objects.live().public().specific()
+            documents = Document.objects
+        else:
+
+            if len(page_types_filter) > 0:
+                pages = Page.objects.live().public().specific().type(page_types_filter)
+
+            if len(document_types_filter) > 0:
+                documents = Document.objects
+
+        # As we are joining 2 different models, we need to bring the models score (annotate_score) so that dataset could be ordered after.
+        search_results = list(chain(
+            pages.search(url_qp_query).annotate_score('_score') if pages else [],
+            documents.search(url_qp_query).annotate_score('_score') if documents else []
+        ))
+        search_results.sort(key=lambda x: x._score, reverse=True)
+
+        # This code is just for debugging purposes. Shows the dataset results with the score.
+        # for event in search_results:
+        #     print(event.title, event._score)
 
         query = Query.get(url_qp_query)
         query.add_hit()  # Record hit

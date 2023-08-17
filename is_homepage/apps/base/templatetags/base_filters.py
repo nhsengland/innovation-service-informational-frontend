@@ -9,7 +9,7 @@ def classname(obj):
 
 
 @register.filter
-def pagetypename(obj):
+def modeltypename(obj):
     match obj.__class__.__name__:
         case 'CaseStudiesDetailPage':
             return 'Case Studies'
@@ -19,5 +19,9 @@ def pagetypename(obj):
             return 'Innovation guides'
         case 'NewsDetailPage':
             return 'News'
+        case 'HelpResourcesIndexPage' | 'HelpResourcesGroupPage' | 'HelpResourcesMenuItemPage' | 'HelpResourcesGenericPage':
+            return 'Help and resources'
+        case 'Document':
+            return 'Document'
         case _:
             return ''

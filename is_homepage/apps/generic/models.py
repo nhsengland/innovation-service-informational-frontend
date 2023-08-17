@@ -21,7 +21,7 @@ class GenericPage(BasePage):
 
     # Page rules.
     template = 'generic_page.html'
-    parent_page_types = ['home.HomePage', 'generic.GenericPage']
+    parent_page_types = ['home.HomePage', 'generic.GenericPage', 'help_resources.HelpResourcesMenuItemPage']
     subpage_types = ['generic.GenericPage']
     page_description = 'Make usage of the available blocks and components to build content without restrictions.'
 
