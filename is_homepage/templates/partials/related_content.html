@@ -24,15 +24,15 @@
         {% for item in page_group %}
 
           <li class="nhsuk-contents-list__item">
-            {% if item.is_page_model %}
+            {% if item|classname == 'Document' %}
+            <a href="{{ item.url }}" class="nhsuk-link nhsuk-link--no-visited-state nhsuk-body-s link-with-icon nhsuk-u-margin-bottom-0">
+              <svg class="nhsuk-u-margin-right-2" xmlns="http://www.w3.org/2000/svg" id="icon-download" viewBox="0 0 16 16">
+                <path d="M12.609 9.802v3.013h-9.218v-3.013h-1.751v3.888c0 0.489 0.386 0.901 0.875 0.901h10.969c0.489 0 0.875-0.412 0.875-0.901v-3.888zM7.846 9.493l-2.549-3.038c0 0-0.386-0.386 0.051-0.386 0.412 0 1.416 0 1.416 0s0-0.232 0-0.618c0-1.056 0-3.038 0-3.837 0 0-0.051-0.206 0.283-0.206 0.309 0 1.751 0 2.008 0 0.232 0 0.206 0.18 0.206 0.18 0 0.772 0 2.807 0 3.837 0 0.335 0 0.566 0 0.566s0.824 0 1.339 0c0.489 0 0.129 0.386 0.129 0.386s-2.163 2.858-2.472 3.141c-0.206 0.232-0.412-0.026-0.412-0.026z"></path>
+              </svg>
+              {{ item.title }} ({{ item.file_extension|upper }} only, {{ item.file_size | filesizeformat }})
+            </a>
+            {% else %}
               <a href="{% pageurl item %}" class="nhsuk-contents-list__link">{{ item.seo_title|default:item.title }}</a>
-            {% elif item|classname == 'Document' %}
-              <a href="{{ item.url }}" class="nhsuk-link nhsuk-link--no-visited-state nhsuk-body-s link-with-icon nhsuk-u-margin-bottom-0">
-                <svg class="nhsuk-u-margin-right-2" xmlns="http://www.w3.org/2000/svg" id="icon-download" viewBox="0 0 16 16">
-                  <path d="M12.609 9.802v3.013h-9.218v-3.013h-1.751v3.888c0 0.489 0.386 0.901 0.875 0.901h10.969c0.489 0 0.875-0.412 0.875-0.901v-3.888zM7.846 9.493l-2.549-3.038c0 0-0.386-0.386 0.051-0.386 0.412 0 1.416 0 1.416 0s0-0.232 0-0.618c0-1.056 0-3.038 0-3.837 0 0-0.051-0.206 0.283-0.206 0.309 0 1.751 0 2.008 0 0.232 0 0.206 0.18 0.206 0.18 0 0.772 0 2.807 0 3.837 0 0.335 0 0.566 0 0.566s0.824 0 1.339 0c0.489 0 0.129 0.386 0.129 0.386s-2.163 2.858-2.472 3.141c-0.206 0.232-0.412-0.026-0.412-0.026z"></path>
-                </svg>
-                {{ item.title }} ({{ item.file_extension|upper }} only, {{ item.file_size | filesizeformat }})
-              </a>
             {% endif %}
           </li>
 
