@@ -13,8 +13,6 @@ def modeltypename(obj):
     match obj.__class__.__name__:
         case 'CaseStudiesDetailPage':
             return 'Case Studies'
-        case 'GenericPage' | 'GenericNavigationIndexPage' | 'GenericNavigationDetailPage':
-            return 'Other'
         case 'InnovationGuidesIndexPage' | 'InnovationGuidesStagePage' | 'InnovationGuidesDetailPage':
             return 'Innovation guides'
         case 'NewsDetailPage':
@@ -24,4 +22,4 @@ def modeltypename(obj):
         case 'Document':
             return 'Documents'
         case _:
-            return ''
+            return 'Other'

@@ -27,10 +27,6 @@ class BasePage(MetadataPageMixin, Page):
         if errors:
             raise ValidationError(errors)
 
-    def is_page_model(self):
-        """This is used in search page in order to distinguish page models from other (ex: document) models."""
-        return True
-
     class Meta:
         abstract = True
 

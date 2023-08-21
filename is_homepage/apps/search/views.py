@@ -1,4 +1,5 @@
 from copy import copy
+from itertools import chain
 
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.template.response import TemplateResponse
@@ -15,8 +16,7 @@ from is_homepage.apps.generic_navigation.models import GenericNavigationIndexPag
 from is_homepage.apps.innovation_guides.models import InnovationGuidesIndexPage, InnovationGuidesStagePage, InnovationGuidesDetailPage
 from is_homepage.apps.news.models import NewsDetailPage
 from is_homepage.apps.help_resources.models import HelpResourcesGenericPage, HelpResourcesGroupPage, HelpResourcesIndexPage, HelpResourcesMenuItemPage
-
-from itertools import chain
+from is_homepage.config.helpers.iterables_helper import flatten_tuple
 
 
 def search(request):
@@ -60,26 +60,38 @@ def search(request):
 
         pages = None
         documents = None
+        promoted = None
 
         page_types_filter = tuple(value['models'] for value in pages_types_list if value['model_type'] == 'page' and value['name'] in url_qp_types)
+        page_types_filter = flatten_tuple(page_types_filter)
         document_types_filter = tuple(value['models'] for value in pages_types_list if value['model_type'] == 'document' and value['name'] in url_qp_types)
+        document_types_filter = flatten_tuple(document_types_filter)
 
         if len(page_types_filter) == 0 and len(document_types_filter) == 0:
             # No filters applied, return everything.
             pages = Page.objects.live().public().specific()
             documents = Document.objects
+            promoted = list(value.page.get_specific(deferred=True) for value in Query.get(url_qp_query).editors_picks.all())
         else:
 
             if len(page_types_filter) > 0:
                 pages = Page.objects.live().public().specific().type(page_types_filter)
+                promoted = list(value.page.get_specific(deferred=True) for value in Query.get(url_qp_query).editors_picks.all())
+                promoted = list(value for value in promoted if value.__class__ in page_types_filter)
 
             if len(document_types_filter) > 0:
                 documents = Document.objects
 
-        # As we are joining 2 different models, we need to bring the models score (annotate_score) so that dataset could be ordered after.
+        # Adds a "high" '_score' promoted search (as it don't have it) so that it can be sortable just like the other datasets.
+        if promoted:
+            for value in promoted:
+                value._score = 0.8
+
+        # As we are joining different models, we need to bring the models score (annotate_score) so that dataset could be ordered after.
         search_results = list(chain(
             pages.search(url_qp_query).annotate_score('_score') if pages else [],
-            documents.search(url_qp_query).annotate_score('_score') if documents else []
+            documents.search(url_qp_query).annotate_score('_score') if documents else [],
+            promoted if promoted else []
         ))
         search_results.sort(key=lambda x: x._score, reverse=True)
 
