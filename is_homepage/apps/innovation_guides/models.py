@@ -5,6 +5,7 @@ from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
 
 from wagtail.admin.panels import FieldPanel
+from wagtail.documents.models import Document
 from wagtail.fields import StreamField
 from wagtail.search import index
 
@@ -12,7 +13,6 @@ from wagtail_pdf_view.mixins import PdfViewPageMixin
 from taggit.models import TaggedItemBase
 
 from is_homepage.apps.base.models import BasePage
-from is_homepage.apps.news.models import NewsDetailPage
 from is_homepage.apps.innovation_guides.snippets import InnovationGuidesStageSnippet
 from is_homepage.config.blocks import FIXED_LAYOUT_BLOCK, FLUID_LAYOUT_BLOCK, grid_layout_block
 
@@ -100,7 +100,7 @@ class InnovationGuidesStagePage(PdfViewPageMixin, BasePage):
         verbose_name_plural = 'Innovation guides stages page'
 
 
-class InnovationGuidesDetailPage(PdfViewPageMixin, BasePage):  # RoutablePageMixin
+class InnovationGuidesDetailPage(PdfViewPageMixin, BasePage):
 
     # Page rules.
     template = 'detail_page.html'
@@ -130,6 +130,10 @@ class InnovationGuidesDetailPage(PdfViewPageMixin, BasePage):  # RoutablePageMix
 
     def get_context(self, request, mode=None, **kwargs):
 
+        from is_homepage.apps.case_studies.models import CaseStudiesDetailPage
+        from is_homepage.apps.help_resources.models import HelpResourcesMenuItemPage
+        from is_homepage.apps.news.models import NewsDetailPage
+
         context = super().get_context(request, **kwargs)
 
         if mode == 'pdf':
@@ -141,10 +145,16 @@ class InnovationGuidesDetailPage(PdfViewPageMixin, BasePage):  # RoutablePageMix
 
             related_content_news = NewsDetailPage.objects.live().public().filter(tags__in=page_tags)
             related_content_news = related_content_news.annotate(Count('title')).exclude(pk=self.pk).order_by('-title__count')[:3]
-            related_content_ip = InnovationGuidesDetailPage.objects.live().public().filter(tags__in=page_tags)
-            related_content_ip = related_content_ip.annotate(Count('title')).exclude(pk=self.pk).order_by('-title__count')[:3]
+            related_content_ig = InnovationGuidesDetailPage.objects.live().public().filter(tags__in=page_tags)
+            related_content_ig = related_content_ig.annotate(Count('title')).exclude(pk=self.pk).order_by('-title__count')[:3]
+            related_content_case_studies = CaseStudiesDetailPage.objects.live().public().filter(tags__in=page_tags)
+            related_content_case_studies = related_content_case_studies.annotate(Count('title')).exclude(pk=self.pk).order_by('-title__count')[:3]
+            related_help_resources = HelpResourcesMenuItemPage.objects.live().public().filter(tags__in=page_tags)
+            related_help_resources = related_help_resources.annotate(Count('title')).exclude(pk=self.pk).order_by('-title__count')[:3]
+            related_documents = Document.objects.filter(tags__in=page_tags)
+            related_documents = related_documents.annotate(Count('title')).exclude(pk=self.pk).order_by('-title__count')[:3]
 
-            context['related_content_list'] = [related_content_news, related_content_ip]
+            context['related_content_list'] = [related_content_news, related_content_ig, related_content_case_studies, related_help_resources, related_documents]
             context['related_content_count'] = sum([len(items) for items in context['related_content_list']])
 
         return context

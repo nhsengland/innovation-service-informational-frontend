@@ -1,0 +1,28 @@
+{% load wagtailembeds_tags nhsukfrontend_wrapper_tags %}
+
+<div class="nhsuk-card {% if url or internal_page %}nhsuk-card--clickable{% endif %}">
+
+  {{ content_embed }}
+
+  <div class="nhsuk-card__content">
+ 
+    <h{{ heading_level }} class="nhsuk-card__heading
+    {% if heading_size == 'small' %} nhsuk-heading-s{% endif %}
+    {% if heading_size == 'medium' %} nhsuk-heading-m{% endif %}
+    {% if heading_size == 'large' %} nhsuk-heading-l{% endif %}
+    ">
+
+    {% if url or internal_page %}
+      <a href="{% if url %}{{ url }}{% else %}{{ internal_page.url }}{% endif %}" class="nhsuk-card__link">{{ heading }}</a>
+    {% else %}
+      {{ heading }}
+    {% endif %}
+
+    </h{{ heading_level }}>
+
+    {% if body %}
+      {% contentwrapper "body" %}{{ body }}{% endcontentwrapper %}
+    {% endif %}
+
+  </div>
+</div>

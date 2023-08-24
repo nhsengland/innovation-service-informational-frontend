@@ -6,7 +6,7 @@
     // This sets the height of the secondary menu.
     // If more than 4 items are needed, this measure needs to be reevaluated. No need for that now!
     &.children-items-height {
-      margin-bottom: 160px
+      margin-bottom: 200px
     }
 
     .app-multilevel-navigation__navigation-item {
@@ -115,8 +115,9 @@
     border-bottom: 1px solid var(--color_nhsuk-grey-5);
 
     @media (min-width: 61.875em) {
-      left: 0;
       position: absolute;
+      height: 200px;
+      left: 0;
       right: 0;
     }
 

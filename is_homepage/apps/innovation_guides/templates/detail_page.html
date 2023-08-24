@@ -14,7 +14,7 @@
         <div class="app-pane">
 
           <div class="app-pane__side-bar">
-            {% include "partials/pages_list_menu.html" with pages=self.get_siblings.specific menu_title=self.get_parent.title current_url=request.path %}
+            {% include "partials/pages_list_menu.html" with pages=self.get_siblings.specific current_url=request.path %}
           </div>
 
           <div class="app-pane__main-content">
@@ -34,12 +34,14 @@
             {% endfor %}
 
             <div>
-              <a href="{% routablepageurl page "pdf" %}" class="app-print-button" target="_blank">
+              <a href="{% routablepageurl page 'pdf' %}" class="app-print-button" target="_blank">
                 Print this guide<span class="nhsuk-u-visually-hidden">(opens a PDF in a new page)</span>
               </a>
             </div>
 
-            {% include "partials/content_navigation.html" with previous_url=self.get_prev_sibling.url previous_label=self.get_prev_sibling.title next_url=self.get_next_sibling.url next_label=self.get_next_sibling.title %}
+            {% firstof self.get_prev_sibling.url self.get_parent.url as previous_child_page %}
+            {% firstof self.get_prev_sibling.title self.get_parent.title as previous_child_title %}
+            {% include "partials/content_navigation.html" with previous_url=previous_child_page previous_label=previous_child_title next_url=self.get_next_sibling.url next_label=self.get_next_sibling.title %}
 
           </div>
 

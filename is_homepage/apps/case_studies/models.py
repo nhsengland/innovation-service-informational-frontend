@@ -11,13 +11,11 @@ from modelcluster.fields import ParentalKey, ParentalManyToManyField
 from taggit.models import TaggedItemBase
 
 from wagtail.admin.panels import FieldPanel
-from wagtail.fields import RichTextField, StreamField
+from wagtail.fields import StreamField
 from wagtail.search import index
 
 from is_homepage.apps.base.models import BasePage
 from is_homepage.apps.case_studies.snippets import CaseStudiesTypeSnippet
-from is_homepage.apps.news.models import NewsDetailPage
-from is_homepage.apps.innovation_guides.models import InnovationGuidesDetailPage
 from is_homepage.config.blocks import FIXED_LAYOUT_BLOCK, FLUID_LAYOUT_BLOCK
 
 
@@ -125,18 +123,21 @@ class CaseStudiesDetailPage(BasePage):
 
     def get_context(self, request, *args, **kwargs):
 
+        from is_homepage.apps.news.models import NewsDetailPage
+        from is_homepage.apps.innovation_guides.models import InnovationGuidesDetailPage
+
         context = super().get_context(request, *args, **kwargs)
 
         page_tags = self.tags.all()
 
         related_content_news = NewsDetailPage.objects.live().public().filter(tags__in=page_tags)
         related_content_news = related_content_news.annotate(Count('title')).exclude(pk=self.pk).order_by('-title__count')[:3]
-        related_content_ip = InnovationGuidesDetailPage.objects.live().public().filter(tags__in=page_tags)
-        related_content_ip = related_content_ip.annotate(Count('title')).exclude(pk=self.pk).order_by('-title__count')[:3]
+        related_content_ig = InnovationGuidesDetailPage.objects.live().public().filter(tags__in=page_tags)
+        related_content_ig = related_content_ig.annotate(Count('title')).exclude(pk=self.pk).order_by('-title__count')[:3]
         related_content_case_studies = CaseStudiesDetailPage.objects.live().public().filter(tags__in=page_tags)
         related_content_case_studies = related_content_case_studies.annotate(Count('title')).exclude(pk=self.pk).order_by('-title__count')[:3]
 
-        context['related_content_list'] = [related_content_news, related_content_ip, related_content_case_studies]
+        context['related_content_list'] = [related_content_news, related_content_ig, related_content_case_studies]
         context['related_content_count'] = sum([len(items) for items in context['related_content_list']])
         return context
 

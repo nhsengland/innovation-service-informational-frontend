@@ -1,0 +1,10 @@
+{
+  "recommendations": [
+    "batisteo.vscode-django",
+    "bibhasdn.django-html",
+    "ms-python.autopep8",
+    "ms-python.python",
+    "ms-toolsai.jupyter",
+    "monosans.djlint"
+  ]
+}
