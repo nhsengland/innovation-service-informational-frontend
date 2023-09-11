@@ -77,7 +77,7 @@
           <ol class="nhsuk-u-padding-0">
             {% for item in pages_types_list %}
               <li class="navigation-list">
-                <a href="?{{ item.qp }}" class="app-tag nhsuk-u-font-size-14{% if item.is_active %} app-tag__selected{% endif %}">{{ item.name }}</a>
+                <a href="?{{ item.qp }}" class="app-tag nhsuk-u-font-size-14{% if item.is_active %} app-tag__selected{% endif %}" rel="nofollow">{{ item.name }}</a>
               </li>
             {% endfor %}
           </ol>

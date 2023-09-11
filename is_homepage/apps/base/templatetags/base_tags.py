@@ -7,22 +7,6 @@ from django.utils.text import slugify
 register = template.Library()
 
 
-@register.simple_tag(takes_context=True)
-def seo_canonical(context):
-    """
-    Returns the canonical tag.
-    Example: For the url https://some-url.com?queryParam=seo google would index this as a separate page, just because we have a queryParam, splitting your page hits and affecting your ranking.
-    You'll also start to get errors on Search Console where Google has selected what its algorithms decide is the canonical page for you.
-    In this case, we want to tell Google that the url without the query string is the canonical url.
-    """
-
-    page_canonical_url = context.request.build_absolute_uri(context.request.path)
-    if page_canonical_url:
-        return mark_safe(f'<link rel="canonical" href="{page_canonical_url}">')
-    else:
-        return ''
-
-
 @register.simple_tag
 def html_headings_parse(html, element_h_number, *args):
     """
