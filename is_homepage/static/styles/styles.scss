@@ -291,7 +291,7 @@ a.app-tag {
 
 
 // Blocks (used in streamfields).
-// // Streamfield blocks. This class matches all DIV with a class starting with "block-".
+// // Streamfield blocks.
 .fixed-layout-blocks {
 
   padding-top: 48px;
@@ -407,6 +407,20 @@ a.app-tag {
 
   .column-2 {
     grid-column: span 2;
+  }
+
+}
+
+// // Richtext block customization.
+.block-rich_text {
+
+  p:empty {
+    display: none;
+  }
+
+  img.richtext-image {
+    width: 100%;
+    height: auto;
   }
 
 }
