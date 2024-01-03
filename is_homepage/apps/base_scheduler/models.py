@@ -14,7 +14,6 @@ from .helpers import is_main_runtime_process
 from .scheduler import BaseScheduler
 
 scheduler_enabled = getattr(settings, 'BASE_SCHEDULER_ENABLED', False)
-print(scheduler_enabled)
 
 logger = logging.getLogger('BaseScheduler')
 
@@ -71,10 +70,10 @@ if scheduler_enabled and is_main_runtime_process():
     scheduler = BaseScheduler()
 
     # Publish unpublish job. Runs every hour at minute 01.
-    scheduler.every().hour.at(':01').do(publish_unpublish_scheduled_pages_job)
+    scheduler.every().hour.at(':54').do(publish_unpublish_scheduled_pages_job)
 
     # Health check job. Runs every hour at minute 05.
-    scheduler.every().hour.at(':05').do(health_check_job)
+    scheduler.every().hour.at(':55').do(health_check_job)
 
     # Health cleanup job. Runs every day.
     scheduler.every().day.at('03:00').do(health_cleanup_job)
