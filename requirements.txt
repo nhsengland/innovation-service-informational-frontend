@@ -9,6 +9,8 @@ django_debug_toolbar==4.2
 djlint==1.32.1
 notifications-python-client==8.0.1
 psycopg2==2.9.7
+psutil==5.9.6
+schedule==1.2.1
 wagtail-metadata==4.0.3
 wagtail-nhsuk-frontend==1.5.2
 wagtail-pdf-view==0.2.1

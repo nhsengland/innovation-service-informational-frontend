@@ -27,6 +27,7 @@ BASE_DIR = os.path.dirname(PROJECT_DIR)
 INSTALLED_APPS = [
     "is_homepage.apps.base",
     "is_homepage.apps.base_navigation",
+    "is_homepage.apps.base_scheduler",
     "is_homepage.apps.case_studies",
     "is_homepage.apps.contact_us",
     "is_homepage.apps.generic",
@@ -211,3 +212,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 FORM_RENDERER = 'wagtailnhsukfrontend.forms.renderers.NHSUKFrontendRenderer'
 
 WAGTAILEMBEDS_RESPONSIVE_HTML = True
+
+BASE_SCHEDULER_ENABLED = os.environ.get('ENABLE_SCHEDULER') == 'true' or False

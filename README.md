@@ -5,6 +5,9 @@ It is built with **Wagtail**, an open source content management framework.
 
 
 ## Requirements
+
+> NOTE: if you use the `devcontainer/devcontainer.json` to [create your development environment](https://code.visualstudio.com/docs/devcontainers/containers) you can skip straight to [configuration](#configuration)
+
 - Python
 - Pip
 - Docker and Docker compose
