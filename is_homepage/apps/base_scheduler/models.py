@@ -8,12 +8,15 @@ from django.db import models
 from django.utils import timezone
 from django.conf import settings
 
-from .jobs import health_cleanup_job, health_check_job, publish_unpublish_scheduled_pages_job
+from .jobs import delete_expired_job_history, cancel_stale_jobs, publish_unpublish_scheduled_pages_job
 from .constants import SchedulerHistoryModelStatus
 from .helpers import is_main_runtime_process
 from .scheduler import BaseScheduler
 
 scheduler_enabled = getattr(settings, 'BASE_SCHEDULER_ENABLED', False)
+minute_to_publish = getattr(settings, 'BASE_SCHEDULER_MINUTE_TO_PUBLISH', ':01')
+minute_to_job_cleanup = getattr(settings, 'BASE_SCHEDULER_MINUTE_TO_JOB_CLEANUP', ':05')
+hour_to_log_cleanup = getattr(settings, 'BASE_SCHEDULER_HOUR_TO_LOG_CLEANUP', '03:00')
 
 logger = logging.getLogger('BaseScheduler')
 
@@ -69,14 +72,14 @@ if scheduler_enabled and is_main_runtime_process():
     logger.info('Starting scheduler')
     scheduler = BaseScheduler()
 
-    # Publish unpublish job. Runs every hour at minute 01.
-    scheduler.every().hour.at(':54').do(publish_unpublish_scheduled_pages_job)
+    # Publish unpublish job. Runs every hour at (default at minute 01).
+    scheduler.every().hour.at(minute_to_publish).do(publish_unpublish_scheduled_pages_job)
 
-    # Health check job. Runs every hour at minute 05.
-    scheduler.every().hour.at(':55').do(health_check_job)
+    # Health check job. Runs every hour at (default at minute 05).
+    scheduler.every().hour.at(minute_to_job_cleanup).do(cancel_stale_jobs)
 
-    # Health cleanup job. Runs every day.
-    scheduler.every().day.at('03:00').do(health_cleanup_job)
+    # Health cleanup job. Runs every day (default at 03:00).
+    scheduler.every().day.at(hour_to_log_cleanup).do(delete_expired_job_history)
 
     stop_run_continuously = scheduler.run_continuously()
 
