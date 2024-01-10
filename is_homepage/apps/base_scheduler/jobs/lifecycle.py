@@ -10,7 +10,7 @@ from ..constants import SchedulerHistoryModelStatus
 logger = logging.getLogger('BaseScheduler')
 
 
-def health_check_job():
+def cancel_stale_jobs():
 
     from ..models import SchedulerHistoryModel
 
@@ -43,7 +43,7 @@ def health_check_job():
     logger.info(f'SchedulerJOB:{job_name}: {notes}')
 
 
-def health_cleanup_job():
+def delete_expired_job_history():
 
     from ..models import SchedulerHistoryModel
 
