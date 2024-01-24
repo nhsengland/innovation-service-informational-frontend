@@ -3,6 +3,8 @@ NHS Innovation Service Homepage is the entry point of all NHS services related t
 
 It is built with **Wagtail**, an open source content management framework.
 
+This README describes how to set up and run the project, but there are other docs (e.g. about search) in the [docs folder](./docs)
+
 
 ## Requirements
 
