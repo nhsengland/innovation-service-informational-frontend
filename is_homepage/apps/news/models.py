@@ -131,6 +131,7 @@ class NewsDetailPage(BasePage):
 
     # Search index configuration.
     search_fields = BasePage.search_fields + [
+        index.SearchField('content', boost=0),
         index.RelatedFields('news_type', [index.SearchField('name')]),
         index.RelatedFields('tags', [index.SearchField('name')])
     ]

@@ -82,6 +82,7 @@ class InnovationGuidesStagePage(PdfViewPageMixin, BasePage):
 
     # Search index configuration.
     search_fields = BasePage.search_fields + [
+        index.SearchField('content', boost=0),
         index.RelatedFields('stage', [index.SearchField('name')]),
         index.RelatedFields('tags', [index.SearchField('name')])
     ]
@@ -124,6 +125,7 @@ class InnovationGuidesDetailPage(PdfViewPageMixin, BasePage):
 
     # Search index configuration.
     search_fields = BasePage.search_fields + [
+        index.SearchField('content', boost=0),
         index.RelatedFields('stage', [index.SearchField('name')]),
         index.RelatedFields('tags', [index.SearchField('name')])
     ]
