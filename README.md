@@ -53,6 +53,7 @@ $ pip install -r requirements.txt # Install dependencies
 $ wagtail updatemodulepaths # Update dependencies with changes in module paths. This will be needed until all dependencies are updated to the wagtail version used. (https://docs.wagtail.org/en/stable/releases/3.0.html#changes-to-module-paths)
 $ python3 manage.py migrate # Run migrations.
 $ python3 manage.py createsuperuser # Create admin user to access your local admin area.
+$ python3 manage.py update_index # Create Elastic Search indexes.
 
 ```
 Everything will be installed and ready to run from the virtual environment.
