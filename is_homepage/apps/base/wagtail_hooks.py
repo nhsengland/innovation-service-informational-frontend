@@ -2,23 +2,25 @@ from django.templatetags.static import static
 from django.utils.html import format_html
 
 from wagtail import hooks
-from wagtail.contrib.modeladmin.options import ModelAdmin, modeladmin_register
+from wagtail.snippets.models import register_snippet
+from wagtail.snippets.views.snippets import SnippetViewSet
 from wagtail.admin.panels import FieldPanel
 
 from taggit.models import Tag
 
 
-class AdminTagsModel(ModelAdmin):
+class AdminTagsSnippetViewSet(SnippetViewSet):
     Tag.panels = [FieldPanel('name'), FieldPanel('slug')]
     model = Tag
     menu_label = 'Tags'
-    menu_icon = 'tag'
+    add_to_admin_menu = True
+    icon = 'tag'
     menu_order = 200  # will put in 3rd place (000 being 1st, 100 2nd)
     list_display = ['name', 'slug']
     search_fields = ['name']
 
 
-modeladmin_register(AdminTagsModel)
+register_snippet(AdminTagsSnippetViewSet)
 
 
 @hooks.register('insert_global_admin_css')
