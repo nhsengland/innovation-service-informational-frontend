@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'wagtail_pdf_view',
 
     "wagtail.contrib.forms",
-    'wagtail.contrib.modeladmin',
     "wagtail.contrib.redirects",
     'wagtail.contrib.routable_page',
     "wagtail.contrib.search_promotions",

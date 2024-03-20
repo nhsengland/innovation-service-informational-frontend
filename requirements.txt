@@ -1,5 +1,5 @@
-Django>=4.1,<4.2
-wagtail>=5.0,<5.1
+Django>=5.0,<5.1
+wagtail>=6.0,<6.1
 autopep8==2.0.2
 django-compressor==4.4
 django-extensions==3.2.3
