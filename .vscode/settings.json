@@ -11,5 +11,8 @@
   "python.defaultInterpreterPath": "./.venv/bin/python",
   "[django-html]": {
     "editor.defaultFormatter": "monosans.djlint"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

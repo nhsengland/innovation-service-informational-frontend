@@ -10,6 +10,8 @@ from wagtail.contrib.search_promotions.models import Query
 
 from urllib.parse import urlencode
 
+from wagtail.search.backends.elasticsearch8 import (Elasticsearch8SearchQueryCompiler)
+
 from is_homepage.apps.case_studies.models import CaseStudiesDetailPage
 from is_homepage.apps.generic.models import GenericPage
 from is_homepage.apps.generic_navigation.models import GenericNavigationIndexPage, GenericNavigationDetailPage
@@ -88,6 +90,7 @@ def search(request):
                 value._score = 0.8
 
         # As we are joining different models, we need to bring the models score (annotate_score) so that dataset could be ordered after.
+        Elasticsearch8SearchQueryCompiler
         search_results = list(chain(
             pages.search(url_qp_query).annotate_score('_score') if pages else [],
             documents.search(url_qp_query).annotate_score('_score') if documents else [],

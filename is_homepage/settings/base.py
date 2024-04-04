@@ -190,11 +190,11 @@ WAGTAIL_SITE_NAME = "Innovation Service Homepage"
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
 WAGTAILSEARCH_BACKENDS = {
     "default": {
-        'BACKEND': 'wagtail.search.backends.elasticsearch8',
+        'BACKEND': 'is_homepage.apps.search.custom_elasticsearch8',
+        # 'BACKEND': 'wagtail.search.backends.elasticsearch8',
         'URLS': [os.environ.get("ES_HOST")],
         'INDEX': 'wagtail',
         'TIMEOUT': 5,
-        'OPTIONS': {},
         'INDEX_SETTINGS': {},
     }
 }
