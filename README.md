@@ -36,9 +36,34 @@ To collect the static files (only when they change):
 $ docker exec <wagtail-container-id> "$ python3 manage.py collectstatic --clear --noinput && python3 manage.py comprress"
 ```
 
+### 3. Postgres DB Seeding
+
+It's important that the seeding is done before running the containers.
+Two seed files are require:
+- `./.db-seed/0.sql` to create some required roles. 
+- `./.db-seed/1.sql` to restore the DB.
+
+To dump the DB from the Dev, proper permissions to access are required.
+Consult with the DevOps for permissions and proper credentials.
+
+To create the dump:
+``` bash
+# NOTE: the pg_dump version should be the same as the DB
+PGPASSWORD=<INFORMATIONAL-PG-SQL-PASSWORD> \
+pg_dump --file "1.sql" \
+  --host "<PGHOST>" \
+  --port "5432" \
+  --username "<INFORMATIONAL-PG-SQL-USER>" \
+  --no-password \
+  --verbose \
+  --no-privileges \
+  "is_homepage"
+```
+
 ## Running in production
 To run in production mode update .env file with:
 ```bash
 DJANGO_SETTINGS_MODULE=is_homepage.settings.production
 ALLOWED_HOSTS={YOUR_HOSTS_HERE}
 ```
+You may need to rebuild the wagtail container.
