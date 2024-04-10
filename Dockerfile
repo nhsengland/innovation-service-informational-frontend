@@ -1,5 +1,5 @@
-# Use an official Python runtime based on Debian 10 "buster" as a parent image.
-FROM python:3.10-slim-buster
+# Use an official Python runtime based on Debian 12 "bookworm" as a parent image.
+FROM python:3.12-slim-bookworm
 
 # Add user that will be used in the container.
 #RUN useradd wagtail
@@ -15,16 +15,17 @@ ENV PYTHONUNBUFFERED=1 \
     PORT=8000
 
 # Install system packages required by Wagtail and Django.
-RUN apt-get update --yes --quiet && apt-get install --yes --quiet --no-install-recommends \
+RUN apt-get update --yes --quiet \
+  && apt-get install --yes --quiet --no-install-recommends \
     build-essential \
     libpq-dev \
-    libmariadbclient-dev \
     libjpeg62-turbo-dev \
     zlib1g-dev \
     libwebp-dev \
     libpango-1.0-0 \
     libharfbuzz0b \
-    libpangoft2-1.0-0\
+    libpangoft2-1.0-0 \
+    postgresql-client \
   && rm -rf /var/lib/apt/lists/*
 
 # Install the application server.
@@ -44,8 +45,5 @@ RUN wagtail updatemodulepaths
 # Copy the wagtail script
 COPY manage.py /manage.py
 
-# Copy the startup script
-COPY --chown=777 ./.scripts/localdev/startup.sh /startup.sh
-
 # Run server
-CMD /startup.sh
+CMD ["/wait && python3 manage.py migrate && python3 manage.py update_index && python3 manage.py runserver 0.0.0.0:8000"]

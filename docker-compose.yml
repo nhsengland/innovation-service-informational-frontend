@@ -10,6 +10,9 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=is_homepage
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./tmp:/docker-entrypoint-initdb.d
 
   wagtail:
     build:
@@ -36,8 +39,10 @@ services:
       - EMAIL_NOTIFICATION_API_BASE_URL=https://api.notifications.service.gov.uk
       - DJANGO_SETTINGS_MODULE=is_homepage.settings.dev
     volumes:
-      - ./tmp:/backup
       - ./is_homepage:/is_homepage
+    depends_on:
+      - postgres
+      - elasticsearch
 
   pgadmin:
     image: dpage/pgadmin4
@@ -46,6 +51,8 @@ services:
       PGADMIN_DEFAULT_PASSWORD: "#PgAdmin123!#"
     ports:
       - "16543:80"
+    depends_on:
+      - postgres
   
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
@@ -63,5 +70,5 @@ services:
       - 9200:9200
 
 volumes:
-  wagtail:
   elasticsearch:
+  postgres:
