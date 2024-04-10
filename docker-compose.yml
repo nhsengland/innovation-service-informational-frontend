@@ -45,7 +45,7 @@ services:
       - elasticsearch
 
   pgadmin:
-    image: dpage/pgadmin4
+    image: dpage/pgadmin4:8.4
     environment:
       PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
       PGADMIN_DEFAULT_PASSWORD: "#PgAdmin123!#"
