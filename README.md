@@ -60,6 +60,16 @@ pg_dump --file "1.sql" \
   "is_homepage"
 ```
 
+### 4. Wagtail Assets
+
+Request a dump from the DevOps with the wagtail assets.
+Copy the following folders to `.wagtail-media`:
+```
+- documents
+- images
+- original_images
+```
+
 ## Running in production
 To run in production mode update .env file with:
 ```bash

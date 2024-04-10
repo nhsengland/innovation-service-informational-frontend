@@ -40,6 +40,7 @@ services:
       - DJANGO_SETTINGS_MODULE=is_homepage.settings.dev
     volumes:
       - ./is_homepage:/is_homepage
+      - ./.wagtail-media:/media
     depends_on:
       - postgres
       - elasticsearch

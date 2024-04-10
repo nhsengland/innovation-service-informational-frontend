@@ -45,5 +45,8 @@ RUN wagtail updatemodulepaths
 # Copy the wagtail script
 COPY manage.py /manage.py
 
+# Copy startup script
+COPY --chmod=777 ./.scripts/wagtail.sh /startup.sh
+
 # Run server
-CMD ["/wait && python3 manage.py migrate && python3 manage.py update_index && python3 manage.py runserver 0.0.0.0:8000"]
+CMD ["/startup.sh"]
