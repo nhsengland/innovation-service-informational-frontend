@@ -33,7 +33,7 @@ $ docker exec <wagtail-container-id> "python3 manage.py update_index"
 
 To collect the static files (only when they change):
 ``` bash
-$ docker exec <wagtail-container-id> "$ python3 manage.py collectstatic --clear --noinput && python3 manage.py comprress"
+$ docker exec <wagtail-container-id> "python3 manage.py collectstatic --clear --noinput && python3 manage.py comprress"
 ```
 
 ### 3. Postgres DB Seeding
@@ -62,7 +62,7 @@ pg_dump --file "1.sql" \
 
 ### 4. Wagtail Assets
 
-Request a dump from the DevOps with the wagtail assets.
+Download the assets from Azure: [download.zip](https://nhse-innovation-service-informational-dev.scm.azurewebsites.net/api/zip/media/)
 Copy the following folders to `.wagtail-media`:
 ```
 - documents
