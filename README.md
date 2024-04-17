@@ -5,71 +5,69 @@ It is built with **Wagtail**, an open source content management framework.
 
 This README describes how to set up and run the project, but there are other docs (e.g. about search) in the [docs folder](./docs)
 
-
 ## Requirements
 
-> NOTE: if you use the `devcontainer/devcontainer.json` to [create your development environment](https://code.visualstudio.com/docs/devcontainers/containers) you can skip straight to [configuration](#configuration)
+- Docker and docker-dompose
 
-- Python
-- Pip
-- Docker and Docker compose
-
-The following installation instructions are for any linux ubuntu flavored environment:
-
-``` bash
-# Install python and Pip
-$ sudo apt-get install python3
-$ sudo apt-get install python3-pip
-
-# Install docker + docker compose 
-$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-$ sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu RELEASE stable" # Check RELEASE in "cat /etc/os-release", UBUNTU_CODENAME
-$ sudo apt-get update
-$ sudo apt-get install docker-ce docker-ce-cli docker-compose
-
-$ sudo usermod -a -G docker $USER # Optional command, if errors about permissions happens when running commands
-
-# Install global packages.
-$ pip install pipenv # Install virtual environments
-$ pip install autopep8 # Install code formatter.
-```
----
+The whole wagtail environment runs on docker. All the libraries are setup on the container.
 
 ## Configuration
-This project is prepared to run locally using a virtual environment for the runtime, and additionally layers (PostgreSQL DB) served through Docker and Docker compose. Run the following intructions inside the project folder.
-
-### 1. Configure environment variables
-Make a copy of the file ".env.example", and call it ".env"
-
-### 2. Start local DB server through docker and docker compose
-```bash
-$ docker-compose -f .docker/docker-compose.yml up
-```
-
-### 3. Configure your virtual environment
-``` bash
-$ pipenv shell # This will create your new virtual environment, where everything runs.
-$ pip install -r requirements.txt # Install dependencies
-$ wagtail updatemodulepaths # Update dependencies with changes in module paths. This will be needed until all dependencies are updated to the wagtail version used. (https://docs.wagtail.org/en/stable/releases/3.0.html#changes-to-module-paths)
-$ python3 manage.py migrate # Run migrations.
-$ python3 manage.py createsuperuser # Create admin user to access your local admin area.
-
-```
-Everything will be installed and ready to run from the virtual environment.
+This project is prepared to run locally with Wagtail, PostgreSQL DB and Elastic Search served through Docker and Docker compose. Run the following intructions inside the project folder.
 
 ## Running locally
-### 1. Start local DB server through docker and docker compose.
+### 1. Start local Wagtail, Postgres DB and Elastic Search servers through docker and docker compose
 ```bash
-$ docker-compose -f .docker/docker-compose.yml up
+$ docker-compose -f ./docker-compose.yml up &
 ```
-### 2. Make sure that you are inside your virtual environment. If not, execute the command:
-```bash
-$ pipenv shell
+
+### 2. Relevant Wagtail commands
+Configure wagtail superuser:
+``` bash
+$ docker exec <wagtail-container-id> "python3 manage.py createsuperuser"
 ```
-To exit from the virtual environment, type `$ deactivate`
-### 3. Run the app
-```bash
-$ python3 manage.py runserver
+
+Re-index Elastic Search:
+``` bash
+$ docker exec <wagtail-container-id> "python3 manage.py update_index"
+```
+
+To collect the static files (only when they change):
+``` bash
+$ docker exec <wagtail-container-id> "$ python3 manage.py collectstatic --clear --noinput && python3 manage.py comprress"
+```
+
+### 3. Postgres DB Seeding
+
+It's important that the seeding is done before running the containers.
+Two seed files are require:
+- `./.db-seed/0.sql` to create some required roles. 
+- `./.db-seed/1.sql` to restore the DB.
+
+To dump the DB from the Dev, proper permissions to access are required.
+Consult with the DevOps for permissions and proper credentials.
+
+To create the dump:
+``` bash
+# NOTE: the pg_dump version should be the same as the DB
+PGPASSWORD=<INFORMATIONAL-PG-SQL-PASSWORD> \
+pg_dump --file "1.sql" \
+  --host "<PGHOST>" \
+  --port "5432" \
+  --username "<INFORMATIONAL-PG-SQL-USER>" \
+  --no-password \
+  --verbose \
+  --no-privileges \
+  "is_homepage"
+```
+
+### 4. Wagtail Assets
+
+Request a dump from the DevOps with the wagtail assets.
+Copy the following folders to `.wagtail-media`:
+```
+- documents
+- images
+- original_images
 ```
 
 ## Running in production
@@ -78,9 +76,4 @@ To run in production mode update .env file with:
 DJANGO_SETTINGS_MODULE=is_homepage.settings.production
 ALLOWED_HOSTS={YOUR_HOSTS_HERE}
 ```
-
-You also need to collect the static files by running the following command (only need to do this when the static files change):
-```bash
-$ python3 manage.py collectstatic --clear --noinput
-$ python3 manage.py comprress
-```
+You may need to rebuild the wagtail container.

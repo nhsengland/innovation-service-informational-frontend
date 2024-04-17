@@ -13,3 +13,10 @@ tmp
 
 # Virtual Environments.
 .venv
+
+# DB Seeds
+.db-seed/*
+!.db-seed/0.sql
+
+# Wagtail Media
+.wagtail-media
