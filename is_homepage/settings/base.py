@@ -101,7 +101,11 @@ TEMPLATES = [
 
                 'is_homepage.config.context_processors.environment.environment_variables'
 
-            ]
+            ],
+            "libraries": {
+            #   "search_filters": "is_homepage.apps.search.templatetags.search_filters.py"
+            } 
+            
         }
     }
 ]
@@ -110,7 +114,7 @@ WSGI_APPLICATION = "is_homepage.wsgi.application"
 
 
 # Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
+# https:./docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -191,11 +195,21 @@ WAGTAIL_SITE_NAME = "Innovation Service Homepage"
 WAGTAILSEARCH_BACKENDS = {
     "default": {
         'BACKEND': 'is_homepage.apps.search.custom_elasticsearch8',
-        # 'BACKEND': 'wagtail.search.backends.elasticsearch8',
         'URLS': [os.environ.get("ES_HOST")],
         'INDEX': 'wagtail',
         'TIMEOUT': 5,
-        'INDEX_SETTINGS': {},
+        'INDEX_SETTINGS': {
+            'settings': {
+                'analysis': {
+                    'analyzer': {
+                        'default': {
+                            'type': 'english',
+                            'filter': [ 'stop' ]
+                        }
+                    }
+                }
+            }
+        },
     }
 }
 

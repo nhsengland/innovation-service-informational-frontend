@@ -85,6 +85,7 @@ class CaseStudiesIndexPage(BasePage):
         context['case_studies_types_list'] = case_studies_types_list
         context['case_studies_list'] = case_studies_list
         context['pagination_range'] = case_studies_list.paginator.get_elided_page_range(number=page, on_each_side=1, on_ends=1)
+        context['search_params'] = request.GET.get('search', '')
         return context
 
     class Meta:
@@ -140,6 +141,7 @@ class CaseStudiesDetailPage(BasePage):
 
         context['related_content_list'] = [related_content_news, related_content_ig, related_content_case_studies]
         context['related_content_count'] = sum([len(items) for items in context['related_content_list']])
+        context['search_params'] = request.GET.get('search', '')
         return context
 
     class Meta:

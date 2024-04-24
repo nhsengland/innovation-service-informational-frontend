@@ -10,8 +10,6 @@ from wagtail.contrib.search_promotions.models import Query
 
 from urllib.parse import urlencode
 
-from wagtail.search.backends.elasticsearch8 import (Elasticsearch8SearchQueryCompiler)
-
 from is_homepage.apps.case_studies.models import CaseStudiesDetailPage
 from is_homepage.apps.generic.models import GenericPage
 from is_homepage.apps.generic_navigation.models import GenericNavigationIndexPage, GenericNavigationDetailPage
@@ -22,7 +20,6 @@ from is_homepage.config.helpers.iterables_helper import flatten_tuple
 
 
 def search(request):
-
     pages_types_list = [
         {'name': 'Innovation guides', 'model_type': 'page', 'models': (InnovationGuidesIndexPage, InnovationGuidesStagePage, InnovationGuidesDetailPage), 'qp': '', 'is_active': False},
         {'name': 'News', 'model_type': 'page', 'models': (NewsDetailPage), 'qp': '', 'is_active': False},
@@ -90,18 +87,18 @@ def search(request):
                 value._score = 0.8
 
         # As we are joining different models, we need to bring the models score (annotate_score) so that dataset could be ordered after.
-        Elasticsearch8SearchQueryCompiler
+        # Function 'annotate_terms_occurences()' adds terms_occurences field to each object in the search results, so they can be accessed on the template.
+
         search_results = list(chain(
-            pages.search(url_qp_query).annotate_score('_score') if pages else [],
-            documents.search(url_qp_query).annotate_score('_score') if documents else [],
+            pages.search(url_qp_query).annotate_score('_score').annotate_terms_occurences('terms_occurences') if pages else [],
+            documents.search(url_qp_query).annotate_score('_score').annotate_terms_occurences('terms_occurences') if documents else [],
             promoted if promoted else []
         ))
+        
         search_results.sort(key=lambda x: x._score, reverse=True)
-
-        # This code is just for debugging purposes. Shows the dataset results with the score.
-        # for event in search_results:
-        #     print(event.title, event._score)
-
+    
+    
+        
         query = Query.get(url_qp_query)
         query.add_hit()  # Record hit
 
@@ -119,6 +116,8 @@ def search(request):
     except EmptyPage:
         page = paginator.num_pages
         search_results = paginator.page(paginator.num_pages)
+        
+    
 
     return TemplateResponse(request, 'search/search.html', {
         'search_query': url_qp_query,

@@ -20,7 +20,7 @@
           <div class="app-pane__main-content">
  
             <h1>
-              <span class="nhsuk-caption-l">{{ self.get_parent.title }}<span class="nhsuk-u-visually-hidden"> - </span></span>{{ self.title }}
+              <span class="nhsuk-caption-l">{{ self.get_parent.title }}<span class="nhsuk-u-visually-hidden"> - </span></span>{{ self.title | highlight:search_params }}
             </h1>
 
             {% for block in self.content %}
