@@ -34,6 +34,8 @@ class HomePage(BasePage):
         context['news_list'] = NewsDetailPage.objects.live().public().order_by('-first_published_at')[0: 3]
         context['case_studies_list'] = CaseStudiesDetailPage.objects.live().public().order_by('-first_published_at')[0: 3]
         context['last_block_background_color'] = self.content[-1].value['background_color'] if self.content else ''
+        context['search_params'] = request.GET.get('search', '')
+
         return context
 
     class Meta:

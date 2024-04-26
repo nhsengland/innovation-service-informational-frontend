@@ -21,7 +21,6 @@
             <h2 id="page-filter-heading" class="nhsuk-heading-s nhsuk-u-margin-bottom-2">Filter by type</h2>
             <ul class="nhsuk-u-padding-0">
               {% for item in case_studies_types_list %}
-              !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 <li class="d-inline-block nhsuk-u-margin-1">
                   <a href="?{{ item.qp }}" class="app-tag nhsuk-u-font-size-14{% if item.is_active %} app-tag__selected{% endif %}" rel="nofollow">{{ item.title }}</a>
                 </li>

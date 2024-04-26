@@ -23,6 +23,15 @@ class HelpResourcesIndexPage(BasePage):
         FieldPanel('content')
     ]
 
+    def get_context(self, request, *args, **kwargs):
+
+        context = super().get_context(request, *args, **kwargs)
+
+        context['search_params'] = request.GET.get('search', '')
+
+        return context
+
+
     class Meta:
         verbose_name = 'Help resources index page'
         verbose_name_plural = 'Help resources index page'
@@ -38,6 +47,14 @@ class HelpResourcesGroupPage(GenericNavigationIndexPage):
     parent_page_types = ['help_resources.HelpResourcesIndexPage']
     subpage_types = ['help_resources.HelpResourcesMenuItemPage']
     page_description = 'Use this page to group content with a left side menu containing a list of child pages.'
+    
+    def get_context(self, request, *args, **kwargs):
+
+        context = super().get_context(request, *args, **kwargs)
+
+        context['search_params'] = request.GET.get('search', '')
+
+        return context
 
     class Meta:
         verbose_name = 'Help resources group page'
@@ -54,6 +71,7 @@ class HelpResourcesMenuItemPage(GenericNavigationDetailPage):
     parent_page_types = ['help_resources.HelpResourcesGroupPage']
     subpage_types = ['help_resources.HelpResourcesGenericPage']
     page_description = 'This will create and item on the left side menu containing a list of the pages of the same parent.'
+    
 
     class Meta:
         verbose_name = 'Help resources menu item page'
@@ -69,6 +87,14 @@ class HelpResourcesGenericPage(GenericPage):
     template = 'generic_page.html'
     parent_page_types = ['help_resources.HelpResourcesMenuItemPage']
     subpage_types = []
+
+    def get_context(self, request, *args, **kwargs):
+
+        context = super().get_context(request, *args, **kwargs)
+
+        context['search_params'] = request.GET.get('search', '')
+
+        return context
 
     class Meta:
         verbose_name = 'Help resources detail page'

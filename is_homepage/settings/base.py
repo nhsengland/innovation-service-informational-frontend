@@ -100,12 +100,7 @@ TEMPLATES = [
                 "wagtail.contrib.settings.context_processors.settings",
 
                 'is_homepage.config.context_processors.environment.environment_variables'
-
-            ],
-            "libraries": {
-            #   "search_filters": "is_homepage.apps.search.templatetags.search_filters.py"
-            } 
-            
+            ]
         }
     }
 ]
@@ -204,7 +199,7 @@ WAGTAILSEARCH_BACKENDS = {
                     'analyzer': {
                         'default': {
                             'type': 'english',
-                            'filter': [ 'stop' ]
+                            'filter': ['stop']
                         }
                     }
                 }
@@ -233,4 +228,4 @@ WAGTAILEMBEDS_RESPONSIVE_HTML = True
 
 BASE_SCHEDULER_ENABLED = os.environ.get('SCHEDULER_DISABLE') != 'true'
 BASE_SCHEDULER_MINUTE_TO_PUBLISH = os.environ.get('SCHEDULER_MINUTE_TO_PUBLISH', ':01')
-BASE_SCHEDULER_MINUTE_TO_JOB_CLEANUP =  os.environ.get('SCHEDULER_MINUTE_TO_CLEANUP', ':05')
+BASE_SCHEDULER_MINUTE_TO_JOB_CLEANUP = os.environ.get('SCHEDULER_MINUTE_TO_CLEANUP', ':05')
