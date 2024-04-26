@@ -187,26 +187,34 @@ WAGTAIL_SITE_NAME = "Innovation Service Homepage"
 
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
-WAGTAILSEARCH_BACKENDS = {
-    "default": {
-        'BACKEND': 'is_homepage.apps.search.custom_elasticsearch8',
-        'URLS': [os.environ.get("ES_HOST")],
-        'INDEX': 'wagtail',
-        'TIMEOUT': 5,
-        'INDEX_SETTINGS': {
-            'settings': {
-                'analysis': {
-                    'analyzer': {
-                        'default': {
-                            'type': 'english',
-                            'filter': ['stop']
+ES_HOST = os.environ.get('ES_HOST')
+if (ES_HOST):
+    WAGTAILSEARCH_BACKENDS = {
+        "default": {
+            'BACKEND': 'is_homepage.apps.search.custom_elasticsearch8',
+            'URLS': [ES_HOST],
+            'INDEX': 'wagtail',
+            'TIMEOUT': 5,
+            'INDEX_SETTINGS': {
+                'settings': {
+                    'analysis': {
+                        'analyzer': {
+                            'default': {
+                                'type': 'english',
+                                'filter': ['stop']
+                            }
                         }
                     }
                 }
-            }
-        },
+            },
+        }
     }
-}
+else:
+    WAGTAILSEARCH_BACKENDS = {
+        "default": {
+            'BACKEND': 'wagtail.search.backends.database',
+        }
+    }
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash

@@ -1,0 +1,75 @@
+version: '3.7'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=is_homepage
+    volumes:
+      - postgres:/var/lib/postgresql/data
+      - ./.db-seed:/docker-entrypoint-initdb.d
+
+  wagtail:
+    build:
+      dockerfile: ./Dockerfile
+    image: wagtail
+    ports:
+      - 8000:8000
+    environment:
+      - WAIT_HOSTS=postgres:5432,elasticsearch:9200
+      - WAIT_AFTER=5
+      - PIPENV_VENV_IN_PROJECT=true
+      - CSRF_TRUSTED_ORIGINS=http://localhost:8000
+      - DJANGO_SECRET_KEY=django-insecure-ji=cti8z0pluj)-zzsey1xygtlagd^x%s_dzac15r_k0ke#w30
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=admin
+      - DB_PASSWORD=admin
+      - DB_NAME=is_homepage
+      - ES_HOST=http://elasticsearch:9200
+      - ENABLE_ANALYTICS=false
+      - ENABLE_SCHEDULER=true
+      - EMAIL_NOTIFICATION_API_ISSUER={SECRET}
+      - EMAIL_NOTIFICATION_API_SECRET={SECRET}
+      - EMAIL_NOTIFICATION_API_BASE_URL=https://api.notifications.service.gov.uk
+      - DJANGO_SETTINGS_MODULE=is_homepage.settings.dev
+    volumes:
+      - ./is_homepage:/is_homepage
+      - ./.wagtail-media:/media
+    depends_on:
+      - postgres
+      - elasticsearch
+
+  pgadmin:
+    image: dpage/pgadmin4:8.4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "admin@admin.com"
+      PGADMIN_DEFAULT_PASSWORD: "#PgAdmin123!#"
+    ports:
+      - "16543:80"
+    depends_on:
+      - postgres
+  
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.12.2
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+      - discovery.type=single-node
+    ports:
+      - 9300:9300
+      - 9200:9200
+
+volumes:
+  elasticsearch:
+  postgres:
