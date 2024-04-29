@@ -31,8 +31,8 @@ def modeltypename(obj):
 @register.filter
 def highlight(text, search):
     highlighted_text = text
-    spitted_search: List[str] = search.split()
-    for search_word in spitted_search:
+    splitted_search: List[str] = list(filter(None,re.split(r"\W",search)))
+    for search_word in splitted_search:
         text = str(highlighted_text)
         src_str = re.compile(r"\b" + search_word + r"\b" , re.IGNORECASE)
         highlighted_text = src_str.sub(f"<span class='highlight'>{search_word}</span>", text)

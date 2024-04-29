@@ -6,10 +6,9 @@ class ElasticsearchQueryCompilerCustom(Elasticsearch8SearchQueryCompiler):
         """Add the `fuzziness` parameter to all `match` & `match_multi` queries."""
         query = super()._compile_plaintext_query(*args, **kwargs)
 
-        # The query is a dictionary with one key for the query type.
-        # Either "match" or "match_multi"
-        query_type = list(query.keys())[0]
-        query[query_type]['fuzziness'] = 1
+        if query['multi_match'] != None:
+            query['multi_match']['fuzziness'] = 1
+
         return query
     
 class CustomSearchResults(Elasticsearch8SearchResults):
@@ -42,7 +41,9 @@ class CustomSearchResults(Elasticsearch8SearchResults):
             15: {'mental': 0, 'health': 1}
         }
         '''
-        terms_occurences = {str(pk): { term : len([m.start() for m in re.finditer(f'<em>{term}', ' '.join(highlights[str(pk)]), re.IGNORECASE)]) for term in query_term.split()} for pk in pks}
+        splitted_query_term = list(filter(None, re.split(r"\W",query_term)))
+
+        terms_occurences = {str(pk): { term : len([m.start() for m in re.finditer(f'<em>{term}', ' '.join(highlights[str(pk)]), re.IGNORECASE)]) for term in splitted_query_term} for pk in pks}
 
         # Initialise results dictionary
         results = {str(pk): None for pk in pks}
