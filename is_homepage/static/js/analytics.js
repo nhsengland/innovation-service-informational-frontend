@@ -4,7 +4,7 @@ const enableAnalytics = environment_variables.ENABLE_ANALYTICS === "true";
 
 (function () {
 
-  if (!enableAnalytics || !getConsentCookie().analytics) {
+  if (!enableAnalytics || !TAG_MEASUREMENT_ID || !GTM_ID || !getConsentCookie().analytics) {
     return;
   }
 
