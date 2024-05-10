@@ -4,7 +4,7 @@ const enableAnalytics = environment_variables.ENABLE_ANALYTICS === "true";
 
 (function () {
 
-  if (!enableAnalytics || !tagMeasurementId || !gtmId || !getConsentCookie().analytics) {
+  if (!enableAnalytics || !tagMeasurementId || !gtmId) {
     return;
   }
 
@@ -41,7 +41,7 @@ const enableAnalytics = environment_variables.ENABLE_ANALYTICS === "true";
     functionality_storage: 'denied',
     personalization_storage: 'denied',
     security_storage: 'denied',
-    analytics_storage: 'granted'
+    analytics_storage: getConsentCookie().analytics ? 'granted' : 'denied'
   });
 
   // Google Tag Manager
