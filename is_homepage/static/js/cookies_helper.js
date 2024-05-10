@@ -41,3 +41,20 @@ function getConsentCookie() { // cookies-consent type = { consented: boolean, ne
 function setConsentCookie(agreed) {
   setCookie('cookies-consent', JSON.stringify({ consented: true, necessary: true, analytics: agreed }), 365);
 }
+
+function deleteAnalyticsCookies() {
+
+  const cookieArray = document.cookie.split(';');
+
+  for (let item of cookieArray) {
+
+    const equalIndex = item.indexOf('=');
+    const name = equalIndex > -1 ? item.substring(0, equalIndex).trim() : item.trim();
+
+    if (name.startsWith('_hj') || name.startsWith('_ga')) {
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+    }
+
+  }
+
+}

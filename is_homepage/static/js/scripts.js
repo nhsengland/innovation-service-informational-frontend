@@ -86,6 +86,7 @@ for (let e of document.getElementsByClassName('app-multilevel-navigation__toggle
     document.querySelector('#cookie-banner').classList.add('d-none')
     document.querySelector('#cookie-banner-success').classList.remove('d-none');
     setConsentCookie(false);
+    deleteAnalyticsCookies();
 
     gtag &&
       gtag('consent', 'update', {
