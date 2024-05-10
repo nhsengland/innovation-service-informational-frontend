@@ -118,7 +118,7 @@ class CaseStudiesDetailPage(BasePage):
     # Search index configuration.
     search_fields = BasePage.search_fields + [
         index.SearchField('content', boost=0),
-        index.RelatedFields('case_studies_type', [index.SearchField('name')]),
+        index.RelatedFields('case_studies_type', [index.SearchField('title')]),
         index.RelatedFields('tags', [index.SearchField('name')])
     ]
 
