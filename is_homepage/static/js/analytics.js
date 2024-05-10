@@ -4,7 +4,7 @@ const enableAnalytics = environment_variables.ENABLE_ANALYTICS === "true";
 
 (function () {
 
-  if (!enableAnalytics || !TAG_MEASUREMENT_ID || !GTM_ID || !getConsentCookie().analytics) {
+  if (!enableAnalytics || !tagMeasurementId || !gtmId || !getConsentCookie().analytics) {
     return;
   }
 
@@ -18,17 +18,6 @@ const enableAnalytics = environment_variables.ENABLE_ANALYTICS === "true";
     a.appendChild(r);
   })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
 
-  // Set GA4 Consent Mode
-  gtag('consent', 'default', {
-    ad_storage: 'denied',
-    ad_user_data: 'denied',
-    ad_personalization: 'denied',
-    functionality_storage: 'denied',
-    personalization_storage: 'denied',
-    security_storage: 'denied',
-    analytics_storage: 'granted'
-  });
-
   // Google Analytics.
   const node = document.createElement('script');
   node.id = 'ga-analytics';
@@ -41,6 +30,19 @@ const enableAnalytics = environment_variables.ENABLE_ANALYTICS === "true";
   function gtag() { dataLayer.push(arguments); }
   gtag('js', new Date());
   gtag('config', tagMeasurementId);
+
+  window.gtag = gtag;
+
+  // Set GA4 Consent Mode
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    functionality_storage: 'denied',
+    personalization_storage: 'denied',
+    security_storage: 'denied',
+    analytics_storage: 'granted'
+  });
 
   // Google Tag Manager
   (function (w, d, s, l, i) {
