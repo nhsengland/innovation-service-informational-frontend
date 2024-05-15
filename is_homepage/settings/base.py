@@ -109,7 +109,7 @@ WSGI_APPLICATION = "is_homepage.wsgi.application"
 
 
 # Database
-# https:./docs.djangoproject.com/en/4.1/ref/settings/#databases
+# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
     'default': {
@@ -187,14 +187,20 @@ WAGTAIL_SITE_NAME = "Innovation Service Homepage"
 
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
-ES_HOST = os.environ.get('ES_HOST')
-if (ES_HOST):
+
+ES_API_URL = os.environ.get('ES_API_URL')
+ES_API_KEY = os.environ.get('ES_API_KEY')
+
+if (ES_API_URL):
     WAGTAILSEARCH_BACKENDS = {
         "default": {
             'BACKEND': 'is_homepage.apps.search.custom_elasticsearch8',
-            'URLS': [ES_HOST],
+            'URLS': [ES_API_URL],
             'INDEX': 'wagtail',
             'TIMEOUT': 5,
+            'OPTIONS': {
+                'api_key': ES_API_KEY
+            },
             'INDEX_SETTINGS': {
                 'settings': {
                     'analysis': {
