@@ -7,7 +7,7 @@ class ElasticsearchQueryCompilerCustom(Elasticsearch8SearchQueryCompiler):
         query = super()._compile_plaintext_query(*args, **kwargs)
 
         if query['multi_match'] != None:
-            query['multi_match']['fuzziness'] = 1
+            query['multi_match']['fuzziness'] = "AUTO"
 
         return query
     
@@ -31,9 +31,7 @@ class CustomSearchResults(Elasticsearch8SearchResults):
         pks = [hit["fields"]["pk"][0] for hit in hits]
         scores = {str(hit["fields"]["pk"][0]): hit["_score"] for hit in hits}
         highlights = {str(hit["fields"]["pk"][0]): hit["highlight"]['_all_text'] for hit in hits}
-
-        query_term = self.query_compiler.query.query_string
-        
+                
         '''
         Creates object with occurences count per search term, by document index. i.e.:
         {
@@ -41,9 +39,23 @@ class CustomSearchResults(Elasticsearch8SearchResults):
             15: {'mental': 0, 'health': 1}
         }
         '''
-        splitted_query_term = list(filter(None, re.split(r"\W",query_term)))
-
-        terms_occurences = {str(pk): { term : len([m.start() for m in re.finditer(f'<em>{term}', ' '.join(highlights[str(pk)]), re.IGNORECASE)]) for term in splitted_query_term} for pk in pks}
+        
+        terms_occurences = {
+            str(pk): 
+                {
+                    'terms': set(re.findall("<em>(.*?)</em>", ' '.join(highlights[pk]))),
+                    'occurences': { 
+                        term : 
+                            len([m.start() for m in re.finditer(f'<em>{term}</em>', ' '.join(highlights[str(pk)]), re.IGNORECASE)]) 
+                            for term 
+                            in set(re.findall("<em>(.*?)</em>", ' '.join(highlights[pk]).lower()))
+                    },
+                }
+                for pk in pks}
+        
+        # Sort each document(pk) occurences by descending order
+        for k,v in terms_occurences.items():
+            terms_occurences[k]['occurences'] = dict(sorted(v['occurences'].items(), key=lambda item: item[1],reverse=True))
 
         # Initialise results dictionary
         results = {str(pk): None for pk in pks}
