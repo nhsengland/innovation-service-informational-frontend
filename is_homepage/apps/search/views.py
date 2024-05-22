@@ -97,8 +97,8 @@ def search(request):
         
         search_results.sort(key=lambda x: x._score, reverse=True)
     
-    
-        
+        search_results_count = len(search_results)
+
         query = Query.get(url_qp_query)
         query.add_hit()  # Record hit
 
@@ -121,6 +121,7 @@ def search(request):
 
     return TemplateResponse(request, 'search/search.html', {
         'search_query': url_qp_query,
+        'search_results_count': search_results_count,
         'search_results': search_results,
         'pages_types_list': pages_types_list,
         'current_url_query_params': current_url_qp,

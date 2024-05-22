@@ -70,8 +70,8 @@
     <div class="nhsuk-grid-row nhsuk-u-padding-top-5">
 
       <div class="nhsuk-grid-column-one-quarter">
-        <h2 class="nhsuk-heading-m nhsuk-u-padding-bottom-2 nhsuk-u-margin-bottom-3 border-bottom-separator-black">
-          Filter by type
+        <h2 class="nhsuk-heading-m nhsuk-u-padding-bottom-2 nhsuk-u-margin-bottom-3">
+          Filter your search
         </h2>
         <nav>
           <ol class="nhsuk-u-padding-0">
@@ -87,6 +87,8 @@
       <div class="nhsuk-grid-column-three-quarters">
 
         {% if search_results %}
+
+        <p>{{ search_results_count }} search results for '{{ search_query }}'</p>
 
           <ul class="nhsuk-grid-row nhsuk-card-group">
 
