@@ -87,11 +87,11 @@ def search(request):
                 value._score = 0.8
 
         # As we are joining different models, we need to bring the models score (annotate_score) so that dataset could be ordered after.
-        # Function 'annotate_terms_occurences()' adds terms_occurences field to each object in the search results, so they can be accessed on the template.
+        # Function 'annotate_terms_occurrences()' adds terms_occurrences field to each object in the search results, so they can be accessed on the template.
 
         search_results = list(chain(
-            pages.search(url_qp_query).annotate_score('_score').annotate_terms_occurences('terms_occurences') if pages else [],
-            documents.search(url_qp_query).annotate_score('_score').annotate_terms_occurences('terms_occurences') if documents else [],
+            pages.search(url_qp_query).annotate_score('_score').annotate_terms_occurrences('terms_occurrences') if pages else [],
+            documents.search(url_qp_query).annotate_score('_score').annotate_terms_occurrences('terms_occurrences') if documents else [],
             promoted if promoted else []
         ))
         

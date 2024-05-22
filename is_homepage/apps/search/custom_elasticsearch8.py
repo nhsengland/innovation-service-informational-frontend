@@ -16,9 +16,9 @@ class CustomSearchResults(Elasticsearch8SearchResults):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
     
-    def annotate_terms_occurences(self, field_name):
+    def annotate_terms_occurrences(self, field_name):
         clone = self._clone()
-        clone.terms_occurences = field_name
+        clone.terms_occurrences = field_name
         return clone
     
     # custom implementation of class    
@@ -33,18 +33,18 @@ class CustomSearchResults(Elasticsearch8SearchResults):
         highlights = {str(hit["fields"]["pk"][0]): hit["highlight"]['_all_text'] for hit in hits}
                 
         '''
-        Creates object with occurences count per search term, by document index. i.e.:
+        Creates object with occurrences count per search term, by document index. i.e.:
         {
             61: {'mental': 5, 'health': 1},
             15: {'mental': 0, 'health': 1}
         }
         '''
         
-        terms_occurences = {
+        terms_occurrences = {
             str(pk): 
                 {
                     'terms': set(re.findall("<em>(.*?)</em>", ' '.join(highlights[pk]))),
-                    'occurences': { 
+                    'occurrences': { 
                         term : 
                             len([m.start() for m in re.finditer(f'<em>{term}</em>', ' '.join(highlights[str(pk)]), re.IGNORECASE)]) 
                             for term 
@@ -53,9 +53,9 @@ class CustomSearchResults(Elasticsearch8SearchResults):
                 }
                 for pk in pks}
         
-        # Sort each document(pk) occurences by descending order
-        for k,v in terms_occurences.items():
-            terms_occurences[k]['occurences'] = dict(sorted(v['occurences'].items(), key=lambda item: item[1],reverse=True))
+        # Sort each document(pk) occurrences by descending order
+        for k,v in terms_occurrences.items():
+            terms_occurrences[k]['occurrences'] = dict(sorted(v['occurrences'].items(), key=lambda item: item[1],reverse=True))
 
         # Initialise results dictionary
         results = {str(pk): None for pk in pks}
@@ -68,7 +68,7 @@ class CustomSearchResults(Elasticsearch8SearchResults):
             if self._score_field:
                 setattr(obj, self._score_field, scores.get(str(obj.pk)))
             
-            setattr(obj, 'terms_occurences', terms_occurences.get(str(obj.pk)))
+            setattr(obj, 'terms_occurrences', terms_occurrences.get(str(obj.pk)))
 
         # Yield results in order given by Elasticsearch
         for pk in pks:
