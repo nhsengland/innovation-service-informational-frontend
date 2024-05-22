@@ -34,8 +34,9 @@ def highlight(text, search):
     splitted_search: List[str] = list(filter(None,re.split(r"\W",search)))
     for search_word in splitted_search:
         text = str(highlighted_text)
+        
         # This regex should help in avoid replacing text within html tags i.e. <a> or classnames such as 'data-foo-bar'
-        src_str = re.compile(r"(?<![<])\b" + search_word + r"\b(?![>-])")
+        src_str = re.compile(r"(?<![<-])\b" + search_word + r"\b(?![>-])")
         highlighted_text = src_str.sub(f"<span class='highlight'>{search_word}</span>", text)
         
     return mark_safe(highlighted_text)
