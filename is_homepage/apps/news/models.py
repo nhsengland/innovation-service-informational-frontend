@@ -87,6 +87,8 @@ class NewsIndexPage(RoutablePageMixin, BasePage):
         context['news_types_list'] = news_types_list
         context['news_list'] = news_list
         context['pagination_range'] = news_list.paginator.get_elided_page_range(number=page, on_each_side=1, on_ends=1)
+        context['search_params'] = request.GET.get('search', '')
+
         return context
 
     # Concept case, if we need news by year/month.
@@ -147,6 +149,8 @@ class NewsDetailPage(BasePage):
 
         context['related_content_list'] = [related_content_news]
         context['related_content_count'] = sum([len(items) for items in context['related_content_list']])
+        context['search_params'] = request.GET.get('search', '')
+
         return context
 
     class Meta:

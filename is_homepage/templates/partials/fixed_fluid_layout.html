@@ -1,4 +1,4 @@
-{% load static wagtailcore_tags %}
+{% load static wagtailcore_tags base_filters %}
 
 {% for block in content %}
 
@@ -22,7 +22,7 @@
     <div class="nhsuk-width-container app-width-container fixed-layout-blocks">
       <div class="nhsuk-grid-row">
         {% for layout_grid in block.value.layout_grid %}
-          <div class="nhsuk-grid-column-{{ layout_grid.column_width }}">{{ layout_grid.content }}</div>
+          <div class="nhsuk-grid-column-{{ layout_grid.column_width }}">{{ layout_grid.content | highlight:search_params }}</div>
         {% endfor %}
       </div>
     </div>
