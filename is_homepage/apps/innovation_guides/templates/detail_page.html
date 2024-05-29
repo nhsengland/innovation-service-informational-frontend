@@ -20,15 +20,16 @@
           <div class="app-pane__main-content">
  
             <h1>
-              <span class="nhsuk-caption-l">{{ self.get_parent.title }}<span class="nhsuk-u-visually-hidden"> - </span></span>{{ self.title | highlight:search_params }}
+              <span class="nhsuk-caption-l">{{ self.get_parent.title | highlight:search_params  }}<span class="nhsuk-u-visually-hidden"> - </span></span>{{ self.title | highlight:search_params }}
             </h1>
 
             {% for block in self.content %}
               <div class="nhsuk-grid-row">
                 {% for layout_grid_block in block.value %}
-                  <div class="nhsuk-grid-column-{{ layout_grid_block.column_width }}">
-                    {% html_headings_parse layout_grid_block.content '2' 'add-id-attribute' as parsed_headings %} {{parsed_headings | highlight:search_params}}
-                  </div>
+                <div class="nhsuk-grid-column-{{ layout_grid_block.column_width }}">
+                  {% html_headings_parse layout_grid_block.content '2' 'add-id-attribute' as parsed_headings %} 
+                  {{parsed_headings | highlight:search_params}}
+                </div>
                 {% endfor %}
               </div>
             {% endfor %}

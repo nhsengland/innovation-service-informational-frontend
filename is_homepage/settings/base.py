@@ -207,7 +207,8 @@ if (ES_API_URL):
                         'analyzer': {
                             'default': {
                                 'type': 'english',
-                                'filter': ['stop']
+                                'filter': ['stop'],
+                                
                             }
                         }
                     }

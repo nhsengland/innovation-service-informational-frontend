@@ -8,6 +8,7 @@ class ElasticsearchQueryCompilerCustom(Elasticsearch8SearchQueryCompiler):
 
         if query['multi_match'] != None:
             query['multi_match']['fuzziness'] = "AUTO"
+            query['multi_match']['prefix_length'] = 2
 
         return query
     
