@@ -31,6 +31,8 @@ def search(request):
 
     url_qp_query = request.GET.get('query', None)
     url_qp_types = request.GET.getlist('types', None)
+    
+    search_results_count = 0
 
     current_url_qp = urlencode(({key: value for (key, value) in {
         'query': url_qp_query if url_qp_query else None,
