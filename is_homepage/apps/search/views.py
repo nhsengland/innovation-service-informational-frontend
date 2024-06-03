@@ -20,7 +20,6 @@ from is_homepage.config.helpers.iterables_helper import flatten_tuple
 
 
 def search(request):
-
     pages_types_list = [
         {'name': 'Innovation guides', 'model_type': 'page', 'models': (InnovationGuidesIndexPage, InnovationGuidesStagePage, InnovationGuidesDetailPage), 'qp': '', 'is_active': False},
         {'name': 'News', 'model_type': 'page', 'models': (NewsDetailPage), 'qp': '', 'is_active': False},
@@ -32,6 +31,8 @@ def search(request):
 
     url_qp_query = request.GET.get('query', None)
     url_qp_types = request.GET.getlist('types', None)
+    
+    search_results_count = 0
 
     current_url_qp = urlencode(({key: value for (key, value) in {
         'query': url_qp_query if url_qp_query else None,
@@ -88,16 +89,17 @@ def search(request):
                 value._score = 0.8
 
         # As we are joining different models, we need to bring the models score (annotate_score) so that dataset could be ordered after.
+        # Function 'annotate_terms_occurrences()' adds terms_occurrences field to each object in the search results, so they can be accessed on the template.
+
         search_results = list(chain(
-            pages.search(url_qp_query).annotate_score('_score') if pages else [],
-            documents.search(url_qp_query).annotate_score('_score') if documents else [],
+            pages.search(url_qp_query).annotate_score('_score').annotate_terms_occurrences('terms_occurrences') if pages else [],
+            documents.search(url_qp_query).annotate_score('_score').annotate_terms_occurrences('terms_occurrences') if documents else [],
             promoted if promoted else []
         ))
+        
         search_results.sort(key=lambda x: x._score, reverse=True)
-
-        # This code is just for debugging purposes. Shows the dataset results with the score.
-        # for event in search_results:
-        #     print(event.title, event._score)
+    
+        search_results_count = len(search_results)
 
         query = Query.get(url_qp_query)
         query.add_hit()  # Record hit
@@ -116,9 +118,12 @@ def search(request):
     except EmptyPage:
         page = paginator.num_pages
         search_results = paginator.page(paginator.num_pages)
+        
+    
 
     return TemplateResponse(request, 'search/search.html', {
         'search_query': url_qp_query,
+        'search_results_count': search_results_count,
         'search_results': search_results,
         'pages_types_list': pages_types_list,
         'current_url_query_params': current_url_qp,

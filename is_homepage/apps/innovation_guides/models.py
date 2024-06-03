@@ -50,7 +50,9 @@ class InnovationGuidesIndexPage(PdfViewPageMixin, BasePage):
 
         if mode == 'pdf':
             self.template = 'index_page_print.html'
-
+            
+        context['search_params'] = request.GET.get('search', '')
+        
         return context
 
     class Meta:
@@ -93,6 +95,9 @@ class InnovationGuidesStagePage(PdfViewPageMixin, BasePage):
 
         if mode == 'pdf':
             self.template = 'stage_page_print.html'
+            
+        context['search_params'] = request.GET.get('search', '')
+
 
         return context
 
@@ -158,6 +163,7 @@ class InnovationGuidesDetailPage(PdfViewPageMixin, BasePage):
 
             context['related_content_list'] = [related_content_news, related_content_ig, related_content_case_studies, related_help_resources, related_documents]
             context['related_content_count'] = sum([len(items) for items in context['related_content_list']])
+            context['search_params'] = request.GET.get('search', '')
 
         return context
 

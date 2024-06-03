@@ -73,6 +73,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "is_homepage.middleware.fetch_original_host.FetchOriginalHostMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -100,7 +101,6 @@ TEMPLATES = [
                 "wagtail.contrib.settings.context_processors.settings",
 
                 'is_homepage.config.context_processors.environment.environment_variables'
-
             ]
         }
     }
@@ -188,24 +188,40 @@ WAGTAIL_SITE_NAME = "Innovation Service Homepage"
 
 # Search
 # https://docs.wagtail.org/en/stable/topics/search/backends.html
-ES_HOST = os.environ.get('ES_HOST')
-if (ES_HOST):
-  WAGTAILSEARCH_BACKENDS = {
-      "default": {
-          'BACKEND': 'wagtail.search.backends.elasticsearch8',
-          'URLS': [ES_HOST],
-          'INDEX': 'wagtail',
-          'TIMEOUT': 5,
-          'OPTIONS': {},
-          'INDEX_SETTINGS': {},
-      }
-  }
+
+ES_API_URL = os.environ.get('ES_API_URL')
+ES_API_KEY = os.environ.get('ES_API_KEY')
+
+if (ES_API_URL):
+    WAGTAILSEARCH_BACKENDS = {
+        "default": {
+            'BACKEND': 'is_homepage.apps.search.custom_elasticsearch8',
+            'URLS': [ES_API_URL],
+            'INDEX': 'wagtail',
+            'TIMEOUT': 5,
+            'OPTIONS': {
+                'api_key': ES_API_KEY
+            },
+            'INDEX_SETTINGS': {
+                'settings': {
+                    'analysis': {
+                        'analyzer': {
+                            'default': {
+                                'type': 'english',
+                                'filter': ['stop']
+                            }
+                        }
+                    }
+                }
+            },
+        }
+    }
 else:
-  WAGTAILSEARCH_BACKENDS = {
-      "default": {
-          'BACKEND': 'wagtail.search.backends.database',
-      }
-  }
+    WAGTAILSEARCH_BACKENDS = {
+        "default": {
+            'BACKEND': 'wagtail.search.backends.database',
+        }
+    }
 
 # Base URL to use when referring to full URLs within the Wagtail admin backend -
 # e.g. in notification emails. Don't include '/admin' or a trailing slash
@@ -227,4 +243,4 @@ WAGTAILEMBEDS_RESPONSIVE_HTML = True
 
 BASE_SCHEDULER_ENABLED = os.environ.get('SCHEDULER_DISABLE') != 'true'
 BASE_SCHEDULER_MINUTE_TO_PUBLISH = os.environ.get('SCHEDULER_MINUTE_TO_PUBLISH', ':01')
-BASE_SCHEDULER_MINUTE_TO_JOB_CLEANUP =  os.environ.get('SCHEDULER_MINUTE_TO_CLEANUP', ':05')
+BASE_SCHEDULER_MINUTE_TO_JOB_CLEANUP = os.environ.get('SCHEDULER_MINUTE_TO_CLEANUP', ':05')

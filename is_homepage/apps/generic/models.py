@@ -45,6 +45,13 @@ class GenericPage(BasePage):
     search_fields = BasePage.search_fields + [
         index.RelatedFields('tags', [index.SearchField('name')])
     ]
+    
+    def get_context(self, request, *args, **kwargs):
+        
+        context = super().get_context(request, *args, **kwargs)
+        context['search_params'] = request.GET.get('search', '')
+
+        return context
 
     class Meta:
         verbose_name = 'Generic page'

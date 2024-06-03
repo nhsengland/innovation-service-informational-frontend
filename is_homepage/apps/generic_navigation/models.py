@@ -49,6 +49,7 @@ class GenericNavigationIndexPage(BasePage):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context['navigation_pages'] = self.get_children().specific()
+        context['search_params'] = request.GET.get('search', '')
         return context
 
     class Meta:
@@ -83,6 +84,7 @@ class GenericNavigationDetailPage(BasePage):
     def get_context(self, request, *args, **kwargs):
         context = super().get_context(request, *args, **kwargs)
         context['navigation_pages'] = self.get_siblings().specific()
+        context['search_params'] = request.GET.get('search', '')
         return context
 
     def is_child_page(self):
