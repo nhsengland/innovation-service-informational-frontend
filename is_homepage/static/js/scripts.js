@@ -70,7 +70,7 @@ for (let e of document.getElementsByClassName('app-multilevel-navigation__toggle
     document.querySelector('#cookie-banner-success').classList.remove('d-none');
     setConsentCookie(true);
 
-    gtag &&
+    (typeof gtag === 'function') &&
       gtag('consent', 'update', {
         ad_storage: 'denied',
         ad_user_data: 'denied',
@@ -88,7 +88,7 @@ for (let e of document.getElementsByClassName('app-multilevel-navigation__toggle
     setConsentCookie(false);
     deleteAnalyticsCookies();
 
-    gtag &&
+    (typeof gtag === 'function') &&
       gtag('consent', 'update', {
         ad_storage: 'denied',
         ad_user_data: 'denied',
