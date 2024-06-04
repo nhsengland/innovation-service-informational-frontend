@@ -57,9 +57,9 @@
   {# Global javascript #}
   <script type="text/javascript">
     window.__env = window.__env || {};
-    window.__env.ENABLE_ANALYTICS = environment_variables.ENABLE_ANALYTICS;
-    window.__env.TAG_MEASUREMENT_ID = environment_variables.TAG_MEASUREMENT_ID;
-    window.__env.GTM_ID = environment_variables.GTM_ID;
+    window.__env.ENABLE_ANALYTICS = "{{environment_variables.ENABLE_ANALYTICS}}";
+    window.__env.TAG_MEASUREMENT_ID = "{{environment_variables.TAG_MEASUREMENT_ID}}";
+    window.__env.GTM_ID = "{{environment_variables.GTM_ID}}";
   </script>
   <script type="text/javascript" src="{% static 'wagtailnhsukfrontend/js/nhsuk.min.js' %}" defer></script>
   <script type="text/javascript" src="{% static 'js/scripts.js' %}" defer></script>
@@ -70,7 +70,7 @@
 {% if environment_variables.ENABLE_ANALYTICS %}
   <noscript>
     <!-- Google Tag Manager (noscript) -->
-    <iframe title="Google Tag Manager frame" src="https://www.googletagmanager.com/ns.html?id=GTM-M8KK8NB" height="0" width="0" class="d-none"></iframe>
+    <iframe title="Google Tag Manager frame" src="https://www.googletagmanager.com/ns.html?id={{ environment_variables.TAG_MEASUREMENT_ID }}" height="0" width="0" class="d-none"></iframe>
   </noscript>
 {% endif %}
 
