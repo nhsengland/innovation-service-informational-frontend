@@ -70,16 +70,18 @@ for (let e of document.getElementsByClassName('app-multilevel-navigation__toggle
     document.querySelector('#cookie-banner-success').classList.remove('d-none');
     setConsentCookie(true);
 
-    gtag &&
-      gtag('consent', 'update', {
-        ad_storage: 'denied',
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-        functionality_storage: 'denied',
-        personalization_storage: 'denied',
-        security_storage: 'denied',
-        analytics_storage: 'granted'
-      });
+    if (environment_variables.ENABLE_ANALYTICS) {
+      gtag &&
+        gtag('consent', 'update', {
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          functionality_storage: 'denied',
+          personalization_storage: 'denied',
+          security_storage: 'denied',
+          analytics_storage: 'granted'
+        });
+    }
   });
 
   document.querySelector('#save-cookies-button-nok')?.addEventListener('click', function () {
@@ -88,16 +90,18 @@ for (let e of document.getElementsByClassName('app-multilevel-navigation__toggle
     setConsentCookie(false);
     deleteAnalyticsCookies();
 
-    gtag &&
-      gtag('consent', 'update', {
-        ad_storage: 'denied',
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-        functionality_storage: 'denied',
-        personalization_storage: 'denied',
-        security_storage: 'denied',
-        analytics_storage: 'denied'
-      });
+    if (environment_variables.ENABLE_ANALYTICS) {
+      gtag &&
+        gtag('consent', 'update', {
+          ad_storage: 'denied',
+          ad_user_data: 'denied',
+          ad_personalization: 'denied',
+          functionality_storage: 'denied',
+          personalization_storage: 'denied',
+          security_storage: 'denied',
+          analytics_storage: 'denied'
+        });
+    }
   });
 
 })();
