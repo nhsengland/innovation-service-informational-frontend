@@ -32,7 +32,9 @@ services:
       - DB_PASSWORD=admin
       - DB_NAME=is_homepage
       - ES_HOST=http://elasticsearch:9200
-      - ENABLE_ANALYTICS=false
+      - ENABLE_ANALYTICS=${ENABLE_ANALYTICS}
+      - GTM_ID=${GTM_ID}
+      - TAG_MEASUREMENT_ID=${TAG_MEASUREMENT_ID}
       - ENABLE_SCHEDULER=true
       - EMAIL_NOTIFICATION_API_ISSUER={SECRET}
       - EMAIL_NOTIFICATION_API_SECRET={SECRET}

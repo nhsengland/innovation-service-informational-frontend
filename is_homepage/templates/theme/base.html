@@ -36,6 +36,12 @@
   {% endcompress %}
 
   <script type="text/javascript" src="{% static 'js/cookies_helper.js' %}"></script>
+  <script type="text/javascript">
+    window.__env = window.__env || {};
+    window.__env.ENABLE_ANALYTICS = "{{ environment_variables.ENABLE_ANALYTICS }}";
+    window.__env.TAG_MEASUREMENT_ID = "{{ environment_variables.TAG_MEASUREMENT_ID }}";
+    window.__env.GTM_ID = "{{ environment_variables.GTM_ID }}";
+  </script>
   {% if environment_variables.ENABLE_ANALYTICS %}
     <script type="text/javascript" src="{% static 'js/analytics.js' %}"></script>
   {% endif %}
