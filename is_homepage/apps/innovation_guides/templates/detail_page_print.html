@@ -8,8 +8,8 @@
 {% block content %}
 
   <div class="frontcover">
-    <span class="nhsuk-caption-l">{{ self.get_parent.title | highlight:search_params }} stage</span>
-    <p class="nhsuk-heading-xl">{{ self.title | highlight:search_params }} guide</p>
+    <span class="nhsuk-caption-l">{{ self.get_parent.title }} stage</span>
+    <p class="nhsuk-heading-xl">{{ self.title }} guide</p>
     Downloaded on {% now "F jS, Y" %}
   </div>
  
