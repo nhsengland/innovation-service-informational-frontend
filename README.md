@@ -75,5 +75,6 @@ To run in production mode update .env file with:
 ```bash
 DJANGO_SETTINGS_MODULE=is_homepage.settings.production
 ALLOWED_HOSTS={YOUR_HOSTS_HERE}
+BASEURL={BASEURL}
 ```
 You may need to rebuild the wagtail container.
