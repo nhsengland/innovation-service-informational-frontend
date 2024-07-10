@@ -229,6 +229,19 @@ WAGTAILADMIN_BASE_URL = "http://example.com"
 
 
 # Custom settings.
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": os.environ.get("LOGLEVEL", "WARNING"),
+    },
+}
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS').split(',') if os.environ.get('CSRF_TRUSTED_ORIGINS') else []
