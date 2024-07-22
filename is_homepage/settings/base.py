@@ -229,6 +229,19 @@ WAGTAILADMIN_BASE_URL = "http://example.com"
 
 
 # Custom settings.
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": os.environ.get("LOGLEVEL", "WARNING"),
+    },
+}
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 CSRF_TRUSTED_ORIGINS = os.environ.get('CSRF_TRUSTED_ORIGINS').split(',') if os.environ.get('CSRF_TRUSTED_ORIGINS') else []
@@ -244,3 +257,6 @@ WAGTAILEMBEDS_RESPONSIVE_HTML = True
 BASE_SCHEDULER_ENABLED = os.environ.get('SCHEDULER_DISABLE') != 'true'
 BASE_SCHEDULER_MINUTE_TO_PUBLISH = os.environ.get('SCHEDULER_MINUTE_TO_PUBLISH', ':01')
 BASE_SCHEDULER_MINUTE_TO_JOB_CLEANUP = os.environ.get('SCHEDULER_MINUTE_TO_CLEANUP', ':05')
+
+if 'BASEURL' in os.environ:
+    WEASYPRINT_BASEURL = os.environ.get('BASEURL')
