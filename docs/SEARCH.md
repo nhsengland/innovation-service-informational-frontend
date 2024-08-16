@@ -43,6 +43,3 @@ weights.BOOSTS_WEIGHTS
 ```
 
 There’s a note about this in the [Wagtail docs](https://docs.wagtail.org/en/stable/topics/search/indexing.html#options)
-
-
-

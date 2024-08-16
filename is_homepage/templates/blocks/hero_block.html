@@ -13,7 +13,7 @@
       {% if self.image %}
         <div class="nhsuk-grid-column-one-third nhsuk-u-padding-bottom-7">
           {% image self.image max-250x250 as hero_image %}
-          <img src="{{ hero_image.url }}" alt="" />
+          <img src="{{ hero_image.url }}" alt="{{ hero_image.alt }}" />
         </div>
       {% endif %}
     </div>
