@@ -11,7 +11,7 @@
       "program": "${workspaceFolder}/manage.py",
       "args": [
         "runserver",
-        // "--settings=nice_ai_maas_cms.settings.local"
+        // "--settings=is_homepage.settings.local"
       ],
       "django": true,
       "justMyCode": true
