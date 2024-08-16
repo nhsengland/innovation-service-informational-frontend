@@ -1,5 +1,5 @@
 {% extends "theme/base.html" %}
-{% load static wagtailcore_tags wagtailimages_tags %}
+{% load static i18n wagtailcore_tags wagtailimages_tags base_filters %}
 
 {% block content %}
 
@@ -13,67 +13,90 @@
 
     {% include "partials/fixed_fluid_layout.html" with content=self.content %}
 
-    {% if case_studies_types_list|length > 0 %}
+    {% if case_studies_filter_list %}
 
       <div class="nhsuk-grid-row">
-        <div class="nhsuk-grid-column-full nhsuk-u-padding-bottom-4">
-          <nav aria-labelledby="page-filter-heading">
+        <div class="nhsuk-grid-column-full nhsuk-u-margin-bottom-3">
+          <section class="border-bottom-separator-grey">
+
             <h2 id="page-filter-heading" class="nhsuk-heading-s nhsuk-u-margin-bottom-2">Filter your search</h2>
-            <ul class="nhsuk-u-padding-0">
-              {% for item in case_studies_types_list %}
+            <ul class="nhsuk-u-padding-0 nhsuk-u-margin-bottom-3" aria-labelledby="page-filter-heading">
+              {% for item in case_studies_filter_list %}
                 <li class="d-inline-block nhsuk-u-margin-1">
-                  <a href="?{{ item.qp }}" class="app-tag nhsuk-u-font-size-14{% if item.is_active %} app-tag__selected{% endif %}" rel="nofollow">{{ item.title }}</a>
+                  <a href="?{{ item.qp }}" role="button" rel="nofollow" class="app-tag nhsuk-u-font-size-14{% if item.is_active %} app-tag__selected{% endif %}" aria-pressed="{{ item.is_active|yesno:'true,false' }}">{{ item.title }}</a>
                 </li>
               {% endfor %}
             </ul>
-          </nav>
+
+            <p class="nhsuk-body-s nhsuk-u-margin-bottom-2{% if not active_filter_names %} nhsuk-u-visually-hidden{% endif %}">
+              <span role="alert">
+                {% with paragraph_suffix=active_filter_names|chosen_filters_paragraph_suffix %}
+                  {% if case_studies_list %}
+                    {% blocktranslate trimmed count num=case_studies_list.paginator.count %}
+                      Found <strong>{{ num }}</strong> case study{{ paragraph_suffix }}.
+                    {% plural %}
+                      Found <strong>{{ num }}</strong> case studies{{ paragraph_suffix }}.
+                    {% endblocktranslate %}
+                  {% else %}
+                    {% translate "No matching results" %}{{ paragraph_suffix }}.
+                  {% endif %}
+                {% endwith %}
+              </span>
+              {% if active_filter_names %}
+                <a href="{{ self.get_url }}" role="button" class="nhsuk-link--no-visited-state white-space-no-wrap nhsuk-u-margin-left-1">{% translate "Clear filters" %}</a>
+              {% endif %}
+            </p>
+
+          </section>
         </div>
       </div>
 
     {% endif %}
 
-    <ul class="nhsuk-grid-row nhsuk-card-group">
+    {% if case_studies_list %}
 
-      {% for item in case_studies_list %}
+      <ul class="nhsuk-grid-row nhsuk-card-group">
 
-        <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
+        {% for item in case_studies_list %}
 
-          <div class="nhsuk-card nhsuk-card--clickable">
+          <li class="nhsuk-grid-column-one-third nhsuk-card-group__item">
 
-            {% if item.search_image %}
-            {% image item.search_image fill-400x300 as case_study_image %}
-              <img src="{{ case_study_image.url }}" class="nhsuk-card__img" alt="" />
-            {% endif %}
- 
-            <div class="nhsuk-card__content">
-              <h2 class="nhsuk-card__heading nhsuk-heading-m">
-                <a href="{{ item.url }}" class="nhsuk-card__link">{{ item.title }}</a>
-              </h2>
-              <p class="nhsuk-card__description">{{ item.search_description }}</p>
-              <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">{{ item.first_published_at|date:'F j, Y' }}</p>
+            <div class="nhsuk-card nhsuk-card--clickable">
 
-              {% if item.case_studies_type.all|length > 0 %}
-                <ul class="nhsuk-u-margin-top-3 nhsuk-u-padding-0">
-                  {% for case_studies_type_item in item.case_studies_type.all %}
-                    <li class="app-tag app-tag__selected nhsuk-u-font-size-14">{{ case_studies_type_item.title }}</li>
-                  {% endfor %}
-                </ul>
+              {% if item.search_image %}
+                {% image item.search_image fill-400x300 as case_study_image %}
+                <img src="{{ case_study_image.url }}" class="nhsuk-card__img" alt="" />
               {% endif %}
+
+              <div class="nhsuk-card__content">
+                <h2 class="nhsuk-card__heading nhsuk-heading-m">
+                  <a href="{{ item.url }}" class="nhsuk-card__link">{{ item.title }}</a>
+                </h2>
+                <p class="nhsuk-card__description">{{ item.search_description }}</p>
+                <p class="nhsuk-body-s font-color-secondary nhsuk-u-margin-0">{{ item.first_published_at|date:'F j, Y' }}</p>
+
+                {% if item.case_studies_type.all|length > 0 %}
+                  <ul class="nhsuk-u-margin-top-3 nhsuk-u-padding-0">
+                    {% for case_studies_type_item in item.case_studies_type.all %}<li class="app-tag app-tag__selected nhsuk-u-font-size-14">{{ case_studies_type_item.title }}</li>{% endfor %}
+                  </ul>
+                {% endif %}
+
+              </div>
 
             </div>
 
-          </div>
+          </li>
 
-        </li>
+        {% endfor %}
 
-      {% endfor %}
+      </ul>
 
-    </ul>
+    {% else %}
+      <p class="nhsuk-u-padding-top-2">You may get more results by removing any selected filter.</p>
+    {% endif %}
 
     <div class="nhsuk-grid-row">
-      <div class="nhsuk-grid-column-full">
-        {% include "partials/pagination.html" with pages=case_studies_list range=pagination_range query_params=current_url_query_params %}
-      </div>
+      <div class="nhsuk-grid-column-full">{% include "partials/pagination.html" with pages=case_studies_list range=pagination_range query_params=current_url_query_params %}</div>
     </div>
 
   </div>

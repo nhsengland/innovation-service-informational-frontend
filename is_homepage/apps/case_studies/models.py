@@ -45,11 +45,11 @@ class CaseStudiesIndexPage(BasePage):
 
         case_studies_list = CaseStudiesDetailPage.objects.distinct().live().public().order_by('-first_published_at')
 
-        case_studies_types_list = list(map(lambda item: {'title': item.title, 'qp': '', 'is_active': False}, CaseStudiesTypeSnippet.objects.all()))
+        case_studies_filter_list = list(map(lambda item: {'title': item.title, 'qp': '', 'is_active': False}, CaseStudiesTypeSnippet.objects.all()))
 
-        url_case_studies_types_list = request.GET.getlist('types', None)
-        if url_case_studies_types_list:
-            case_studies_list = case_studies_list.filter(case_studies_type__title__in=url_case_studies_types_list)
+        url_case_studies_filter_list = request.GET.getlist('types', None)
+        if url_case_studies_filter_list:
+            case_studies_list = case_studies_list.filter(case_studies_type__title__in=url_case_studies_filter_list)
 
         if request.GET.get('tags', None):
             tags = request.GET.getlist('tags')
@@ -68,11 +68,11 @@ class CaseStudiesIndexPage(BasePage):
             case_studies_list = paginator.page(paginator.num_pages)
 
         # Build news type filter list.
-        for item in case_studies_types_list:
+        for item in case_studies_filter_list:
 
-            qp = copy(url_case_studies_types_list)
+            qp = copy(url_case_studies_filter_list)
 
-            if item['title'] in url_case_studies_types_list:
+            if item['title'] in url_case_studies_filter_list:
                 qp.remove(item['title'])
                 item['is_active'] = True
             else:
@@ -81,8 +81,9 @@ class CaseStudiesIndexPage(BasePage):
 
             item['qp'] = f"types={'&types='.join(qp)}" if len(qp) > 0 else ''
 
-        context['current_url_query_params'] = f"types={'&types='.join(url_case_studies_types_list)}" if len(url_case_studies_types_list) > 0 else ''
-        context['case_studies_types_list'] = case_studies_types_list
+        context['current_url_query_params'] = f"types={'&types='.join(url_case_studies_filter_list)}" if len(url_case_studies_filter_list) > 0 else ''
+        context['case_studies_filter_list'] = case_studies_filter_list
+        context['active_filter_names'] = [item['title'] for item in case_studies_filter_list if item['is_active']]
         context['case_studies_list'] = case_studies_list
         context['pagination_range'] = case_studies_list.paginator.get_elided_page_range(number=page, on_each_side=1, on_ends=1)
         context['search_params'] = request.GET.get('search', '')
