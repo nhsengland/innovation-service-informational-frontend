@@ -1,0 +1,9 @@
+{
+  "profile": "django",
+  "ignore": "H023,H030,H031",
+  "indent": 2,
+  "line_break_after_multiline_tag": false,
+  "max_attribute_length": 250,
+  "max_line_length": 250,
+  "max_blank_lines": 2
+}

@@ -10,7 +10,7 @@
     {% image item.image max-250x250 as item_image %}
     <img src="{{ item_image.url }}"
          class="column-{{ item.column_span }}"
-         alt=""
+         alt="{{ item_image.alt }}"
          {% if self.row_height %} style="max-height: {{ self.row_height }}px;"{% endif %}/>
 
     {% if item.url %}</a>{% endif %}
