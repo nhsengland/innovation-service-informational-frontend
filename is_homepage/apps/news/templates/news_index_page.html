@@ -17,15 +17,17 @@
 
 {% block content %}
 
-  <div class="nhsuk-width-container app-width-container nhsuk-main-wrapper">
-
+  <div class="nhsuk-width-container app-width-container nhsuk-u-margin-top-7">
     <div class="nhsuk-grid-row">
       <div class="nhsuk-grid-column-three-quarters">
         <h1 class="nhsuk-u-margin-0">{{ self.title }}</h1>
       </div>
     </div>
+  </div>
 
-    {% include "partials/fixed_fluid_layout.html" with content=self.content %}
+  {% include "partials/fixed_fluid_layout.html" with content=self.content %}
+
+  <div class="nhsuk-width-container app-width-container">
 
     <div class="nhsuk-grid-row nhsuk-u-padding-bottom-5">
 
