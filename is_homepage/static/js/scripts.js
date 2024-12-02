@@ -68,36 +68,16 @@ for (let e of document.getElementsByClassName('app-multilevel-navigation__toggle
   document.querySelector('#save-cookies-button-ok')?.addEventListener('click', () => {
     document.querySelector('#cookie-banner').classList.add('d-none');
     document.querySelector('#cookie-banner-success').classList.remove('d-none');
+    updateGTAGConsent(true);
     setConsentCookie(true);
-
-    (typeof gtag === 'function') &&
-      gtag('consent', 'update', {
-        ad_storage: 'denied',
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-        functionality_storage: 'denied',
-        personalization_storage: 'denied',
-        security_storage: 'denied',
-        analytics_storage: 'granted'
-      });
   });
 
   document.querySelector('#save-cookies-button-nok')?.addEventListener('click', function () {
     document.querySelector('#cookie-banner').classList.add('d-none')
     document.querySelector('#cookie-banner-success').classList.remove('d-none');
+    updateGTAGConsent(false);
     setConsentCookie(false);
     deleteAnalyticsCookies();
-
-    (typeof gtag === 'function') &&
-      gtag('consent', 'update', {
-        ad_storage: 'denied',
-        ad_user_data: 'denied',
-        ad_personalization: 'denied',
-        functionality_storage: 'denied',
-        personalization_storage: 'denied',
-        security_storage: 'denied',
-        analytics_storage: 'denied'
-      });
   });
 
 })();
