@@ -46,7 +46,7 @@ function deleteAnalyticsCookies() {
   for (let item of cookieArray) {
     const equalIndex = item.indexOf("=");
     const name = equalIndex > -1 ? item.substring(0, equalIndex).trim() : item.trim();
-    if (name.startsWith("_hj") || name.startsWith("_ga")) {
+    if (name.startsWith("_hj") || name.startsWith("_ga") || name.startsWith("ai_")) {
       document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
     }
   }
