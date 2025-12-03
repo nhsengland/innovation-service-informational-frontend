@@ -1,4 +1,7 @@
 from django.core.exceptions import ValidationError
+from django.utils.decorators import method_decorator
+
+from django_ratelimit.decorators import ratelimit
 
 from wagtail.admin.panels import FieldPanel
 from wagtail.models import Page
@@ -26,6 +29,13 @@ class BasePage(MetadataPageMixin, Page):
 
         if errors:
             raise ValidationError(errors)
+
+    @method_decorator(ratelimit(key='ip', rate='5/s', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='10/m', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='1000/h', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='10000/d', block=True), name='serve')
+    def serve(self, request, *args, **kwargs):
+        return super().serve(request, *args, **kwargs)
 
     class Meta:
         abstract = True

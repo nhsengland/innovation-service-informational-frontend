@@ -5,9 +5,12 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db import models
 from django.db.models.aggregates import Count
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 
 from modelcluster.contrib.taggit import ClusterTaggableManager
 from modelcluster.fields import ParentalKey, ParentalManyToManyField
+
+from django_ratelimit.decorators import ratelimit
 
 from taggit.models import TaggedItemBase
 
@@ -40,6 +43,13 @@ class NewsIndexPage(RoutablePageMixin, BasePage):
     content_panels = BasePage.content_panels + [
         FieldPanel('content')
     ]
+
+    @method_decorator(ratelimit(key='ip', rate='5/s', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='100/m', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='1000/h', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='10000/d', block=True), name='serve')
+    def serve(self, request, *args, **kwargs):
+        return super().serve(request, *args, **kwargs)
 
     def get_context(self, request, *args, **kwargs):
 
