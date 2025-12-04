@@ -13,6 +13,7 @@ tmp
 
 # Virtual Environments.
 .venv
+venv
 
 # DB Seeds
 .db-seed/*

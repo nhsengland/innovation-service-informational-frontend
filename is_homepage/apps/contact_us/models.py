@@ -1,8 +1,11 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.shortcuts import render
+from django.utils.decorators import method_decorator
 
 from modelcluster.fields import ParentalKey
+
+from django_ratelimit.decorators import ratelimit
 
 from wagtail.admin.panels import FieldPanel, FieldRowPanel, InlinePanel, MultiFieldPanel
 from wagtail.fields import RichTextField, StreamField
@@ -111,6 +114,10 @@ class ContactUsPage(AbstractForm):
         FieldPanel('search_description')
     ]
 
+    @method_decorator(ratelimit(key='ip', rate='5/s', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='100/m', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='1000/h', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='10000/d', block=True), name='serve')
     def serve(self, request):
 
         if request.method == 'POST':
@@ -145,3 +152,5 @@ class ContactUsPage(AbstractForm):
             form = self.get_form(page=self)
 
         return render(request, self.template, {'page': self, 'form': form})
+    
+
