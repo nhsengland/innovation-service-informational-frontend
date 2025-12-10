@@ -30,10 +30,10 @@ class BasePage(MetadataPageMixin, Page):
         if errors:
             raise ValidationError(errors)
 
-    @method_decorator(ratelimit(key='ip', rate='5/s', block=True), name='serve')
-    @method_decorator(ratelimit(key='ip', rate='100/m', block=True), name='serve')
-    @method_decorator(ratelimit(key='ip', rate='1000/h', block=True), name='serve')
-    @method_decorator(ratelimit(key='ip', rate='10000/d', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='2/s', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='20/m', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='80/h', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='100/d', block=True), name='serve')
     def serve(self, request, *args, **kwargs):
         return super().serve(request, *args, **kwargs)
 
