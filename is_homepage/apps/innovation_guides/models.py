@@ -1,8 +1,11 @@
 from django.db import models
 from django.db.models.aggregates import Count
+from django.utils.decorators import method_decorator
 
 from modelcluster.fields import ParentalKey
 from modelcluster.contrib.taggit import ClusterTaggableManager
+
+from django_ratelimit.decorators import ratelimit
 
 from wagtail.admin.panels import FieldPanel
 from wagtail.documents.models import Document
@@ -43,6 +46,13 @@ class InnovationGuidesIndexPage(PdfViewPageMixin, BasePage):
         FieldPanel('intro'),
         FieldPanel('content')
     ]
+
+    @method_decorator(ratelimit(key='ip', rate='2/s', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='20/m', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='80/h', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='100/d', block=True), name='serve')
+    def serve(self, request, *args, **kwargs):
+        return super().serve(request, *args, **kwargs)
 
     def get_context(self, request, mode=None, **kwargs):
 
@@ -89,6 +99,13 @@ class InnovationGuidesStagePage(PdfViewPageMixin, BasePage):
         index.RelatedFields('tags', [index.SearchField('name')])
     ]
 
+    @method_decorator(ratelimit(key='ip', rate='2/s', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='20/m', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='80/h', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='100/d', block=True), name='serve')
+    def serve(self, request, *args, **kwargs):
+        return super().serve(request, *args, **kwargs)
+
     def get_context(self, request, mode=None, **kwargs):
 
         context = super().get_context(request, **kwargs)
@@ -134,6 +151,13 @@ class InnovationGuidesDetailPage(PdfViewPageMixin, BasePage):
         index.RelatedFields('stage', [index.SearchField('name')]),
         index.RelatedFields('tags', [index.SearchField('name')])
     ]
+
+    @method_decorator(ratelimit(key='ip', rate='2/s', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='20/m', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='80/h', block=True), name='serve')
+    @method_decorator(ratelimit(key='ip', rate='100/d', block=True), name='serve')
+    def serve(self, request, *args, **kwargs):
+        return super().serve(request, *args, **kwargs)
 
     def get_context(self, request, mode=None, **kwargs):
 

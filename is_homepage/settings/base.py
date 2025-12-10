@@ -10,9 +10,9 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
-import mimetypes
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
+import re
 
 PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR = os.path.dirname(PROJECT_DIR)
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "is_homepage.apps.search",
     "is_homepage.apps.help_resources",
 
+    'django_ratelimit',
     'compressor',
     'wagtailnhsukfrontend',
     'wagtailnhsukfrontend.forms',
@@ -75,6 +76,7 @@ MIDDLEWARE = [
     "django.contrib.sessions.middleware.SessionMiddleware",
     "is_homepage.middleware.fetch_original_host.FetchOriginalHostMiddleware",
     "django.middleware.common.CommonMiddleware",
+    "django_ratelimit.middleware.RatelimitMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -120,6 +122,16 @@ DATABASES = {
         'USER': os.environ.get("DB_USER"),
         'PASSWORD': os.environ.get("DB_PASSWORD"),
         'NAME': os.environ.get("DB_NAME")
+    }
+}
+
+
+# Caching
+# https://docs.djangoproject.com/en/4.1/ref/settings/#caches
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
     }
 }
 
@@ -258,5 +270,16 @@ BASE_SCHEDULER_ENABLED = os.environ.get('SCHEDULER_DISABLE') != 'true'
 BASE_SCHEDULER_MINUTE_TO_PUBLISH = os.environ.get('SCHEDULER_MINUTE_TO_PUBLISH', ':01')
 BASE_SCHEDULER_MINUTE_TO_JOB_CLEANUP = os.environ.get('SCHEDULER_MINUTE_TO_CLEANUP', ':05')
 
+# Block spider/crawlers from accessing wagtail
+DISALLOWED_USER_AGENTS = [re.compile(r'scrap', re.IGNORECASE)]
+
 if 'BASEURL' in os.environ:
     WEASYPRINT_BASEURL = os.environ.get('BASEURL')
+
+# Silence django-ratelimit system checks for locmemcache
+SILENCED_SYSTEM_CHECKS = [
+    'django_ratelimit.E003',
+    'django_ratelimit.W001',
+]
+
+RATELIMIT_VIEW = 'is_homepage.apps.base.views.ratelimited_error_view'

@@ -29,7 +29,7 @@ RUN apt-get update --yes --quiet \
   && rm -rf /var/lib/apt/lists/*
 
 # Install the application server.
-RUN pip install "gunicorn==20.0.4"
+RUN pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org "gunicorn==20.0.4"
 
 ## Add the wait script to the image
 ENV WAIT_VERSION 2.12.1
@@ -37,7 +37,7 @@ ADD --chmod=777 https://github.com/ufoscout/docker-compose-wait/releases/downloa
 
 # Install the project requirements.
 COPY requirements.txt /
-RUN pip install -r /requirements.txt
+RUN pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org -r /requirements.txt
 
 # Update wagtail module paths
 RUN wagtail updatemodulepaths

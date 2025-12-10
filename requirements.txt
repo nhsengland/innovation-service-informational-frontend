@@ -15,3 +15,4 @@ wagtail-metadata==5.0.0
 wagtail-nhsuk-frontend==1.5.2
 wagtail-pdf-view==0.2.1
 elasticsearch>=8.0.0,<9.0.0
+django-ratelimit==4.1.0
