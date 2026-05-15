@@ -99,10 +99,10 @@ python3 run_django.py createsuperuser
 python3 run_django.py update_index
 ```
 
-**2. Generate Dummy Content (Testing Dataset)**
+**2. Seed Content (Testing Dataset)**
 *Run the provided automation script to create 40+ pages (News, Case Studies, Innovation Guides, and Generic Pages).*
 ```bash
-python3 generate_dummy_content.py
+python3 seed_content.py
 ```
 *Crucial: After seeding content, you **MUST** run the indexer again so they appear in search results:*
 ```bash
@@ -115,10 +115,10 @@ python3 run_django.py runserver 0.0.0.0:8000
 ```
 
 **4. Verify Caching (The Automated Test)**
-*In a separate terminal, run the verification script to ensure all pages are hitting the local disk cache.*
-```bash
-python3 verify_cache_all.py
-```
+*In a separate terminal, run the verification scripts to ensure all pages are hitting the local disk cache.*
+*   **For Users (with cookies):** `python3 test_cache_user.py`
+*   **For Bots (without cookies):** `python3 test_cache_bot.py`
+
 *   **Target Output:** You want to see `hit` in the `Req 3` column.
 *   **Note:** Seeing `skip` or `miss` on the first request is normal (it's either setting a CSRF cookie or populating the cache for the first time).
 
