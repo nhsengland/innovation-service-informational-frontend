@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'wagtailmetadata',
     'wagtail_pdf_view',
 
+    "wagtailcache",
+
     "wagtail.contrib.forms",
     "wagtail.contrib.redirects",
     'wagtail.contrib.routable_page',
@@ -72,6 +74,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "wagtailcache.cache.UpdateCacheMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "is_homepage.middleware.fetch_original_host.FetchOriginalHostMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -81,6 +84,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "wagtail.contrib.redirects.middleware.RedirectMiddleware",
+    "wagtailcache.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "is_homepage.urls"
@@ -120,6 +124,18 @@ DATABASES = {
         'USER': os.environ.get("DB_USER"),
         'PASSWORD': os.environ.get("DB_PASSWORD"),
         'NAME': os.environ.get("DB_NAME")
+    }
+}
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": os.path.join(BASE_DIR, "cache"),
+        "KEY_PREFIX": "wagtailcache",
+        "TIMEOUT": 60 * 60,  # 1 hour
+        "OPTIONS": {
+            "MAX_ENTRIES": 1000
+        }
     }
 }
 
