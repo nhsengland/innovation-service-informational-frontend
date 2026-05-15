@@ -72,6 +72,8 @@ def search(request):
             except Exception:
                 cached_data = None
 
+            query = Query.get(query_stripped)
+
             if cached_data is not None:
                 search_results = cached_data['results']
                 search_results_count = cached_data['count']
@@ -89,12 +91,12 @@ def search(request):
                     # No filters applied, return everything.
                     pages = Page.objects.live().public().specific()
                     documents = Document.objects
-                    promoted = list(value.page.get_specific(deferred=True) for value in Query.get(url_qp_query).editors_picks.all())
+                    promoted = list(value.page.get_specific(deferred=True) for value in query.editors_picks.all())
                 else:
 
                     if len(page_types_filter) > 0:
                         pages = Page.objects.live().public().specific().type(page_types_filter)
-                        promoted = list(value.page.get_specific(deferred=True) for value in Query.get(url_qp_query).editors_picks.all())
+                        promoted = list(value.page.get_specific(deferred=True) for value in query.editors_picks.all())
                         promoted = list(value for value in promoted if value.__class__ in page_types_filter)
 
                     if len(document_types_filter) > 0:
@@ -124,7 +126,6 @@ def search(request):
                 except Exception:
                     pass
 
-            query = Query.get(url_qp_query)
             query.add_hit()  # Record hit
 
     else:

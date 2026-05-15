@@ -12,11 +12,8 @@ class SearchViewsTestCase(TestCase):
         # 1. Test that if cache.get() fails, it does not throw 500 error
         mock_cache_get.side_effect = Exception("Cache down")
         request = self.factory.get('/search/?query=innovation')
-        try:
-            response = search(request)
-            self.assertEqual(response.status_code, 200)
-        except Exception as e:
-            self.fail(f"search() raised an exception: {e}")
+        response = search(request)
+        self.assertEqual(response.status_code, 200)
 
     def test_search_view_short_query(self):
         # 2. Test short query (<3 characters) returns empty
