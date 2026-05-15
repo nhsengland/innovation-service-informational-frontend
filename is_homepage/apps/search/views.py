@@ -66,16 +66,15 @@ def search(request):
             search_results = []
             search_results_count = 0
         else:
-            cache_key = f"search_results_{url_qp_query}_{','.join(url_qp_types or [])}"
-            cached_data = cache.get(cache_key)
+            cache_key = f"search_results_{query_stripped}_{','.join(sorted(url_qp_types or []))}"
+            try:
+                cached_data = cache.get(cache_key)
+            except Exception:
+                cached_data = None
 
             if cached_data is not None:
                 search_results = cached_data['results']
                 search_results_count = cached_data['count']
-                
-                # Record hit on cached result as well
-                query = Query.get(url_qp_query)
-                query.add_hit()
             else:
                 pages = None
                 documents = None
@@ -119,14 +118,14 @@ def search(request):
             
                 search_results_count = len(search_results)
 
-                query = Query.get(url_qp_query)
-                query.add_hit()  # Record hit
-
                 # Save to cache with graceful degradation if disk is full
                 try:
                     cache.set(cache_key, {'results': search_results, 'count': search_results_count}, 300) # 5 minutes
                 except Exception:
                     pass
+
+            query = Query.get(url_qp_query)
+            query.add_hit()  # Record hit
 
     else:
         search_results = Page.objects.none()
