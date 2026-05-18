@@ -2,10 +2,11 @@ from django.core.exceptions import ValidationError
 
 from wagtail.admin.panels import FieldPanel
 from wagtail.models import Page
+from wagtailcache.cache import WagtailCacheMixin
 from wagtailmetadata.models import MetadataPageMixin
 
 
-class BasePage(MetadataPageMixin, Page):
+class BasePage(WagtailCacheMixin, MetadataPageMixin, Page):
 
     # Editor panels configuration.
     promote_panels = [
