@@ -1,6 +1,7 @@
 from copy import copy
 from itertools import chain
 
+from django.core.cache import cache
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.template.response import TemplateResponse
 
@@ -58,51 +59,74 @@ def search(request):
 
     # Models filter and search.
     if url_qp_query:
-
-        pages = None
-        documents = None
-        promoted = None
-
-        page_types_filter = tuple(value['models'] for value in pages_types_list if value['model_type'] == 'page' and value['name'] in url_qp_types)
-        page_types_filter = flatten_tuple(page_types_filter)
-        document_types_filter = tuple(value['models'] for value in pages_types_list if value['model_type'] == 'document' and value['name'] in url_qp_types)
-        document_types_filter = flatten_tuple(document_types_filter)
-
-        if len(page_types_filter) == 0 and len(document_types_filter) == 0:
-            # No filters applied, return everything.
-            pages = Page.objects.live().public().specific()
-            documents = Document.objects
-            promoted = list(value.page.get_specific(deferred=True) for value in Query.get(url_qp_query).editors_picks.all())
-        else:
-
-            if len(page_types_filter) > 0:
-                pages = Page.objects.live().public().specific().type(page_types_filter)
-                promoted = list(value.page.get_specific(deferred=True) for value in Query.get(url_qp_query).editors_picks.all())
-                promoted = list(value for value in promoted if value.__class__ in page_types_filter)
-
-            if len(document_types_filter) > 0:
-                documents = Document.objects
-
-        # Adds a "high" '_score' promoted search (as it don't have it) so that it can be sortable just like the other datasets.
-        if promoted:
-            for value in promoted:
-                value._score = 0.8
-
-        # As we are joining different models, we need to bring the models score (annotate_score) so that dataset could be ordered after.
-        # Function 'annotate_terms_occurrences()' adds terms_occurrences field to each object in the search results, so they can be accessed on the template.
-
-        search_results = list(chain(
-            pages.search(url_qp_query).annotate_score('_score').annotate_terms_occurrences('terms_occurrences') if pages else [],
-            documents.search(url_qp_query).annotate_score('_score').annotate_terms_occurrences('terms_occurrences') if documents else [],
-            promoted if promoted else []
-        ))
+        query_stripped = url_qp_query.strip()
         
-        search_results.sort(key=lambda x: x._score, reverse=True)
-    
-        search_results_count = len(search_results)
+        # Guardrail: ignore searches that are too short or too long
+        if len(query_stripped) < 3 or len(query_stripped) > 100:
+            search_results = []
+            search_results_count = 0
+        else:
+            cache_key = f"search_results_{query_stripped}_{','.join(sorted(url_qp_types or []))}"
+            try:
+                cached_data = cache.get(cache_key)
+            except Exception:
+                cached_data = None
 
-        query = Query.get(url_qp_query)
-        query.add_hit()  # Record hit
+            query = Query.get(query_stripped)
+
+            if cached_data is not None:
+                search_results = cached_data['results']
+                search_results_count = cached_data['count']
+            else:
+                pages = None
+                documents = None
+                promoted = None
+
+                page_types_filter = tuple(value['models'] for value in pages_types_list if value['model_type'] == 'page' and value['name'] in url_qp_types)
+                page_types_filter = flatten_tuple(page_types_filter)
+                document_types_filter = tuple(value['models'] for value in pages_types_list if value['model_type'] == 'document' and value['name'] in url_qp_types)
+                document_types_filter = flatten_tuple(document_types_filter)
+
+                if len(page_types_filter) == 0 and len(document_types_filter) == 0:
+                    # No filters applied, return everything.
+                    pages = Page.objects.live().public().specific()
+                    documents = Document.objects
+                    promoted = list(value.page.get_specific(deferred=True) for value in query.editors_picks.all())
+                else:
+
+                    if len(page_types_filter) > 0:
+                        pages = Page.objects.live().public().specific().type(page_types_filter)
+                        promoted = list(value.page.get_specific(deferred=True) for value in query.editors_picks.all())
+                        promoted = list(value for value in promoted if value.__class__ in page_types_filter)
+
+                    if len(document_types_filter) > 0:
+                        documents = Document.objects
+
+                # Adds a "high" '_score' promoted search (as it don't have it) so that it can be sortable just like the other datasets.
+                if promoted:
+                    for value in promoted:
+                        value._score = 0.8
+
+                # As we are joining different models, we need to bring the models score (annotate_score) so that dataset could be ordered after.
+                # Function 'annotate_terms_occurrences()' adds terms_occurrences field to each object in the search results, so they can be accessed on the template.
+
+                search_results = list(chain(
+                    pages.search(url_qp_query).annotate_score('_score').annotate_terms_occurrences('terms_occurrences') if pages else [],
+                    documents.search(url_qp_query).annotate_score('_score').annotate_terms_occurrences('terms_occurrences') if documents else [],
+                    promoted if promoted else []
+                ))
+                
+                search_results.sort(key=lambda x: x._score, reverse=True)
+            
+                search_results_count = len(search_results)
+
+                # Save to cache with graceful degradation if disk is full
+                try:
+                    cache.set(cache_key, {'results': search_results, 'count': search_results_count}, 300) # 5 minutes
+                except Exception:
+                    pass
+
+            query.add_hit()  # Record hit
 
     else:
         search_results = Page.objects.none()
