@@ -9,6 +9,15 @@ from wagtail.documents import urls as wagtaildocs_urls
 
 from .apps.search import views as search_views
 
+
+def serve_static_no_cache(request, path, document_root=None):
+    request.META.pop("HTTP_IF_NONE_MATCH", None)
+    request.META.pop("HTTP_IF_MODIFIED_SINCE", None)
+    response = serve(request, path, document_root=document_root or settings.STATIC_ROOT)
+    response["Cache-Control"] = "no-store, max-age=0"
+    return response
+
+
 urlpatterns = [
     path("django-admin/", admin.site.urls),
     path("admin/", include(wagtailadmin_urls)),
@@ -32,7 +41,7 @@ if settings.DEBUG:
     ] + urlpatterns
 else:
     # Serve media files
-    urlpatterns += [re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT})]
+    urlpatterns += [re_path(r'^static/(?P<path>.*)$', serve_static_no_cache)]
     urlpatterns += [re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})]
 
 urlpatterns = urlpatterns + [
