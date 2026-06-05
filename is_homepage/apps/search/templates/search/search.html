@@ -28,6 +28,10 @@
   Search
 {% endblock title %}
 
+{% block canonical %}
+  <link rel="canonical" href="{{ environment_variables.APP_PRD_URL }}/search">
+{% endblock canonical %}
+
 {% block content %}
 
   <div class="nhsuk-width-container app-width-container nhsuk-main-wrapper">
