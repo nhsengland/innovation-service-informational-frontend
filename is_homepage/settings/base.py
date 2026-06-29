@@ -74,6 +74,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "is_homepage.middleware.sanitize_filters.SanitizeFiltersMiddleware",
     "wagtailcache.cache.UpdateCacheMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "is_homepage.middleware.fetch_original_host.FetchOriginalHostMiddleware",
