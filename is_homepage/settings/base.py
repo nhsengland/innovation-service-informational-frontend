@@ -74,6 +74,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "is_homepage.middleware.sanitize_filters.SanitizeFiltersMiddleware",
     "wagtailcache.cache.UpdateCacheMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "is_homepage.middleware.fetch_original_host.FetchOriginalHostMiddleware",
@@ -138,6 +139,14 @@ CACHES = {
         }
     }
 }
+
+
+# Caching Query Strings Whitelist
+# Ignores all query parameters except types, tags, and page (case-insensitive)
+WAGTAIL_CACHE_IGNORE_QS = [
+    r"^(?!(?i)(types|tags|page)$).*$"
+]
+
 
 
 # Password validation
