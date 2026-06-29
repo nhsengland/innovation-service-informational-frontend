@@ -140,6 +140,14 @@ CACHES = {
 }
 
 
+# Caching Query Strings Whitelist
+# Ignores all query parameters except types, tags, and page (case-insensitive)
+WAGTAIL_CACHE_IGNORE_QS = [
+    r"^(?!(?i)(types|tags|page)$).*$"
+]
+
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
