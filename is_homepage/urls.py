@@ -40,9 +40,9 @@ if settings.DEBUG:
         path('__debug__/', include(debug_toolbar.urls))
     ] + urlpatterns
 else:
-    # Serve media files
-    urlpatterns += [re_path(r'^static/(?P<path>.*)$', serve_static_no_cache)]
-    urlpatterns += [re_path(r'^media/(?P<path>.*)$', serve_static_no_cache, {'document_root': settings.MEDIA_ROOT})]
+    # Serve static and media files
+    urlpatterns += [re_path(r'^static/(?P<path>.*)$', serve, {'document_root': settings.STATIC_ROOT})]
+    urlpatterns += [re_path(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT})]
 
 urlpatterns = urlpatterns + [
     path('sitemap.xml', sitemap),
