@@ -11,7 +11,7 @@ This design implements a hybrid architecture:
 2. **Static Asset Caching**: WhiteNoise serves static files (CSS, JS, images) with optimal cache headers.
 3. **Flat HTML Serving (Clean URLs)**: `wagtail-bakery` pre-renders pages (like `/case-studies/` or `/news/`) to disk. WhiteNoise serves these instantly.
 4. **Query Parameter Handling**: Any request containing query parameters (like `/case-studies/?types=Digital`) automatically bypasses WhiteNoise and falls through to Gunicorn. Django serves these dynamically, protected by the existing `SanitizeFiltersMiddleware` (which cleans cache-busters) and cached by `wagtail-cache`.
-5. **Local Automation**: Rebuilds of clean URLs are triggered automatically in a background thread inside Python whenever Wagtail content is published/unpublished.
+5. **Local Automation**: Rebuilds of clean URLs are triggered automatically **on application startup** and **whenever Wagtail content is published/unpublished** in a background thread inside Python.
 
 ```mermaid
 graph TD
@@ -33,10 +33,14 @@ graph TD
 
 ## 3. Detailed Specifications
 
-### 3.1 WSGI Concurrency (Gunicorn)
+### 3.1 WSGI Concurrency & Startup (Gunicorn)
 Currently, [startup.sh](file:///home/redabelca/NHS/innovation-service-informational-frontend/.scripts/startup.sh#L18-L19) runs `python3 manage.py runserver`, limiting processing to a single thread.
-* **Change**: Change the start command to:
+* **Change**: Update the startup script to trigger a flat-page build on startup, followed by starting Gunicorn:
   ```bash
+  # Pre-bake static pages on application startup
+  python3 manage.py build
+  
+  # Start production WSGI server
   gunicorn --bind=0.0.0.0:8000 --workers 3 --timeout 600 is_homepage.wsgi
   ```
 
@@ -85,7 +89,7 @@ We will use Wagtail's page signals to trigger a local rebuild asynchronously in 
 
 ---
 
-## 4. Verification and Testing Plan
-1. **Local Run**: Execute `python manage.py build` locally, verifying the files appear in the `build/` folder.
+## 5. Verification and Testing Plan
+1. **Startup Build Verification**: Check that files are baked in `build/` immediately when container starts up.
 2. **Page Caching**: Verify that filtered requests (with valid types/tags) correctly hit Gunicorn and are cached by `wagtail-cache`.
 3. **Load Testing**: Validate that concurrent requests to static or cached files handle high concurrency on Gunicorn.
