@@ -8,24 +8,22 @@ Protect the NHS Innovation Service Informational Web App from botnet/DDoS attack
 ## 2. Architecture Overview
 This design implements a hybrid architecture:
 1. **Concurrency**: Gunicorn replaces Django `runserver` to handle concurrent traffic.
-2. **Static Asset Caching**: WhiteNoise serves static files with optimal cache headers.
+2. **Static Asset Caching**: WhiteNoise serves static files (CSS, JS, images) with optimal cache headers.
 3. **Flat HTML Serving (Clean URLs)**: `wagtail-bakery` pre-renders pages (like `/case-studies/` or `/news/`) to disk. WhiteNoise serves these instantly.
-4. **Query Parameter Serving**: A custom Django command bakes valid filter combinations to disk (e.g. `/case-studies/?types=Digital`), and a custom middleware serves them directly from disk.
-5. **Dynamic Fallback**: Any dynamic endpoints (like `/search/` or rare filter combos) fall through to Gunicorn and are cached by the existing `wagtail-cache` + `SanitizeFiltersMiddleware`.
-6. **Local Automation**: Rebuilds are triggered automatically in a background thread inside Python whenever Wagtail content is published/unpublished.
+4. **Query Parameter Handling**: Any request containing query parameters (like `/case-studies/?types=Digital`) automatically bypasses WhiteNoise and falls through to Gunicorn. Django serves these dynamically, protected by the existing `SanitizeFiltersMiddleware` (which cleans cache-busters) and cached by `wagtail-cache`.
+5. **Local Automation**: Rebuilds of clean URLs are triggered automatically in a background thread inside Python whenever Wagtail content is published/unpublished.
 
 ```mermaid
 graph TD
     Client[Client Request] --> |AGW| AppService[App Service]
     AppService --> Gunicorn[Gunicorn WSGI Server]
     Gunicorn --> Sanitize[SanitizeFiltersMiddleware]
-    Sanitize --> StaticQuery[StaticQueryParamMiddleware]
     
-    StaticQuery -->|Has Cached Param File| ServeStatic[Serve flat HTML from disk]
-    StaticQuery -->|No Cached Param File| WhiteNoise[WhiteNoise Middleware]
+    Sanitize -->|Has Query Params| WagtailCache[Wagtail Cache Middleware]
+    Sanitize -->|Clean URL e.g. /case-studies/| WhiteNoise[WhiteNoise Middleware]
     
-    WhiteNoise -->|Has Static HTML File| ServeStatic
-    WhiteNoise -->|Dynamic Request e.g. /search/| WagtailCache[Wagtail Cache Middleware]
+    WhiteNoise -->|Has Static HTML File| ServeStatic[Serve flat HTML from disk]
+    WhiteNoise -->|Dynamic Request e.g. /search/| WagtailCache
     
     WagtailCache -->|Cache Hit| ServeCache[Serve from File Cache]
     WagtailCache -->|Cache Miss| Django[Django Views & DB Query]
@@ -63,19 +61,7 @@ Currently, [startup.sh](file:///home/redabelca/NHS/innovation-service-informatio
   WHITENOISE_INDEX_FILE = True
   ```
 
-### 3.4 Query Parameter Baking
-1. **Management Command**: Write `is_homepage/apps/case_studies/management/commands/bake_filters.py`.
-   * Loops through all valid combinations of `types` and `tags` (using snippets/database objects).
-   * Uses Django's `RequestFactory` or test client to internally render `/case-studies/?types=...&tags=...`
-   * Creates a deterministic filename hash (e.g. `case-studies/cache/types_Digital_tags_Innovation.html`).
-   * Saves the rendered HTML to that file path in the `BUILD_DIR`.
-2. **Middleware**: Write `is_homepage/middleware/static_query_param.py`.
-   * Intercepts `GET` requests to `/case-studies/` and `/news/`.
-   * Constructs the target cache filename based on the sorted query parameters.
-   * If the file exists, returns a `FileResponse` directly (bypassing view/db processing).
-   * Register this middleware right after `SanitizeFiltersMiddleware` in [base.py](file:///home/redabelca/NHS/innovation-service-informational-frontend/is_homepage/settings/base.py#L76).
-
-### 3.5 Automated Rebuilds
+### 3.4 Automated Rebuilds
 We will use Wagtail's page signals to trigger a local rebuild asynchronously in a Python background thread when pages are modified.
 * **Change**: Create a signal receiver in `is_homepage/apps/base/wagtail_hooks.py` (or a dedicated signals file):
   ```python
@@ -87,7 +73,6 @@ We will use Wagtail's page signals to trigger a local rebuild asynchronously in 
       def run_rebuild():
           try:
               call_command("build")
-              call_command("bake_filters")
           except Exception as e:
               # Log error gracefully
               pass
@@ -101,6 +86,6 @@ We will use Wagtail's page signals to trigger a local rebuild asynchronously in 
 ---
 
 ## 4. Verification and Testing Plan
-1. **Local Run**: Execute `python manage.py build` and `python manage.py bake_filters` locally, verifying the files appear in the `build/` folder.
-2. **Offline Mode**: Verify that query parameter pages load correctly even if database connection is temporarily simulated as down (ensures disk serving works).
+1. **Local Run**: Execute `python manage.py build` locally, verifying the files appear in the `build/` folder.
+2. **Page Caching**: Verify that filtered requests (with valid types/tags) correctly hit Gunicorn and are cached by `wagtail-cache`.
 3. **Load Testing**: Validate that concurrent requests to static or cached files handle high concurrency on Gunicorn.
