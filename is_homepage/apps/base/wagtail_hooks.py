@@ -44,3 +44,11 @@ def register_icons(icons):
         'svg/square_check_regular.svg',
         'svg/square_check_solid.svg',
     ]
+
+
+@hooks.register('is_request_cacheable')
+def disable_media_cache(request, is_cacheable):
+    if request.path.startswith(('/media/', '/static/')):
+        return False
+    return is_cacheable
+
