@@ -38,8 +38,17 @@ class SanitizeFiltersMiddleware:
         if request.method in ("GET", "HEAD") and request.GET:
             cleaned = request.GET.copy()
             
+            # Search owns its query parameters and is excluded from full-page caching.
+            if request.path_info.startswith("/search/"):
+                for key in list(cleaned):
+                    if key not in ("query", "types", "page"):
+                        cleaned.pop(key, None)
+
+                if "page" in cleaned and not cleaned.get("page", "").isdigit():
+                    cleaned.pop("page", None)
+
             # Identify if request is targeting a list page that uses filters
-            if request.path_info.startswith(("/news/", "/case-studies/")):
+            elif request.path_info.startswith(("/news/", "/case-studies/")):
                 filters = get_valid_filters()
                 
                 # Sanitize 'types' and 'tags' parameters
