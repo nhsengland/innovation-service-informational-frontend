@@ -10,4 +10,11 @@ python3 manage.py migrate
 python3 manage.py update_index
 
 # Run server
-python3 manage.py runserver 0.0.0.0:8000
+exec gunicorn \
+  --bind "0.0.0.0:${PORT:-8000}" \
+  --workers "${GUNICORN_WORKERS:-1}" \
+  --timeout "${GUNICORN_TIMEOUT:-60}" \
+  --graceful-timeout "${GUNICORN_GRACEFUL_TIMEOUT:-30}" \
+  --access-logfile - \
+  --error-logfile - \
+  is_homepage.wsgi:application

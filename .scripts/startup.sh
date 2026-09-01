@@ -15,5 +15,11 @@ echo "Finished applying custom commands"
 python3 manage.py collectstatic --clear --noinput
 python3 manage.py compress
 
-#gunicorn --bind=0.0.0.0 --timeout 600 is_homepage.wsgi
-python3 -u manage.py runserver 0.0.0.0:8000
+exec gunicorn \
+  --bind "0.0.0.0:${PORT:-8000}" \
+  --workers "${GUNICORN_WORKERS:-1}" \
+  --timeout "${GUNICORN_TIMEOUT:-60}" \
+  --graceful-timeout "${GUNICORN_GRACEFUL_TIMEOUT:-30}" \
+  --access-logfile - \
+  --error-logfile - \
+  is_homepage.wsgi:application
