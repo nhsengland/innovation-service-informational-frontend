@@ -1,26 +1,45 @@
-import re
 from django.core.cache import cache
+from django.http import HttpResponseBadRequest
+from django.http import QueryDict
 
-def get_valid_filters():
+
+FILTER_CACHE_TIMEOUT = 60 * 60
+MAX_FILTER_VALUES = 10
+MAX_FILTER_QUERY_STRING_LENGTH = 2048
+
+
+def get_valid_filters(path_info):
     """
-    Fetches the set of all valid category titles (news & case studies) 
-    and tags from the database. Caches the result for 1 hour to avoid 
-    hitting the database on every request.
+    Fetch the valid filter values for a list page and cache them for one hour.
     """
-    data = cache.get("valid_types_and_tags")
-    if not data:
+    if path_info.startswith("/case-studies/"):
+        cache_key = "valid_case_study_filters_v2"
         from is_homepage.apps.case_studies.snippets import CaseStudiesTypeSnippet
+
+        type_model = CaseStudiesTypeSnippet
+    elif path_info.startswith("/news/"):
+        cache_key = "valid_news_filters_v2"
         from is_homepage.apps.news.snippets import NewsTypeSnippet
+
+        type_model = NewsTypeSnippet
+    else:
+        return {"types": set(), "tags": set()}
+
+    data = cache.get(cache_key)
+    if data is None:
         from taggit.models import Tag
-        
-        # Combine valid titles from both snippets and tags
+
         data = {
-            "types": set(CaseStudiesTypeSnippet.objects.values_list("title", flat=True)) | \
-                     set(NewsTypeSnippet.objects.values_list("title", flat=True)),
-            "tags": set(Tag.objects.values_list("name", flat=True))
+            "types": set(type_model.objects.values_list("title", flat=True)),
+            "tags": set(Tag.objects.values_list("name", flat=True)),
         }
-        cache.set("valid_types_and_tags", data, 3600)  # Cache for 1 hour
+        cache.set(cache_key, data, FILTER_CACHE_TIMEOUT)
+
     return data
+
+
+def _normalise_filter_values(values, valid_values):
+    return sorted({value for value in values if value in valid_values})
 
 class SanitizeFiltersMiddleware:
     """
@@ -35,6 +54,11 @@ class SanitizeFiltersMiddleware:
 
     def __call__(self, request):
         # We only care about GET/HEAD requests that actually contain query parameters
+        if request.method in ("GET", "HEAD") and request.path_info.startswith(("/news/", "/case-studies/")):
+            query_string = request.META.get("QUERY_STRING", "")
+            if len(query_string) > MAX_FILTER_QUERY_STRING_LENGTH:
+                return HttpResponseBadRequest("Invalid filter query.")
+
         if request.method in ("GET", "HEAD") and request.GET:
             cleaned = request.GET.copy()
             
@@ -49,18 +73,26 @@ class SanitizeFiltersMiddleware:
 
             # Identify if request is targeting a list page that uses filters
             elif request.path_info.startswith(("/news/", "/case-studies/")):
-                filters = get_valid_filters()
-                
-                # Sanitize 'types' and 'tags' parameters
                 for key in ("types", "tags"):
-                    if key in cleaned:
-                        # Retain only values that exist in our database whitelist
-                        valid_vals = [v for v in cleaned.getlist(key) if v in filters[key]]
-                        cleaned.setlist(key, valid_vals) if valid_vals else cleaned.pop(key, None)
-                
-                # Ensure the 'page' parameter is a clean positive integer
-                if "page" in cleaned and not cleaned.get("page", "").isdigit():
-                    cleaned.pop("page", None)
+                    if len(request.GET.getlist(key)) > MAX_FILTER_VALUES:
+                        return HttpResponseBadRequest("Invalid filter query.")
+
+                if any(key in request.GET for key in ("types", "tags")):
+                    filters = get_valid_filters(request.path_info)
+                else:
+                    filters = {"types": set(), "tags": set()}
+
+                # Keep only valid values, with a stable order and no duplicates.
+                cleaned = QueryDict("", mutable=True)
+                for key in ("types", "tags"):
+                    values = _normalise_filter_values(request.GET.getlist(key), filters[key])
+                    if values:
+                        cleaned.setlist(key, values)
+
+                # Ensure the page parameter is a clean positive integer.
+                page = request.GET.get("page")
+                if page and page.isdigit() and int(page) > 0:
+                    cleaned["page"] = str(int(page))
             else:
                 # Strip all query parameters on other pages (e.g. /?random=123)
                 cleaned.clear()

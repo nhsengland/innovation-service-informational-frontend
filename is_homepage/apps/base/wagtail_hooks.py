@@ -48,6 +48,6 @@ def register_icons(icons):
 
 @hooks.register('is_request_cacheable')
 def disable_media_cache(request, is_cacheable):
-    if request.path.startswith(('/media/', '/static/', '/search/')):
+    if request.path == '/healthz' or request.path.startswith(('/media/', '/static/', '/search/')):
         return False
     return is_cacheable
