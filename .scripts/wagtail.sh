@@ -12,7 +12,7 @@ python3 manage.py update_index
 # Run server
 exec gunicorn \
   --bind "0.0.0.0:${PORT:-8000}" \
-  --workers "${GUNICORN_WORKERS:-1}" \
+  --workers "${GUNICORN_WORKERS:-4}" \
   --timeout "${GUNICORN_TIMEOUT:-60}" \
   --graceful-timeout "${GUNICORN_GRACEFUL_TIMEOUT:-30}" \
   --access-logfile - \

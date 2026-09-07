@@ -29,7 +29,7 @@ RUN apt-get update --yes --quiet \
   && rm -rf /var/lib/apt/lists/*
 
 # Install the application server.
-RUN pip install "gunicorn==20.0.4"
+RUN pip install "gunicorn==26.2.0"
 
 ## Add the wait script to the image
 ENV WAIT_VERSION 2.12.1
