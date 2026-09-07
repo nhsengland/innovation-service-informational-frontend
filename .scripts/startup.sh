@@ -17,7 +17,7 @@ python3 manage.py compress
 
 exec gunicorn \
   --bind "0.0.0.0:${PORT:-8000}" \
-  --workers "${GUNICORN_WORKERS:-12}" \
+  --workers "${GUNICORN_WORKERS:-10}" \
   --timeout "${GUNICORN_TIMEOUT:-60}" \
   --graceful-timeout "${GUNICORN_GRACEFUL_TIMEOUT:-30}" \
   --access-logfile - \
