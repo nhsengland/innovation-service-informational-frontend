@@ -7,6 +7,7 @@ from wagtail.admin import urls as wagtailadmin_urls
 from wagtail.contrib.sitemaps.views import sitemap
 from wagtail.documents import urls as wagtaildocs_urls
 
+from .apps.base.views import healthz
 from .apps.search import views as search_views
 
 
@@ -19,6 +20,7 @@ def serve_static_no_cache(request, path, document_root=None):
 
 
 urlpatterns = [
+    path("healthz", healthz, name="healthz"),
     path("django-admin/", admin.site.urls),
     path("admin/", include(wagtailadmin_urls)),
     path("documents/", include(wagtaildocs_urls)),
